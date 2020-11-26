@@ -79,5 +79,5 @@ hplot <- function() {
 ################################################################################
 
 save_all <- function() {
-    ggsave(file = "heat.svg", witdth = 11, height = 7, plot = hplot())
+    ggsave(file = "heat.png", width = 11, height = 5, plot = hplot())
 }
