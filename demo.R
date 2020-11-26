@@ -49,7 +49,7 @@ col_legend <- guide_legend(nrow = 1,
                            override.aes = list(size = c(rep(thin, 5), thick)))
 common_color_scale <- scale_color_manual(values = line_cols,
                                          guide = col_legend)
-common_size_scale <- scale_size_manual(values=c(thick, thin), guide = FALSE)
+common_size_scale <- scale_size_manual(values = c(thick, thin), guide = FALSE)
 common_xweek_scale <- scale_x_continuous(breaks = seq(1, 53, by = 13))
 common_labs <- labs(caption = enc("данни: EUROSTAT"),
                     color = enc("година"),
@@ -57,12 +57,12 @@ common_labs <- labs(caption = enc("данни: EUROSTAT"),
                     y =  enc("умирания"))
 map_vline <- list(size = 0.2, col = "dark grey") # vline last week with BG data
 gtheme1 <- theme(text = element_text(size = 14,
-                                    family = windowsFont("Calibri")),
+                                     family = windowsFont("Calibri")),
                 panel.grid.minor.x = element_blank(),
                 legend.position = "top",
                 plot.title = element_text(hjust = 0.5,
                                           face = "bold"))
-gtheme2 <- gtheme1 + 
+gtheme2 <- gtheme1 +
     theme(axis.text = element_text(size = 10),
           panel.margin.y = unit(3, "pt"),
           panel.margin.x = unit(4, "pt"),
@@ -79,7 +79,7 @@ agrp_names <- function(x) {
 }
 deaths_con <- gzfile(deaths_file)
 dtab <- read.delim(deaths_con)
-dtab <- cbind(str_split_fixed(dtab[[1]], ",", 4), dtab[,-1])
+dtab <- cbind(str_split_fixed(dtab[[1]], ",", 4), dtab[, -1])
 names(dtab) <- c("age", "sex", "unit", "geo", names(dtab)[-(1:4)])
 dtab <- dtab %>%
     select(matches("(201[5-9]|2020)W[0-5]|age|geo|sex")) %>%
@@ -96,7 +96,7 @@ dtab <- dtab %>%
 # contry by age groups plot (argument: country code, e.g. "BG", "UK", "EL")    #
 ################################################################################
 cplot <- function(country_code) {
-    if(substr(cnames[country_code], 1, 1) %in% c(enc("В"), enc("Ф")))
+    if (substr(cnames[country_code], 1, 1) %in% c(enc("В"), enc("Ф")))
         title_pre <- paste0(txt_title1, txt_v)
     else
         title_pre <- txt_title1
@@ -129,7 +129,7 @@ mplot <- function() {
                sex == "T",
                age == "TOTAL") %>%
         mutate(cname = cnames[geo])
-    last_BG_wk <- idata %>%
+    last_bg_wk <- idata %>%
         filter(geo == "BG", year == 2020, deaths > 0) %>%
         summarize(max(week)) %>%
         pull()
@@ -139,13 +139,13 @@ mplot <- function() {
                                 color = as.factor(year),
                                 size = ifelse(year == 2020, "C", "N"))) +
         geom_line() +
-        geom_vline(xintercept = last_BG_wk,
+        geom_vline(xintercept = last_bg_wk,
                    size = map_vline$size,
                    color = map_vline$col) +
         common_size_scale +
         common_color_scale +
         common_xweek_scale +
-        facet_geo(~ cname, grid = egrid, scales="free_y") +
+        facet_geo(~ cname, grid = egrid, scales = "free_y") +
         labs(title = txt_titlei) +
         common_labs +
         gtheme2
@@ -155,7 +155,7 @@ mplot <- function() {
 ################################################################################
 # example output                                                               #
 ################################################################################
-save_all <- function () {
+save_all <- function() {
     export <- function(plot, file) {
         ggsave(file = file, width = 11, height = 7, plot = plot)
     }

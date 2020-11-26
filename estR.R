@@ -31,4 +31,4 @@ res <- estimate_R(nc, method = "uncertain_si", config = make_config(list(
     min_std_si = stdev - stdev_trunc, max_std_si = stdev + stdev_trunc)))
 #### plot & save csv
 plot(res)
-write.csv(res[1], "estR.csv", row.names=FALSE)
+write.csv(res[1], "estR.csv", row.names = FALSE)
