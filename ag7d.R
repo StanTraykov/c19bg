@@ -4,8 +4,9 @@ library(Cairo)
 
 enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
 # download @ https://data.egov.bg/data/view/492e8186-0d00-43fb-8f5e-f2b0b183b64f
-gen_data <- enc("Обща статистика за разпространението.csv")
-age_data <- enc("Разпределение по дата и по възрастови групи.csv")
+gen_data <- file.path("data", enc("Обща статистика за разпространението.csv"))
+age_data <- file.path("data",
+                      enc("Разпределение по дата и по възрастови групи.csv"))
 
 ##### texts
 fmt_date <- "%d.%m. (%U)"

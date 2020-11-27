@@ -7,7 +7,7 @@ enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
 # enc <- function(x) x
 
 # download @ https://data.egov.bg/data/view/492e8186-0d00-43fb-8f5e-f2b0b183b64f
-obl_data <- enc("Разпределение по дата и по области.csv") # open data
+obl_data <- file.path("data", enc("Разпределение по дата и по области.csv"))
 # NSI 2019 data
 pops <- c("82835", "236305", "171809", "215477", "108018", "172262", "159470",
           "232568", "127001", "110789", "469885", "110914", "106598", "226671",

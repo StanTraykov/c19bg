@@ -6,7 +6,8 @@ enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
 
 ##### data
 # download @ https://data.egov.bg/data/view/492e8186-0d00-43fb-8f5e-f2b0b183b64f
-age_data <- enc("Разпределение по дата и по възрастови групи.csv")
+age_data <- file.path("data",
+                      enc("Разпределение по дата и по възрастови групи.csv"))
 atab <- read.csv(file = age_data)
 # from https://www.nsi.bg/bg/content/2977/%D0%BD%D0%B0%D1%81%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BF%D0%BE-%D1%81%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8-%D1%80%D0%B0%D0%B9%D0%BE%D0%BD%D0%B8-%D0%B2%D1%8A%D0%B7%D1%80%D0%B0%D1%81%D1%82-%D0%BC%D0%B5%D1%81%D1%82%D0%BE%D0%B6%D0%B8%D0%B2%D0%B5%D0%B5%D0%BD%D0%B5-%D0%B8-%D0%BF%D0%BE%D0%BB
 # population struct 0-19, 20-29, 30-39, 40-49,
@@ -75,7 +76,7 @@ hplot <- function() {
 }
 
 ################################################################################
-# example outpout                                                              #
+# example output                                                               #
 ################################################################################
 
 save_all <- function() {

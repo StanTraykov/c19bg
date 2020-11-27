@@ -11,11 +11,12 @@ enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
 
 ##### get data from EUROSTAT
 deaths_file <- "demo_r_mwk_10.tsv.gz"
+local_deaths_file <- file.path("data", deaths_file)
 df_url <- paste0("https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/",
                  "BulkDownloadListing?file=data/",
                  deaths_file)
-if (!file.exists(deaths_file))
-    download.file(df_url, deaths_file)
+if (!file.exists(local_deaths_file))
+    download.file(df_url, local_deaths_file)
 
 ##### country codes->names, EU+ grid (Ireland deaths data missing from EUROSTAT)
 cnames <- c(IS = enc("Исландия"), NO = enc("Норвегия"), SE = enc("Швеция"),
@@ -77,8 +78,8 @@ agrp_names <- function(x) {
     x <- sub("Y", "", x)
     return(x)
 }
-deaths_con <- gzfile(deaths_file)
-dtab <- read.delim(deaths_con)
+
+dtab <- read.delim(gzfile(local_deaths_file))
 dtab <- cbind(str_split_fixed(dtab[[1]], ",", 4), dtab[, -1])
 names(dtab) <- c("age", "sex", "unit", "geo", names(dtab)[-(1:4)])
 dtab <- dtab %>%
