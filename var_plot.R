@@ -27,7 +27,7 @@ line_fields <- list(casesdeaths = "new_cases|new_deaths",
                     hospitalized = "active_cases",
                     positivity = "date|posit7|s7_nt")
 area_fields <- list(cases = "^cases$|active_cases",
-                 hospitalized = "hospitalized|in_icu")
+                    hospitalized = "hospitalized|in_icu")
 tick_choice <- c(10, 20, 25, 50) * rep(c(1, 10, 100, 1000), each = 4)
 no_na <- c(age = "0+", positivity = "posit7")
 thin <- 0.5   # } lines
@@ -123,13 +123,13 @@ plot_sec_y <- list(
                       type = "percent")
 )
 plot_theme <- theme(text = element_text(size = 14,
-                                     family = windowsFont("Calibri")),
-                 panel.grid.minor.x = element_blank(),
-                 legend.position = "top",
-                 plot.title = element_text(hjust = 0.5,
-                                           face = "bold"),
-                 axis.text.x = element_text(angle = 45, hjust = 1),
-                 panel.grid.minor.y = element_blank())
+                                        family = windowsFont("Calibri")),
+                    panel.grid.minor.x = element_blank(),
+                    legend.position = "top",
+                    plot.title = element_text(hjust = 0.5,
+                                              face = "bold"),
+                    axis.text.x = element_text(angle = 45, hjust = 1),
+                    panel.grid.minor.y = element_blank())
 
 ##### clean up
 # age table
@@ -182,7 +182,7 @@ all_fields <- function(chart) {
 # chart - one of: "casesdeaths" | "age" | "cases" | "hospitalized" |           #
 #                 "positivity"                                                 #
 # roll_* - rolling application of function (e.g. mean for moving average)      #
-# line_legend - whether to label lines at last plot values                     #
+# line_legend - regex specifying fields/lines that should be labelled in-plot  #
 ################################################################################
 var_plot <- function(chart,
                      roll_func = NULL,
@@ -253,10 +253,10 @@ var_plot <- function(chart,
                                     color = metric,
                                     size = ifelse(str_detect(metric,
                                                              line_sizes[[chart]]
-                                                                     [["rgx"]]),
+                                                                          $rgx),
                                                   "size1",
                                                   "size2"))) +
-            scale_size_manual(values = line_sizes[[chart]][["sizes"]],
+            scale_size_manual(values = line_sizes[[chart]]$sizes,
                               guide = FALSE)
     }
     if (!is.null(line_legend)) {
