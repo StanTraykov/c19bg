@@ -1,3 +1,4 @@
+#### old file: use var_plot instead
 library(tools)
 library(zoo)
 library(Cairo)
@@ -58,7 +59,7 @@ cd_plot <- function(mvavg = 7) {
     # plot config
     pre_ag <- as.integer(as.Date(atab[1, 1]) - start_date) # days w/o age distr
     if (!identical(unname(rowSums(atab[2:10])),
-                  unname(nc[(pre_ag + 1):length(nc)])))
+                   unname(nc[(pre_ag + 1):length(nc)])))
         stop("failed sanity check: total case counts != summed age brackets")
     cd_factor <- 0.04       # align primary/secondary Y axis @ deaths/cases
     vis_min <- 1.05 * max(rollmean(nc, k = mvavg))
