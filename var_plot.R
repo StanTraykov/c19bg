@@ -322,13 +322,13 @@ save_all <- function() {
     }
     export(file = "posit", plot = var_plot("positivity"))
     export(file = "cd", plot = var_plot("casesdeaths",
-                                            roll_func = mean,
-                                            roll_window = 7))
+                                        roll_func = mean,
+                                        roll_window = 7))
     export(file = "cases", plot = var_plot("cases"))
     export(file = "hospitalized", plot = var_plot("hospitalized"))
     export(file = "age_7", plot = var_plot("age",
-                                               roll_func = mean,
-                                               roll_window = 7,
-                                               line_legend = "0"))
+                                           roll_func = mean,
+                                           roll_window = 7,
+                                           line_legend = "0"))
     export(file = "age_1", plot = var_plot("age", line_legend = "0"))
 }

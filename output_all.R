@@ -5,6 +5,7 @@
 # - alternatively just ggsave() to target format or plot() to screen
 
 library(tools)
+library(stringr)
 
 # set this to your installation/platform-specific locations
 inkscape <- "\"C:\\Program Files\\Inkscape\\bin\\inkscape.exe\""
@@ -53,32 +54,37 @@ for (d in dirs)
         dir.create(d)
 
 source("var_plot.R")
-export(file = "D09_posit", plot = var_plot("positivity"))
-export(file = "D04_cd", plot = var_plot("casesdeaths",
+export(file = "C09_posit", plot = var_plot("positivity"))
+export(file = "C04_cd", plot = var_plot("casesdeaths",
                                            roll_func = mean,
                                            roll_window = 7))
-export(file = "D08_cases", plot = var_plot("cases"))
-export(file = "D07_hospitalized", plot = var_plot("hospitalized"))
-export(file = "D05_age_7", plot = var_plot("age",
+export(file = "C08_cases", plot = var_plot("cases"))
+export(file = "C07_hospitalized", plot = var_plot("hospitalized"))
+export(file = "C05_age_7", plot = var_plot("age",
                                      roll_func = mean,
                                      roll_window = 7,
                                      line_legend = "0"))
-export(file = "D06_age_1", plot = var_plot("age", line_legend = "0"))
+export(file = "C06_age_1", plot = var_plot("age", line_legend = "0"))
 
 source("heat.R")
-ggsave(file = filenames("D01_heat")$jpg,
+ggsave(file = filenames("C01_heat")$jpg,
        width = 11, height = 5.5, quality = 100, dpi = 125,
        plot = hplot())
 
 source("oblasts.R")
-export(file = "D03_oblasts_count", plot = oblasts_plot(incid_100k = FALSE))
-export(file = "D02_oblasts_i100k", plot = oblasts_plot(incid_100k = TRUE))
+export(file = "C03_oblasts_count", plot = oblasts_plot(incid_100k = FALSE))
+export(file = "C02_oblasts_i100k", plot = oblasts_plot(incid_100k = TRUE))
 
 source("demo.R")
 for (c in names(cnames))
-    export(file = paste0(which(sort(cnames) == cnames[c]), "_", c),
+    export(file = paste0("D",
+                         str_pad(which(sort(cnames) == cnames[c]),
+                                 2,
+                                 pad = "0"),
+                         "_",
+                         c),
            plot = cplot(c))
-export(file = "0_map", plot = mplot())
+export(file = "D00_map", plot = mplot())
 
 cat("calculating R...\n")
 source("estR.R")
