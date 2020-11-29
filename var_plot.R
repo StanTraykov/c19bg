@@ -45,9 +45,9 @@ age_colors <- c("dark green",
                 "red")
 age_labels <- function(x) ifelse(x == "new_deaths", enc("смъртни случаи"), x)
 age_guide <- guide_legend(nrow = 1,
-                          override.aes = list(size = c(thick * 1,
-                                                       rep(thin * 1, 7),
-                                                       thick * 1)))
+                          override.aes = list(size = c(thick,
+                                                       rep(thin, 7),
+                                                       thick)))
 cases_fills <- c("light blue" = enc("регистрирани случаи"),
                  "dark blue" = enc("активни случаи"))
 hospitalized_fills <- c("dark golden rod 1" = enc("хоспитализирани"),
