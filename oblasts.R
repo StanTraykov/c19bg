@@ -1,3 +1,5 @@
+# plot BG oblast data in a map: incidence (new cases) & incidence per 100K
+
 library(tidyverse)
 library(zoo)
 library(geofacet)

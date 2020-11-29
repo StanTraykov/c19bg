@@ -1,3 +1,5 @@
+# plot weekly deaths data from EUROSTAT: per country and overview map
+
 library(stringr)
 library(dplyr)
 library(tidyr)

@@ -1,3 +1,5 @@
+# various plots: cases/active, new cases/deaths, age plot, hospitlzd, positivity
+
 library(tidyverse)
 library(zoo)
 
@@ -177,7 +179,8 @@ all_fields <- function(chart) {
 
 ################################################################################
 # various plots                                                                #
-# chart - one of: "age" | "cases" | "hospitalized" | "positivity"              #
+# chart - one of: "casesdeaths" | "age" | "cases" | "hospitalized" |           #
+#                 "positivity"                                                 #
 # roll_* - rolling application of function (e.g. mean for moving average)      #
 # line_legend - whether to label lines at last plot values                     #
 ################################################################################

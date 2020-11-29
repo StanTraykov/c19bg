@@ -1,3 +1,5 @@
+# estimate R and output to CSV
+
 library(EpiEstim) # Cori et al. https://doi.org/10.1093/aje/kwt133
 library(ggplot2)
 enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
