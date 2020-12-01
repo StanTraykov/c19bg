@@ -1,11 +1,17 @@
-# Production quality output -- using inkscape & imagemagick yields slightly
-# better results but is not really necessary.
+# Production quality output -- using Inkscape for rasterization & ImageMagick
+# for JPEG compression yields slightly better results but is not really
+# necessary.
 #
-# - see the save_all() example functions in various files
-# - alternatively just ggsave() to target format or plot() to screen
+# - See the save_all() example functions in various files for quick HQ output.
+# - Alternatively just ggsave() to target format or plot() to screen.
+#
+# To skip some of the time-consuming stuff:
+# > skip_demo <- TRUE; skip_r <- TRUE; source("output_all.R")
 
 library(tools)
 library(stringr)
+if (!exists("skip_demo")) skip_demo <- FALSE
+if (!exists("skip_r")) skip_r <- FALSE
 
 # set this to your installation/platform-specific locations
 inkscape <- "\"C:\\Program Files\\Inkscape\\bin\\inkscape.exe\""
@@ -75,16 +81,20 @@ source("oblasts.R")
 export(file = "C03_oblasts_count", plot = oblasts_plot(incid_100k = FALSE))
 export(file = "C02_oblasts_i100k", plot = oblasts_plot(incid_100k = TRUE))
 
-source("demo.R")
-for (c in names(cnames))
-    export(file = paste0("D",
-                         str_pad(which(sort(cnames) == cnames[c]),
-                                 2,
-                                 pad = "0"),
-                         "_",
-                         c),
-           plot = cplot(c))
-export(file = "D00_map", plot = mplot())
+if (!skip_demo) {
+    source("demo.R")
+    for (c in names(cnames))
+        export(file = paste0("D",
+                             str_pad(which(sort(cnames) == cnames[c]),
+                                     2,
+                                     pad = "0"),
+                             "_",
+                             c),
+               plot = cplot(c))
+    export(file = "D00_map", plot = mplot())
+}
 
-cat("calculating R...\n")
-source("estR.R")
+if (!skip_r) {
+    cat("calculating R...\n")
+    source("estR.R")
+}
