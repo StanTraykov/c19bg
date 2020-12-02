@@ -44,21 +44,35 @@ egrid <- data.frame(row = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4,
 txt_title1 <- enc("Умирания в")
 txt_v <- enc("ъв")
 txt_title2 <- enc("по седмици и възрастови групи")
+txt_title3 <- enc("по седмици")
 txt_titlei <- enc("Умирания по страни и седмици")
 thin <- 0.3  # lines
 thick <- 0.7
+wthin <- 0.6 # for whole page plots
+wthick <- 1.1
 line_cols <- c("#AAAAAA", "#BBAA00", "#008800", "#0000BB", "#000000", "#FF0000")
 col_legend <- guide_legend(nrow = 1,
                            override.aes = list(size = c(rep(thin, 5), thick)))
 common_color_scale <- scale_color_manual(values = line_cols,
                                          guide = col_legend)
 common_size_scale <- scale_size_manual(values = c(thick, thin), guide = FALSE)
+w_size_scale <- scale_size_manual(values = c(wthick, wthin), guide = FALSE)
 common_xweek_scale <- scale_x_continuous(breaks = seq(1, 53, by = 13))
 common_labs <- labs(caption = enc("данни: EUROSTAT"),
                     color = enc("година"),
                     x = enc("седмица"),
                     y =  enc("умирания"))
 map_vline <- list(size = 0.2, col = "dark grey") # vline last week with BG data
+ext_line_cols <- c("#BBBBBB", "#BBBBBB", "#BBBBBB", "#BBBBBB", "#777777",
+                   "#88AAAA", "#BBAA00", "#008800", "#0000BB", "#000000",
+                   "#FF0000") # for country totals plot
+ext_ls <- c("solid", "solid", "dotted", "solid", "solid", "solid",
+            "solid", "solid", "solid", "solid", "solid") # for country totals
+ext_guide <-  guide_legend(nrow = 1,
+                           override.aes = list(linetype = ext_ls,
+                                               shape = c(rep(NA, 10), 19)))
+ext_color_scale <- scale_color_manual(values = ext_line_cols, guide = ext_guide)
+ext_ltypes <- scale_linetype_manual(values = ext_ls, guide = FALSE)
 gtheme1 <- theme(text = element_text(size = 14,
                                      family = windowsFont("Calibri")),
                 panel.grid.minor.x = element_blank(),
@@ -85,7 +99,7 @@ dtab <- read.delim(gzfile(local_deaths_file))
 dtab <- cbind(str_split_fixed(dtab[[1]], ",", 4), dtab[, -1])
 names(dtab) <- c("age", "sex", "unit", "geo", names(dtab)[-(1:4)])
 dtab <- dtab %>%
-    select(matches("(201[5-9]|2020)W[0-5]|age|geo|sex")) %>%
+    select(matches("(201[0-9]|2020)W[0-5]|age|geo|sex")) %>%
     pivot_longer(cols = matches("20..W"),
                  names_to = c("year", "week"),
                  names_pattern = "X(....)W(..)",
@@ -105,6 +119,7 @@ cplot <- function(country_code) {
         title_pre <- txt_title1
     cdata <- dtab %>% filter(geo == country_code,
                              sex == "T",
+                             year >= 2015,
                              #str_detect(age, "([34567]|80\\+)"))
                              str_detect(age, "([1234567]|80-89|90|00)"))
     plt <- ggplot(data = cdata,
@@ -124,13 +139,43 @@ cplot <- function(country_code) {
 }
 
 ################################################################################
+# contry totals plot (argument: country code, e.g. "BG", "UK", "EL")           #
+################################################################################
+tplot <- function(country_code) {
+    if (substr(cnames[country_code], 1, 1) %in% c(enc("В"), enc("Ф")))
+        title_pre <- paste0(txt_title1, txt_v)
+    else
+        title_pre <- txt_title1
+    cdata <- dtab %>% filter(geo == country_code,
+                             sex == "T",
+                             age == "TOTAL")
+    plt <- ggplot(data = cdata,
+                  mapping = aes(x = week,
+                                y = deaths,
+                                color = as.factor(year),
+                                linetype = as.factor(year),
+                                size = ifelse(year == 2020, "C", "N"))) +
+        geom_line() +
+        geom_point(data = cdata %>% filter(year == 2020), size = 2.7) +
+        ext_ltypes +
+        ext_color_scale +
+        w_size_scale +
+        common_xweek_scale +
+        labs(title = paste(title_pre, cnames[country_code], txt_title3)) +
+        common_labs +
+        gtheme1
+    return(plt)
+}
+
+################################################################################
 # map plot                                                                     #
 ################################################################################
 mplot <- function() {
     idata <- dtab %>%
         filter(geo %in% names(cnames),
                sex == "T",
-               age == "TOTAL") %>%
+               age == "TOTAL",
+               year >= 2015) %>%
         mutate(cname = cnames[geo])
     last_bg_wk <- idata %>%
         filter(geo == "BG", year == 2020, deaths > 0) %>%

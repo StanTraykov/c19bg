@@ -173,7 +173,7 @@ ftab <- ftab %>%
 # return regex matching all fields for a chart type                            #
 ################################################################################
 all_fields <- function(chart) {
-    fields <- append("date", c(line_fields[[chart]], area_fields[[chart]]))
+    fields <- c("date", line_fields[[chart]], area_fields[[chart]])
     return(paste(fields, collapse = "|"))
 }
 
