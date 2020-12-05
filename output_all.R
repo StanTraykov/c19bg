@@ -101,3 +101,5 @@ if (!skip_r) {
     cat("calculating R...\n")
     source("estR.R")
 }
+source("r_plot.R")
+export(file = "C00_R", plot = r_plot())
