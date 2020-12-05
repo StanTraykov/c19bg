@@ -1,4 +1,4 @@
-# various plots: cases/active, new cases/deaths, age plot, hospitlzd, positivity
+# R plot from estR.csv and gen data 
 
 library(tidyverse)
 library(zoo)
