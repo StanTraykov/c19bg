@@ -10,8 +10,9 @@ enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
 
 # download @ https://data.egov.bg/data/view/492e8186-0d00-43fb-8f5e-f2b0b183b64f
 gen_data <- file.path("data", enc("Обща статистика за разпространението.csv"))
+est_r <- file.path("data", "estR.csv")
 gen_hist <- file.path("historical_data", "pre_opendata.csv")
-est_r <- "estR.csv"
+
 
 ##### visuals config
 skip_to <- 20 # do not include first few days in scaling calc's
@@ -197,7 +198,7 @@ r_plot <- function() {
                      limits = c(ftab$date[1], last_sunday_inc + 4),
                      date_labels = "%d.%m. (%U)",
                      expand = expansion(mult = c(0.025, 0),
-                                        add = c(-1, 2))) +
+                                        add = c(-1, 3))) +
         plot_labels +
         labs(y = sprintf(lab_y, pcr_scale)) +
         plot_theme

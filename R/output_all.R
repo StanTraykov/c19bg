@@ -6,7 +6,7 @@
 # - Alternatively just ggsave() to target format or plot() to screen.
 #
 # To skip some of the time-consuming stuff:
-# > skip_demo <- TRUE; skip_r <- TRUE; source("output_all.R")
+# > skip_demo <- TRUE; skip_r <- TRUE; source_d("output_all.R")
 
 library(tools)
 library(stringr)
@@ -15,12 +15,13 @@ if (!exists("skip_var")) skip_var <- FALSE
 if (!exists("skip_demo")) skip_demo <- FALSE
 if (!exists("skip_r")) skip_r <- FALSE
 
-# set this to your installation/platform-specific locations
+# set this to installation/platform-specific locations
 inkscape <- "\"C:\\Program Files\\Inkscape\\bin\\inkscape.exe\""
 magick <- "magick"
 inkopts <- "-w 1375 --export-filename"
 mgkopts <- "-quality 100"
 out_dir <- format(Sys.time(), "%b%d")
+source_d <- function(file) source(file.path("R", file))
 
 ##### helper funcs
 dirs <- list(main = out_dir,
@@ -62,7 +63,7 @@ for (d in dirs)
         dir.create(d)
 
 if (!skip_var) {
-    source("var_plot.R")
+    source_d("var_plot.R")
     export(file = "C09_posit", plot = var_plot("positivity"))
     export(file = "C04_cd", plot = var_plot("casesdeaths",
                                                roll_func = mean,
@@ -75,17 +76,17 @@ if (!skip_var) {
                                          line_legend = "0"))
     export(file = "C06_age_1", plot = var_plot("age", line_legend = "0"))
     
-    source("heat.R")
+    source_d("heat.R")
     ggsave(file = filenames("C01_heat")$jpg,
            width = 11, height = 5.5, quality = 100, dpi = 125,
            plot = hplot())
     
-    source("oblasts.R")
+    source_d("oblasts.R")
     export(file = "C03_oblasts_count", plot = oblasts_plot(incid_100k = FALSE))
     export(file = "C02_oblasts_i100k", plot = oblasts_plot(incid_100k = TRUE))
 }
 if (!skip_demo) {
-    source("demo.R")
+    source_d("demo.R")
     for (c in names(cnames))
         export(file = paste0("D",
                              str_pad(which(sort(cnames) == cnames[c]),
@@ -99,7 +100,9 @@ if (!skip_demo) {
 }
 if (!skip_r) {
     cat("calculating R...\n")
-    source("estR.R")
+    source_d("estR.R")
 }
-source("r_plot.R")
-export(file = "C00_R", plot = r_plot())
+if(file.exists(file.path("data", "estR.csv"))) {
+    source_d("r_plot.R")
+    export(file = "C00_R", plot = r_plot())
+}
