@@ -54,11 +54,9 @@ plot_labels <- labs(
                      enc("несигурност 4-7); 7-дневни прозорци, CrI"),
                      enc("по Cori et al. (вж. github уики)")),
     caption = enc("изх. данни: data.egov.bg, НОЩ"),
-    x = enc("дата на докладване (седмица)"),
-    y = paste0(enc("регистрирани случаи, PCR тестове (×"),
-               pcr_scale,
-               ")")
+    x = enc("дата на докладване (седмица)")
 )
+lab_y <- enc(enc("регистрирани случаи, PCR тестове (×%d)"))
 clr_labels <- c(enc("PCR тестове (7 дни)"),
                 enc("позитивност (7 дни)"),
                 enc("рег. случаи (ср. 7 дни)"),
@@ -201,6 +199,7 @@ r_plot <- function() {
                      expand = expansion(mult = c(0.025, 0),
                                         add = c(-1, 2))) +
         plot_labels +
+        labs(y = sprintf(lab_y, pcr_scale)) +
         plot_theme
     return(plt)
 }
