@@ -14,7 +14,7 @@ gen_hist <- file.path("historical_data", "pre_opendata.csv")
 est_r <- "estR.csv"
 
 ##### visuals config
-skip_to <- 10 # do not include first few days in scaling calc's
+skip_to <- 20 # do not include first few days in scaling calc's
 tick_choice <- c(10, 15, 20, 25, 50, 75) * rep(c(1, 10, 100, 1000), each = 6)
 pcr_choice <- c(1, 2, 5) * rep(c(1, 10, 100, 1000), each = 3)
 line_sz <- 0.5
