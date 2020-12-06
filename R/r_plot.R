@@ -13,7 +13,6 @@ gen_data <- file.path("data", enc("Обща статистика за разпр
 est_r <- file.path("data", "estR.csv")
 gen_hist <- file.path("historical_data", "pre_opendata.csv")
 
-
 ##### visuals config
 skip_to <- 20 # do not include first few days in scaling calc's
 tick_choice <- c(10, 15, 20, 25, 50, 75) * rep(c(1, 10, 100, 1000), each = 6)
@@ -66,6 +65,7 @@ fill_labels <- c(enc("95% CrI"),
                  enc("рег. случаи"),
                  enc("рег. сл. (нед.)"))
 sec_axis_name <- paste(enc("репродуктивно число,"), enc("позитивност"))
+
 ##### clean up
 gtab <- read.csv(file = gen_data, encoding = "UTF-8")
 names(gtab) <- c("date", "tests", "new_tests",
@@ -76,7 +76,6 @@ names(gtab) <- c("date", "tests", "new_tests",
                  "new_deaths")
 gtab[, 1] <- as.Date(gtab[, 1])
 rtab <- read.csv(file = est_r)
-rtab <- rtab
 rtab <- rbind(NA, NA, NA, NA, NA, NA, rtab, NA)
 htab <- read.csv(file = gen_hist) %>%
     mutate(date = as.Date(date))
