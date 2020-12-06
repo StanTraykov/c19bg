@@ -22,7 +22,7 @@ install.packages("tidyverse", "geofacet", "zoo", "EpiEstim")
 
 Оттам има няколко начина да се генерират графики:
 
-#### 4.1. Просто и бързо:  генериране на SVG, с команди save_all():
+#### 4.1. Просто и бързо:  генериране на SVG с команди ``save_all()``:
 ```R
 source("R/heat.R"); save_all()
 source("R/var_plot.R"); save_all()
