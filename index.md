@@ -22,7 +22,7 @@
 
 # Общо случаи, активни, хоспитализирани
 
-|Нови и активни случаи|Хоспитализирани|
+|Нови и активни случаи|Хоспитализирани, интензивни|
 |-----|-----|
 |[![Общо случаи и активни случаи](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C08_cases.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C08_cases.svg)|[![Хоспитализирани](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C07_hospitalized.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C07_hospitalized.svg)|
 
@@ -34,6 +34,6 @@
 
 [![Възрасти](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D04_BG.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D04_BG.svg)
 
-|Обща свръхсмъртност|Сравнителна карта|
+|Обща свръхсмъртност|Сравнителна карта ЕС+|
 |-----|-----|
 |[![Общо](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_BG_t.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_BG_t.svg)|[![Карта](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_map.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_map.svg)|
