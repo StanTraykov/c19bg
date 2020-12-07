@@ -2,7 +2,7 @@
 
 # Общи данни
 
-|Нови и смъртни случаи|PCR проби, дял новодоказани|
+|Нови случаи и смъртни случаи|PCR проби, дял новодоказани|
 |-----|-----|
 |[![Регистрирани случаи и смъртни случаи](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C04_cd.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C04_cd.svg)|[![Позитивност](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C09_posit.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C09_posit.svg)|
 
@@ -16,7 +16,7 @@
 
 [![Заболеваемост](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C01_heat.png)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C01_heat.png)
 
-|Нови случаи по възр. средно|Нови случаи по възр. дневно|
+|Нови случаи по възраст, средно|Нови случаи по възраст, дневно|
 |-----|-----|
 |[![Случаи](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C05_age_7.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C05_age_7.svg)|[![Случаи дневно](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C06_age_1.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C06_age_1.svg)|
 
