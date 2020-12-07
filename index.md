@@ -2,7 +2,7 @@
 
 # Общи данни
 
-|Нови случаи и смъртни случаи|PCR проби, дял новодоказани|
+|Нови случаи и см. случаи|PCR проби, дял новодоказани|
 |-----|-----|
 |[![Регистрирани случаи и смъртни случаи](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C04_cd.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C04_cd.svg)|[![Позитивност](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C09_posit.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C09_posit.svg)|
 
@@ -22,7 +22,7 @@
 
 # Общо случаи, хоспитализирани
 
-|Общо нови, активни|Хоспитализирани, интензивни|
+|Общо случаи, активни|Хоспитализирани, интензивни|
 |-----|-----|
 |[![Общо случаи и активни случаи](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C08_cases.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C08_cases.svg)|[![Хоспитализирани](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C07_hospitalized.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C07_hospitalized.svg)|
 
