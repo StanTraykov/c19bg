@@ -62,7 +62,7 @@ plot(my_plot)
 # файл
 ggsave(file = "my_plot.png", width = 11, height = 7, plot = my_plot)
 ```
-*Забележка: При проблеми с UNICODE в RStudio под Windows, изпълнете ръчно* ``source("...")`` *БЕЗ аргумент* ``encoding = 'UTF-8'``*, който се добавя автоматично от RStudio.*
+*Забележка: При проблеми с Unicode в RStudio под Windows, изпълнете ръчно* ``source("...")`` *БЕЗ аргумент* ``encoding = 'UTF-8'``*, който се добавя автоматично от RStudio.*
 
 ## Пакет?
 
