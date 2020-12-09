@@ -12,7 +12,7 @@
 ### 1. Уверете се, че ползвате актуална версия на R и инсталирайте необходимите пакети:
 
 ```R
-install.packages(c("tidyverse", "geofacet", "zoo", "EpiEstim", "shadowtext"))
+install.packages(c("tidyverse", "geofacet", "zoo", "EpiEstim", "shadowtext", "R.utils"))
 ```
 
 ### 2. Изтеглете файловете от GitHub
@@ -23,7 +23,7 @@ install.packages(c("tidyverse", "geofacet", "zoo", "EpiEstim", "shadowtext"))
 
 Изтеглете ръчно трите файла ``Обща статистика за разпространението.csv``, ``Разпределение по дата и по възрастови групи.csv``, ``Разпределение по дата и по области.csv`` от https://data.egov.bg/data/view/492e8186-0d00-43fb-8f5e-f2b0b183b64f и ги сложете в папката ``data``.
 
-*Забележка: Скриптовете теглят сами данните от EUROSTAT и ECDC, и също поставят в папка* ``data``*. Изтрийте файловете* ``demo_r_mwk_10.tsv.gz`` *и* ``ecdc_covid.csv``*, ако желаете данните да се обновят.*
+*Забележка: Скриптовете теглят сами данните от EUROSTAT и ECDC, и също поставят в папка* ``data``*. Изтрийте файловете* ``demo_r_mwk_10.tsv.gz`` *и* ``ecdc_covid.csv.gz``*, ако желаете данните да се обновят.*
  
 ### 4. Генерирайте графиките
 
