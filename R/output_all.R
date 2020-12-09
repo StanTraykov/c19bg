@@ -18,7 +18,7 @@ if (!exists("skip_r")) skip_r <- FALSE
 # set this to installation/platform-specific locations
 inkscape <- "\"C:\\Program Files\\Inkscape\\bin\\inkscape.exe\""
 magick <- "magick"
-inkopts <- "-w 1375 --export-filename"
+inkopts <- "-w %d --export-filename"
 mgkopts <- "-quality 100"
 out_dir <- format(Sys.time(), "%b%d")
 source_d <- function(file) source(file.path("R", file))
@@ -45,14 +45,21 @@ export <- function(file,
                    plot = NULL,
                    make_svg = TRUE,
                    make_png = TRUE,
-                   make_jpg = TRUE) {
+                   make_jpg = TRUE,
+                   width = 11,
+                   height = 7,
+                   pix_width = 1375) {
     fn <- filenames(file)
     if (make_svg)
         ggsave(file = fn$svg,
-               width = 11, height = 7,
+               width = width,
+               height = height,
                plot = plot)
     if (make_png)
-        runcmd(paste(inkscape, fn$svg, inkopts, fn$png))
+        runcmd(paste(inkscape,
+                     fn$svg,
+                     sprintf(inkopts, pix_width),
+                     fn$png))
     if (make_jpg)
         runcmd(paste(magick, fn$png, mgkopts, fn$jpg))
 }
@@ -91,6 +98,13 @@ if (!skip_var) {
 }
 if (!skip_demo) {
     source_d("demo.R")
+    export(file = "D00_BG_t", plot = tplot("BG"))
+    export(file = "D00_map", plot = mplot())
+    export(file = "D00_cmp",
+           height = 8,
+           width = 14.4,
+           pix_width = 1800,
+           plot = fplot())
     for (c in names(cnames))
         export(file = paste0("D",
                              str_pad(which(sort(cnames) == cnames[c]),
@@ -99,14 +113,12 @@ if (!skip_demo) {
                              "_",
                              c),
                plot = cplot(c))
-    export(file = "D00_BG_t", plot = tplot("BG"))
-    export(file = "D00_map", plot = mplot())
 }
 if (!skip_r) {
     cat("calculating R...\n")
     source_d("estR.R")
 }
-if(file.exists(file.path("data", "estR.csv"))) {
+if (file.exists(file.path("data", "estR.csv"))) {
     source_d("r_plot.R")
     export(file = "C00_R", plot = r_plot())
 }

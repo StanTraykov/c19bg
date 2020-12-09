@@ -5,22 +5,35 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(geofacet)
+library(zoo)
+library(shadowtext)
 
 library(extrafont)            # } comment these out to use default fonts
 loadfonts(device = "win")     # }
 enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
 # enc <- function(x) x
 
-##### get data from EUROSTAT
+##### get data from EUROSTAT, ECDC
+# download data, if missing
+dl_missing <- function(url, local_fn) {
+    if (!file.exists(local_fn))
+        download.file(url, local_fn)
+}
+# EUROSTAT
 deaths_file <- "demo_r_mwk_10.tsv.gz"
 local_deaths_file <- file.path("data", deaths_file)
 df_url <- paste0("https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/",
                  "BulkDownloadListing?file=data/",
                  deaths_file)
-if (!file.exists(local_deaths_file))
-    download.file(df_url, local_deaths_file)
+dl_missing(df_url, local_deaths_file)
+# ECDC
+local_covid_file <- file.path("data", "ecdc_covid.csv")
+cf_url <- paste0("https://opendata.ecdc.europa.eu/covid19/casedistribution/",
+                 "csv/data.csv")
+dl_missing(cf_url, local_covid_file)
 
-##### country codes->names, EU+ grid (Ireland deaths data missing from EUROSTAT)
+##### country config
+# country codes->names, EU+ grid (Ireland deaths data missing from EUROSTAT)
 cnames <- c(IS = enc("Исландия"), NO = enc("Норвегия"), SE = enc("Швеция"),
             FI = enc("Финландия"), EE = enc("Естония"),
             UK = enc("Великобритания"), DK = enc("Дания"),
@@ -39,6 +52,8 @@ egrid <- data.frame(row = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4,
                             3, 6, 7, 5, 4, 2, 1, 3, 7, 6, 5, 3, 6, 7, 2, 7),
                     code = names(cnames),
                     name = cnames)
+# for country factor comparison
+comp_f = c("BG", "UK", "BE", "NL", "FR", "ES", "IT", "RO")
 
 ##### visuals config
 txt_title1 <- enc("Умирания в")
@@ -46,10 +61,18 @@ txt_v <- enc("ъв")
 txt_title2 <- enc("по седмици и възрастови групи")
 txt_title3 <- enc("по седмици")
 txt_titlei <- enc("Умирания по страни и седмици")
+txt_titlec <- paste(enc("Фактори на надвишаване (свръхсмъртност /"),
+                    enc("PCR-доказана смъртност)"))
+f_col <- c(enc("средно 2015-2019 г."),
+           enc("2020 г. без PCR-доказани смъртни случаи"),
+           enc("2020 г."))
 thin <- 0.3  # lines
 thick <- 0.7
 wthin <- 0.6 # for whole page plots
 wthick <- 1.1
+f_color_scale <- scale_color_manual(values = c("dark gray",
+                                               "red",
+                                               "dark magenta"))
 line_cols <- c("#AAAAAA", "#BBAA00", "#008800", "#0000BB", "#000000", "#FF0000")
 col_legend <- guide_legend(nrow = 1,
                            override.aes = list(size = c(rep(thin, 5), thick)))
@@ -62,6 +85,10 @@ common_labs <- labs(caption = enc("данни: EUROSTAT"),
                     color = enc("година"),
                     x = enc("седмица"),
                     y =  enc("умирания"))
+f_labs <- labs(caption = enc("данни: EUROSTAT, ECDC"),
+               color = enc("умирания"),
+               x = enc("седмица"),
+               y =  enc("умирания"))
 map_vline <- list(size = 0.2, col = "dark grey") # vline last week with BG data
 ext_line_cols <- c("#BBBBBB", "#BBBBBB", "#BBBBBB", "#BBBBBB", "#777777",
                    "#88AAAA", "#BBAA00", "#008800", "#0000BB", "#000000",
@@ -87,6 +114,7 @@ gtheme2 <- gtheme1 +
                                     margin = margin(1, 0, 1, 0)))
 
 ##### tidy data
+# EUROSTAT weekly mortality
 agrp_names <- function(x) {
     x <- sub("Y_LT10", "00-09", x)
     x <- sub("Y_GE80", "80+", x)
@@ -109,6 +137,77 @@ dtab <- dtab %>%
            age = agrp_names(age)) %>%
     arrange(year, week, age)
 
+mean_tab <- dtab %>% # mean 2015-2019
+    filter(sex == "T",
+           geo %in% comp_f,
+           year >= 2015,
+           year <= 2019,
+           age == "TOTAL") %>%
+    group_by(geo, week) %>%
+    summarize(mean_deaths = mean(deaths))
+tt_tab <- dtab %>% # 2020
+    filter(sex == "T",
+           geo %in% comp_f,
+           year == 2020,
+           age == "TOTAL") %>%
+    select("geo", "week", "deaths") %>%
+    rename(d_2020 = deaths)
+cmp_tab <- left_join(mean_tab, tt_tab, by = c("geo", "week")) %>%
+    mutate(excess_deaths = d_2020 - mean_deaths)
+
+# ECDC covid deaths
+cd_tab <- read.csv(gzfile(local_covid_file))
+cd_tab <- cd_tab %>% filter(geoId %in% comp_f) %>%
+    select("dateRep", "deaths", "geoId") %>%
+    rename(date = dateRep, geo = geoId, daily_d = deaths) %>%
+    mutate(date = as.Date(date, format = "%d/%m/%Y")) %>%
+    filter(date >= as.Date("2020-01-01")) %>%
+    group_by(geo) %>%
+    arrange(date) %>%
+    mutate(s7_d = rollsum(daily_d, 7, align = "right", fill = NA)) %>%
+    filter(weekdays(date) == "Monday") %>%
+    mutate(week = lubridate::isoweek(date) - 1) %>%
+    rename(covid_deaths = s7_d) %>%
+    select("geo", "week", "covid_deaths")
+
+# factor
+factor_tab <- left_join(cmp_tab, cd_tab, by = c("geo", "week")) %>%
+    mutate(ed_covid_factor = excess_deaths / covid_deaths) %>%
+    mutate(ed_factor = d_2020 / mean_deaths)
+
+################################################################################
+# factor comparison                                                            #
+################################################################################
+fplot <- function() {
+    ptab <- factor_tab %>%
+        mutate(cname = cnames[geo])
+    ftab <- ptab %>%
+        filter(ed_factor > 1.2)
+    plt <- ggplot(data = ptab,
+                  mapping = aes(x = week)) +
+        geom_ribbon(mapping = aes(ymin = mean_deaths,
+                                  ymax = d_2020 - covid_deaths),
+                    fill = "#99000044") +
+        geom_line(mapping = aes(y = mean_deaths,
+                                color = f_col[1])) +
+        geom_line(mapping = aes(y = d_2020 - covid_deaths,
+                                color = f_col[2])) +
+        geom_line(mapping = aes(y = d_2020, color = "2020")) +
+        geom_shadowtext(data = ftab,
+                        mapping = aes(label = round(ed_covid_factor, 2),
+                                      y = d_2020 - covid_deaths),
+                        angle = 90,
+                        size = 3.5,
+                        color = "black",
+                        bg.color = "white") +
+        f_color_scale +
+        common_xweek_scale +
+        facet_wrap(~ cname, ncol = 2, scales = "free_y") +
+        labs(title = txt_titlec) +
+        f_labs +
+        gtheme1
+    return(plt)
+}
 ################################################################################
 # contry by age groups plot (argument: country code, e.g. "BG", "UK", "EL")    #
 ################################################################################
