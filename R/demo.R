@@ -7,6 +7,7 @@ library(ggplot2)
 library(geofacet)
 library(zoo)
 library(shadowtext)
+library(R.utils)
 
 library(extrafont)            # } comment these out to use default fonts
 loadfonts(device = "win")     # }
@@ -15,9 +16,20 @@ enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
 
 ##### get data from EUROSTAT, ECDC
 # download data, if missing
-dl_missing <- function(url, local_fn) {
-    if (!file.exists(local_fn))
-        download.file(url, local_fn)
+dl_missing <- function(url, local_fn, zip_local = FALSE) {
+    if (zip_local)
+        down_dest <- paste0(local_fn, ".temp")
+    else
+        down_dest <- local_fn
+    if (!file.exists(local_fn)) {
+        download.file(url, down_dest)
+        if (zip_local) {
+            gzip(down_dest,
+                 destname = local_fn,
+                 overwrite = TRUE,
+                 remove = TRUE)
+        }
+    }
 }
 # EUROSTAT
 deaths_file <- "demo_r_mwk_10.tsv.gz"
@@ -27,10 +39,10 @@ df_url <- paste0("https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/",
                  deaths_file)
 dl_missing(df_url, local_deaths_file)
 # ECDC
-local_covid_file <- file.path("data", "ecdc_covid.csv")
+local_covid_file <- file.path("data", "ecdc_covid.csv.gz")
 cf_url <- paste0("https://opendata.ecdc.europa.eu/covid19/casedistribution/",
                  "csv/data.csv")
-dl_missing(cf_url, local_covid_file)
+dl_missing(cf_url, local_covid_file, zip_local = TRUE)
 
 ##### country config
 # country codes->names, EU+ grid (Ireland deaths data missing from EUROSTAT)
