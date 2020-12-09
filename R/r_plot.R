@@ -2,6 +2,7 @@
 
 library(tidyverse)
 library(zoo)
+library(shadowtext)
 
 library(extrafont)            # } comment these out to use default fonts
 loadfonts(device = "win")     # }
@@ -149,35 +150,38 @@ r_plot <- function() {
                   hjust = 1,
                   size = 2.7) +
         # R median label
-        geom_text(data = ftab %>% filter(date == plot_end_date - 1),
+        geom_shadowtext(data = ftab %>% filter(date == plot_end_date - 1),
                   mapping = aes(x = date,
                                 y = R.Median.R. * r_scale,
                                 color = "D_med",
                                 label = format(round(R.Median.R., 2),
                                                nsmall = 2)),
                   #color = clr$r_med,
-                  size = 3.2,
-                  nudge_x = 4) +
+                  bg.color = "#ebebeb",
+                  size = 3.4,
+                  nudge_x = 5) +
         # R CrI 95% lower
-        geom_text(data = ftab %>% filter(date == plot_end_date - 1),
+        geom_shadowtext(data = ftab %>% filter(date == plot_end_date - 1),
                   mapping = aes(x = date,
                                 y =  r_scale * min(R.Quantile.0.025.R.,
                                                    R.Median.R. - 0.1),
                                 label = format(round(R.Quantile.0.025.R., 2),
                                                nsmall = 2)),
                   color = clr$cri_txt,
-                  size = 3.2,
-                  nudge_x = 4) +
+                  bg.color = "#ebebeb",
+                  size = 3.4,
+                  nudge_x = 5) +
         # R CrI 95% upper
-        geom_text(data = ftab %>% filter(date == plot_end_date - 1),
+        geom_shadowtext(data = ftab %>% filter(date == plot_end_date - 1),
                   mapping = aes(x = date,
                                 y = r_scale * max(R.Quantile.0.975.R.,
                                                   R.Median.R. + 0.1),
                                 label = format(round(R.Quantile.0.975.R., 2),
                                                nsmall = 2)),
                   color = clr$cri_txt,
-                  size = 3.2,
-                  nudge_x = 4) +
+                  bg.color = "#ebebeb",
+                  size = 3.4,
+                  nudge_x = 5) +
         scale_fill_manual(name = 2,
                           values = c(clr$cri, clr$reg_c, clr$reg_s),
                           labels = fill_labels,
@@ -197,7 +201,7 @@ r_plot <- function() {
                      limits = c(ftab$date[1], last_sunday_inc + 4),
                      date_labels = "%d.%m. (%U)",
                      expand = expansion(mult = c(0.025, 0),
-                                        add = c(-1, 3))) +
+                                        add = c(-1, 4))) +
         plot_labels +
         labs(y = sprintf(lab_y, pcr_scale)) +
         plot_theme
