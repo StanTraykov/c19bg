@@ -39,3 +39,9 @@
 |Обща свръхсмъртност|Сравнителна карта ЕС+|
 |-----|-----|
 |[![Общо](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_BG_t.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_BG_t.svg)|[![Карта](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_map.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_map.svg)|
+
+# Източници
+* [Портал за "отворени" данни](https://data.egov.bg/data/view/492e8186-0d00-43fb-8f5e-f2b0b183b64f)
+* [НСИ](https://www.nsi.bg/)
+* [ECDC COVID-19 data](https://www.ecdc.europa.eu/en/covid-19/data)
+* [EUROSTAT demomwk](https://ec.europa.eu/eurostat/databrowser/view/demo_r_mwk_10/default/table?lang=en)
