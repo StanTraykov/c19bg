@@ -34,6 +34,8 @@
 
 [![Възрасти](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D04_BG.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D04_BG.svg)
 
+[![Фактори](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_cmp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_cmp.svg)
+
 |Обща свръхсмъртност|Сравнителна карта ЕС+|
 |-----|-----|
 |[![Общо](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_BG_t.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_BG_t.svg)|[![Карта](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_map.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_map.svg)|
