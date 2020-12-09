@@ -315,13 +315,15 @@ mplot <- function() {
 # example output                                                               #
 ################################################################################
 save_all <- function() {
-    export <- function(plot, file) {
-        ggsave(file = file, width = 11, height = 7, plot = plot)
+    export <- function(plot, file, w = 11, h = 7) {
+        ggsave(file = file, width = w, height = h, plot = plot)
     }
+    export(mplot(), "00_eur_map.svg")
+    export(fplot(), "00_cmp.svg", w = 14.4, h = 8)
+    export(tplot("BG"), "00_BG_totals.svg")
     for (c in names(cnames))
         export(cplot(c),
                # add numbers to filenames per BG alphabetical order of countries
                paste0(str_pad(which(sort(cnames) == cnames[c]), 2, pad = "0"),
                       "_", c, ".svg"))
-    export(mplot(), "00_eur_map.svg")
 }
