@@ -231,8 +231,10 @@ ci14_plot <- function(itype = "i14d",
     first_sunday <- ci_tab %>%
         select("date") %>%
         filter(weekdays(date) == "Sunday") %>%
+        arrange("date") %>%
         slice_head() %>%
         pull()
+    print(first_sunday)
     plot_end_date <- tail(ci_tab$date, n = 1)
     days_till_sunday <- 7 - lubridate::wday(plot_end_date, week_start = 1)
     last_sunday_inc <- plot_end_date + days_till_sunday
@@ -243,8 +245,8 @@ ci14_plot <- function(itype = "i14d",
     plt <- ggplot(data = ci_tab,
                   mapping = aes(x = date, y = .data[[vy]], color = geo)) +
         geom_line(size = 0.3) +
-        geom_line(data = bg_tab, size = 1.1, color = "black") +
-        scale_x_date(breaks = seq(first_sunday,
+        geom_line(data = bg_tab, size = 0.8, color = "black") +
+        scale_x_date(breaks = seq(as.Date("2020-03-08"),
                                   last_sunday_inc,
                                   by = "7 days"),
                      limits = c(ci_tab$date[1], last_sunday_inc + 4),
