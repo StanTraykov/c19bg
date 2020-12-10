@@ -69,6 +69,12 @@ o_name <- function(cd) { # return human field names
     return(enc(name))
 }
 
+o_short <- function(x) { # short oblast name
+    x <- sub(enc("Велико"), enc("В."), x)
+    x <- sub(enc("област"), enc("обл."), x)
+    return(x)
+}
+
 o_pop <- function(oblast) { # return pop
     return(pops[match(oblast, ggrid$name)])
 }
@@ -84,6 +90,7 @@ otab <- otab %>%
     pivot_longer(cols = !matches("date"),
                  names_to = "oblast",
                  values_to = "cases") %>%
+    mutate(oblast_short = o_short(oblast)) %>%
     group_by(oblast) %>%
     mutate(mva7 = rollapply(cases, 7, mean, align = "right", fill = NA)) %>%
     mutate(i100k = 100000 * 7 * mva7 / as.integer(o_pop(oblast)))
@@ -148,7 +155,7 @@ oblasts_plot <- function(incid_100k, facet = TRUE) {
                       mapping = aes(x = date,
                                     y = i100k,
                                     color = oblast,
-                                    label = paste0(oblast,
+                                    label = paste0(oblast_short,
                                                    " (",
                                                    round(i100k),
                                                    ")")),
