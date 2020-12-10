@@ -30,6 +30,7 @@
 # Репродуктивно число
 
 [![R-графика](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C00_R.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C00_R.svg)
+[Методика за изчисление на R](https://github.com/StanTraykov/C19_BG/wiki/%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D0%B8%D0%BA%D0%B0-%D0%B7%D0%B0-%D0%B8%D0%B7%D1%87%D0%B8%D1%81%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%B0-R)
 
 # Сравнение с Европа и света
 
