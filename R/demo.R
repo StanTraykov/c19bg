@@ -228,13 +228,6 @@ ci14_plot <- function(itype = "i14d",
     geo_count <- distinct_geo %>% count() %>% pull()
     bg_tab <- ci_tab %>% filter(geo == "BG")
     set.seed(42)
-    first_sunday <- ci_tab %>%
-        select("date") %>%
-        filter(weekdays(date) == "Sunday") %>%
-        arrange("date") %>%
-        slice_head() %>%
-        pull()
-    print(first_sunday)
     plot_end_date <- tail(ci_tab$date, n = 1)
     days_till_sunday <- 7 - lubridate::wday(plot_end_date, week_start = 1)
     last_sunday_inc <- plot_end_date + days_till_sunday
@@ -270,7 +263,7 @@ ci14_plot <- function(itype = "i14d",
                                                      round(.data[[vy]]),
                                                      ")")),
                         size = 3.6,
-                        nudge_x = 18,
+                        nudge_x = 24,
                         hjust = 0,
                         direction = "y",
                         point.padding = NA,
