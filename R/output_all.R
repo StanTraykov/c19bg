@@ -100,6 +100,14 @@ if (!skip_var) {
 }
 if (!skip_demo) {
     source_d("demo.R")
+    export(plot = ci14_plot("i14d"),
+           file = "C10_cmp_i_wrld")
+    export(plot = ci14_plot("d14d"),
+           file = "C10_cmp_d_wrld")
+    export(plot = ci14_plot("i14d", continent = "Europe"),
+           file = "C11_cmp_i_eurp")
+    export(plot = ci14_plot("d14d", continent = "Europe"),
+           file = "C11_cmp_d_eurp")
     export(file = "D00_BG_t", plot = tplot("BG"))
     export(file = "D00_map", plot = mplot())
     export(file = "D00_cmp",

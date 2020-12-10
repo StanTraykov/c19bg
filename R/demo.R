@@ -1,10 +1,12 @@
 # plot weekly deaths data from EUROSTAT: per country and overview map
 
+library(scales)
 library(stringr)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(geofacet)
+library(ggrepel)
 library(zoo)
 library(shadowtext)
 library(R.utils)
@@ -101,6 +103,16 @@ f_labs <- labs(caption = enc("данни: EUROSTAT, ECDC"),
                color = enc("умирания"),
                x = enc("седмица"),
                y =  enc("умирания"))
+v_labs <- list(i14d = labs(title = paste(enc("14-дневна COVID-19"),
+                                         enc("заболеваемост на 100 хил.")),
+                           caption = enc("данни: ECDC"),
+                           x = enc("дата на докладване (седмица)"),
+                           y =  enc("14-дневна заболеваемост на 100 хил.")),
+               d14d = labs(title = paste(enc("14-дневна COVID-19"),
+                                         enc("смъртност на 1 млн.")),
+                           caption = enc("данни: ECDC"),
+                           x = enc("дата на докладване (седмица)"),
+                           y =  enc("14-дневна смъртност на 1 млн.")))
 map_vline <- list(size = 0.2, col = "dark grey") # vline last week with BG data
 ext_line_cols <- c("#BBBBBB", "#BBBBBB", "#BBBBBB", "#BBBBBB", "#777777",
                    "#88AAAA", "#BBAA00", "#008800", "#0000BB", "#000000",
@@ -126,8 +138,8 @@ gtheme2 <- gtheme1 +
                                     margin = margin(1, 0, 1, 0)))
 
 ##### tidy data
-# EUROSTAT weekly mortality
-agrp_names <- function(x) {
+## EUROSTAT weekly mortality
+agrp_names <- function(x) { # age group labels
     x <- sub("Y_LT10", "00-09", x)
     x <- sub("Y_GE80", "80+", x)
     x <- sub("Y_GE90", "90+", x)
@@ -167,12 +179,26 @@ tt_tab <- dtab %>% # 2020
 cmp_tab <- left_join(mean_tab, tt_tab, by = c("geo", "week")) %>%
     mutate(excess_deaths = d_2020 - mean_deaths)
 
-# ECDC covid deaths
-cd_tab <- read.csv(gzfile(local_covid_file))
-cd_tab <- cd_tab %>% filter(geoId %in% comp_f) %>%
-    select("dateRep", "deaths", "geoId") %>%
-    rename(date = dateRep, geo = geoId, daily_d = deaths) %>%
+## ECDC
+ecdc_tab <- read.csv(gzfile(local_covid_file)) %>%
+    rename(date = dateRep,
+           geo = geoId,
+           daily_d = deaths,
+           geo_name = countriesAndTerritories,
+           i14d =
+               Cumulative_number_for_14_days_of_COVID.19_cases_per_100000) %>%
     mutate(date = as.Date(date, format = "%d/%m/%Y")) %>%
+    mutate(geo_name = gsub("_", " ", substr(enc(geo_name), 1, 13))) %>%
+    group_by(geo) %>%
+    arrange(date) %>%
+    mutate(d14d = 1000000 * rollsum(daily_d, 14, align = "right", fill = NA) /
+                    popData2019) %>%
+    mutate(i14X = 100000 * rollsum(cases, 14, align = "right", fill = NA) /
+                    popData2019) %>%
+    ungroup() %>%
+    arrange(geo)
+cd_tab <- ecdc_tab %>% filter(geo %in% comp_f) %>%
+    select("date", "daily_d", "geo") %>%
     filter(date >= as.Date("2020-01-01")) %>%
     group_by(geo) %>%
     arrange(date) %>%
@@ -187,6 +213,78 @@ factor_tab <- left_join(cmp_tab, cd_tab, by = c("geo", "week")) %>%
     mutate(ed_covid_factor = excess_deaths / covid_deaths) %>%
     mutate(ed_factor = d_2020 / mean_deaths)
 
+################################################################################
+# 14d country incidence/deaths comparison                                      #
+# argument: "i14d" or "d14d" -- cumulative 14d incidence/deaths per 100K/1M    #
+################################################################################
+ci14_plot <- function(itype = "i14d",
+                      continent = "Asia|Africa|Europe|Oceania|America",
+                      top_n = 25) {
+    vy <- itype
+    ci_tab <- ecdc_tab %>%
+        filter(date >= as.Date("2020-03-01"),
+               str_detect(continentExp, continent))
+    distinct_geo <- ci_tab %>% select("geo") %>% distinct()
+    geo_count <- distinct_geo %>% count() %>% pull()
+    bg_tab <- ci_tab %>% filter(geo == "BG")
+    set.seed(42)
+    first_sunday <- ci_tab %>%
+        select("date") %>%
+        filter(weekdays(date) == "Sunday") %>%
+        slice_head() %>%
+        pull()
+    plot_end_date <- tail(ci_tab$date, n = 1)
+    days_till_sunday <- 7 - lubridate::wday(plot_end_date, week_start = 1)
+    last_sunday_inc <- plot_end_date + days_till_sunday
+    pal <- c(hue_pal()(geo_count))
+    geos <- distinct_geo %>% pull()
+    bg_pos <- which(geos == "BG")
+    pal[bg_pos] = "black"
+    plt <- ggplot(data = ci_tab,
+                  mapping = aes(x = date, y = .data[[vy]], color = geo)) +
+        geom_line(size = 0.3) +
+        geom_line(data = bg_tab, size = 1.1, color = "black") +
+        scale_x_date(breaks = seq(first_sunday,
+                                  last_sunday_inc,
+                                  by = "7 days"),
+                     limits = c(ci_tab$date[1], last_sunday_inc + 4),
+                     date_labels = "%d.%m. (%U)",
+                     expand = expansion(mult = c(0.02, 0.24))) +
+        scale_y_continuous(expand = expansion(mult = c(0.02, 0.02)),
+                           limits = c(0, NA)) +
+        guides(color = FALSE) +
+        geom_text_repel(data = ci_tab %>%
+                            filter(date == plot_end_date) %>%
+                            arrange(.data[[vy]]) %>%
+                            slice_tail(n = top_n),
+                        mapping = aes(x = date,
+                                      y = .data[[vy]],
+                                      color = geo,
+                                      fontface = ifelse(geo == "BG",
+                                                        "bold",
+                                                        "plain"),
+                                      label = paste0(geo_name,
+                                                     " (",
+                                                     round(.data[[vy]]),
+                                                     ")")),
+                        size = 3.6,
+                        nudge_x = 18,
+                        hjust = 0,
+                        direction = "y",
+                        point.padding = NA,
+                        box.padding = unit(1.1, units = "pt"),
+                        segment.color	= "dark gray",
+                        segment.size = 0.2,
+                        segment.alpha	= 0.5,
+                        show.legend = FALSE) +
+        scale_color_manual(values = pal) +
+        v_labs[itype] +
+        labs(title = paste(v_labs[[itype]]$title,
+                           sprintf("(%s)", gsub("\\|", ", ", continent)))) +
+        gtheme1 +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    return(plt)
+}
 ################################################################################
 # factor comparison                                                            #
 ################################################################################
@@ -318,6 +416,10 @@ save_all <- function() {
     export <- function(plot, file, w = 11, h = 7) {
         ggsave(file = file, width = w, height = h, plot = plot)
     }
+    export(ci14_plot("i14d"), "cmp_i14d_world.svg")
+    export(ci14_plot("d14d"), "cmp_d14d_world.svg")
+    export(ci14_plot("i14d", continent = "Europe"), "cmp_i14d_europe.svg")
+    export(ci14_plot("d14d", continent = "Europe"), "cmp_d14d_europe.svg")
     export(mplot(), "00_eur_map.svg")
     export(fplot(), "00_cmp.svg", w = 14.4, h = 8)
     export(tplot("BG"), "00_BG_totals.svg")
