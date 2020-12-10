@@ -1,6 +1,7 @@
 # plot BG oblast data in a map: incidence (new cases) & incidence per 100K
 
 library(tidyverse)
+library(ggrepel)
 library(zoo)
 library(geofacet)
 library(extrafont)            # } comment these out to use default fonts
@@ -59,6 +60,7 @@ labs_i100k <- labs(x = enc("месец"),
                    title = paste(enc("7-дневна заболеваемост по области"),
                                  enc("(регистрирани нови случаи на 100 хил.)")),
                    caption = enc("данни: data.egov.bg, НСИ"))
+labs_no_facet <- labs(x = enc("дата на докладване (седмица)"))
 ##### tidy data
 o_name <- function(cd) { # return human field names
     if (cd == "date") return(cd)
@@ -93,9 +95,13 @@ dummy <- data.frame(date = as.Date("2020-11-08"), # for fixing y lower limit
                     i100k = 0)
 
 ################################################################################
-# plot (boolean argument: whether to plot incidence/100K instead of raw incid. #
+# oblast incidence plot; arguments:                                            #
+# - incid_100k: whether to plot incidence/100K instead of raw incid (def FALSE)#
+# - facet: whether to geo split into small charts (default TRUE)               #
 ################################################################################
-oblasts_plot <- function(incid_100k) {
+oblasts_plot <- function(incid_100k, facet = TRUE) {
+    if (!(facet || incid_100k))
+        stop("can't facet count")
     if (incid_100k) {
         plt <- ggplot(data = otab,
                       mapping = aes(x = date, y = i100k, color = oblast)) +
@@ -111,10 +117,54 @@ oblasts_plot <- function(incid_100k) {
     }
     plt <- plt +
         guides(color = FALSE) +
-        geom_line() +
-        scale_x_date(date_labels = "%m", date_breaks = "1 month") +
-        geom_blank(data = dummy) +
-        facet_geo(~ oblast, grid = ggrid, scales = scales)
+        geom_line()
+    if (facet) {
+        plt <- plt +
+            scale_x_date(date_labels = "%m", date_breaks = "1 month") +
+            geom_blank(data = dummy) +
+            facet_geo(~ oblast, grid = ggrid, scales = scales)
+    } else {# no facet
+        set.seed(42)
+        dates_with_mva <- otab %>%
+            ungroup() %>%
+            filter(!is.na(mva7)) %>%
+            arrange(date) %>%
+            select("date")
+        first_sunday <- dates_with_mva %>%
+            filter(weekdays(date) == "Sunday") %>% slice_head() %>% pull()
+        first_mva7 <- dates_with_mva %>% slice_head() %>% pull()
+        plot_end_date <- tail(otab$date, n = 1)
+        days_till_sunday <- 7 - lubridate::wday(plot_end_date, week_start = 1)
+        last_sunday_inc <- plot_end_date + days_till_sunday
+        plt <- plt +
+            scale_x_date(breaks = seq(first_sunday,
+                                      last_sunday_inc,
+                                      by = "7 days"),
+                         limits = c(first_mva7, last_sunday_inc + 4),
+                         date_labels = "%d.%m. (%U)",
+                         expand = expansion(mult = c(0.02, 0.26))) +
+            geom_text_repel(data = otab %>%
+                                filter(date == plot_end_date),
+                      mapping = aes(x = date,
+                                    y = i100k,
+                                    color = oblast,
+                                    label = paste0(oblast,
+                                                   " (",
+                                                   round(i100k),
+                                                   ")")),
+                      size = 3.6,
+                      nudge_x = 18,
+                      hjust = 0,
+                      direction = "y",
+                      point.padding = NA,
+                      box.padding = unit(1.1, units = "pt"),
+                      segment.color	= "dark gray",
+                      segment.size = 0.2,
+                      segment.alpha	= 0.5,
+                      show.legend = FALSE) +
+            labs_no_facet +
+            theme(axis.text.x = element_text(angle = 90))
+    }
     return(plt)
 }
 
@@ -129,4 +179,7 @@ save_all <- function() {
     ggsave(file = "oblasts_count.svg",
                   width = w, height = h,
                   plot = oblasts_plot(incid_100k = FALSE))
+    ggsave(file = "oblasts_i_cmp.svg",
+           width = w, height = h,
+           plot = oblasts_plot(incid_100k = TRUE, facet = FALSE))
 }
