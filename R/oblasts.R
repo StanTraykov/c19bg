@@ -170,7 +170,8 @@ oblasts_plot <- function(incid_100k, facet = TRUE) {
                       segment.alpha	= 0.5,
                       show.legend = FALSE) +
             labs_no_facet +
-            theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
+            theme(axis.text.x = element_text(angle = 45, hjust = 1))
+            #theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
     }
     return(plt)
 }
