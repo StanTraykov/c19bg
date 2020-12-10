@@ -43,7 +43,7 @@
 
 |Смъртност Европа|Смъртност свят|
 |-----|-----|
-|[![Сравнение Европа смъртност](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C11_cmp_d_eurp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C11_cmp_d_eurp.svg)|[![Сравнение свят смъртност](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C10_cmp_d_wrld.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C10_cmp_d_wrld.svg.svg)|
+|[![Сравнение Европа смъртност](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C11_cmp_d_eurp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C11_cmp_d_eurp.svg)|[![Сравнение свят смъртност](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C10_cmp_d_wrld.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C10_cmp_d_wrld.svg)|
 
 # Свръхсмъртност
 
