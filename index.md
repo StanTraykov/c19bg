@@ -34,11 +34,13 @@
 # Сравнение с Европа и света
 
 ## Заболеваемост
+
 |Заболеваемост Европа|Заболеваемост свят|
 |-----|-----|
 |[![Сравнение Европа заболеваемост](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C11_cmp_i_eurp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C11_cmp_i_eurp.svg)|[![Сравнение свят заболеваемост](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C10_cmp_i_wrld.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C10_cmp_i_wrld.svg)|
 
 ## Смъртност
+
 |Смъртност Европа|Смъртност свят|
 |-----|-----|
 |[![Сравнение Европа смъртност](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C11_cmp_d_eurp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C11_cmp_d_eurp.svg)|[![Сравнение свят смъртност](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C10_cmp_d_wrld.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C10_cmp_d_wrld.svg.svg)|
