@@ -9,11 +9,15 @@
 |[![Регистрирани случаи и смъртни случаи](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C04_cd.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C04_cd.svg)|[![Позитивност](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C09_posit.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C09_posit.svg)|
 
 # Области
-[![Заболеваемост](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C02_oblasts_i_cmp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C02_oblasts_i_cmp.svg)
-
-|Заболеваемост по области|Нови случаи по области|
+|Карта заболеваемост|Карта нови случаи|
 |-----|-----|
-|[![Заболеваемост](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C02_oblasts_i100k.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C02_oblasts_i100k.svg)|[![Случаи](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C03_oblasts_count.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C03_oblasts_count.svg)|
+|[![Заболеваемост карта](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C02_oblasts_i100k.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C02_oblasts_i100k.svg)|[![Нови случаи карта](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C03_oblasts_count.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C03_oblasts_count.svg)|
+
+|Сравнение заболеваемост|Сравнение нови случаи|
+|-----|-----|
+|[![Заболеваемост](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C02_oblasts_i_cmp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C02_oblasts_i_cmp.svg)|[![Нови случаи](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C03_oblasts_c_cmp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C03_oblasts_c_cmp.svg)|
+
+
 
 # Възрастови групи
 
