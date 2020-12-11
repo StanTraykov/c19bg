@@ -26,4 +26,10 @@ pub_files="${src_dir}/svg/C*.svg ${src_dir}/svg/D00*.svg ${src_dir}/svg/D*BG.svg
 cp -a ${pub_files} "${copy_dir}"
 cd "${copy_dir}" || exit 1
 ${git_fetch} && ${git_pull} && ${git_stage} && ${git_commit} "auto upload ${src_dir}"
+# also update index.md with the last update time
+mdate=$(${git} log --date "iso-local" -n 1 . | grep Date: | sed -e 's/Date: *//')
+cd ..
+regpre='s/(<!-- up -->).*?(<!-- date -->)/'
+sed -i -re "${regpre}\1${mdate}\2/" index.md
+${git_stage} && ${git_commit} "auto update time ${src_dir}"
 ${git_push}

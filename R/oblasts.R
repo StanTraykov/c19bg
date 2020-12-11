@@ -1,6 +1,7 @@
 # plot BG oblast data in a map: incidence (new cases) & incidence per 100K
 
 library(tidyverse)
+library(scales)
 library(ggrepel)
 library(zoo)
 library(geofacet)
@@ -18,6 +19,7 @@ pops <- c("82835", "236305", "171809", "215477", "108018", "172262", "159470",
           "252776", "225317", "666801", "116915", "158204", "103532", "302694")
 
 ##### visuals config
+line_sizes <- c(0.5, 0.7)
 ggrid <- data.frame( # bg oblast grid from geofacet pkg; modified codes/names
     code = c("VID", "PVN", "DOB", "RSE", "SLS", "SHU",
              "VRC", "VTR", "MON", "RAZ", "VAR", "TGV", "GAB", "SFO", "LOV",
@@ -36,6 +38,15 @@ ggrid <- data.frame( # bg oblast grid from geofacet pkg; modified codes/names
             4L, 4L, 4L, 5L, 5L, 5L, 5L, 5L, 6L, 6L, 6L),
     col = c(1L, 3L, 6L, 4L, 5L, 5L, 2L, 3L, 1L, 4L, 5L, 4L, 3L, 1L, 2L, 2L, 5L,
             3L, 1L, 4L, 5L, 2L, 4L, 3L, 1L, 4L, 3L, 2L))
+obl_colors <- hue_pal()(length(pops))
+obl_colors[which(sort(ggrid$name) == enc("София-град"))] <- "black"
+obl_colors[which(sort(ggrid$name) == enc("Пловдив"))] <- "#CC0000"
+obl_colors[which(sort(ggrid$name) == enc("Варна"))] <- "#0000CC"
+obl_colors[which(sort(ggrid$name) == enc("Бургас"))] <- "#008800"
+big_oblasts <- c(enc("София-град"),
+                 enc("Пловдив"),
+                 enc("Варна"),
+                 enc("Бургас"))
 gtheme_count <- theme(text = element_text(size = 14,
                                           family = windowsFont("Calibri")),
                       panel.grid.minor.x = element_blank(),
@@ -90,7 +101,6 @@ otab <- otab %>%
     pivot_longer(cols = !matches("date"),
                  names_to = "oblast",
                  values_to = "cases") %>%
-    mutate(oblast_short = o_short(oblast)) %>%
     group_by(oblast) %>%
     mutate(mva7 = rollapply(cases, 7, mean, align = "right", fill = NA)) %>%
     mutate(i100k = 100000 * 7 * mva7 / as.integer(o_pop(oblast)))
@@ -107,24 +117,35 @@ dummy <- data.frame(date = as.Date("2020-11-08"), # for fixing y lower limit
 # - facet: whether to geo split into small charts (default TRUE)               #
 ################################################################################
 oblasts_plot <- function(incid_100k, facet = TRUE) {
-    if (!(facet || incid_100k))
-        stop("can't facet count")
+    if (incid_100k)
+        vy <- "i100k"
+    else
+        vy <- "mva7"
+    print(otab)
+    plt <- ggplot(data = otab,
+                  mapping = aes(x = date,
+                                y = .data[[vy]],
+                                color = oblast,
+                                fontface = ifelse(oblast %in% big_oblasts,
+                                                 "bold",
+                                                 "plain"),
+                                label = sprintf("%s (%d)",
+                                                o_short(oblast),
+                                                round(.data[[vy]]))))
     if (incid_100k) {
-        plt <- ggplot(data = otab,
-                      mapping = aes(x = date, y = i100k, color = oblast)) +
-            labs_i100k +
-            gtheme_i100k
+        plt <- plt + labs_i100k + gtheme_i100k
         scales <- "fixed"
     } else {
-        plt <- ggplot(data = otab,
-                      mapping = aes(x = date, y = mva7, color = oblast)) +
-            labs_count +
-            gtheme_count
+        plt <- plt + labs_count + gtheme_count
         scales <- "free_y"
     }
     plt <- plt +
         guides(color = FALSE) +
-        geom_line()
+        geom_line(mapping = aes(size = ifelse(!(oblast %in% big_oblasts),
+                                              ifelse(facet,"B", "A"),
+                                              "B"))) +
+        scale_size_manual(values = line_sizes, guide = FALSE) +
+        scale_color_manual(values = obl_colors)
     if (facet) {
         plt <- plt +
             scale_x_date(date_labels = "%m", date_breaks = "1 month") +
@@ -152,23 +173,17 @@ oblasts_plot <- function(incid_100k, facet = TRUE) {
                          expand = expansion(mult = c(0.02, 0.26))) +
             geom_text_repel(data = otab %>%
                                 filter(date == plot_end_date),
-                      mapping = aes(x = date,
-                                    y = i100k,
-                                    color = oblast,
-                                    label = paste0(oblast_short,
-                                                   " (",
-                                                   round(i100k),
-                                                   ")")),
-                      size = 3.6,
-                      nudge_x = 18,
-                      hjust = 0,
-                      direction = "y",
-                      point.padding = NA,
-                      box.padding = unit(1.1, units = "pt"),
-                      segment.color	= "dark gray",
-                      segment.size = 0.2,
-                      segment.alpha	= 0.5,
-                      show.legend = FALSE) +
+                            size = 3.6,
+                            nudge_x = 18,
+                            hjust = 0,
+                            direction = "y",
+                            point.padding = NA,
+                            box.padding = unit(1.1, units = "pt"),
+                            segment.color	= "dark gray",
+                            segment.size = 0.2,
+                            segment.alpha	= 0.5,
+                            show.legend = FALSE) +
+            
             labs_no_facet +
             theme(axis.text.x = element_text(angle = 45, hjust = 1))
     }
@@ -189,4 +204,7 @@ save_all <- function() {
     ggsave(file = "oblasts_i_cmp.svg",
            width = w, height = h,
            plot = oblasts_plot(incid_100k = TRUE, facet = FALSE))
+    ggsave(file = "oblasts_c_cmp.svg",
+           width = w, height = h,
+           plot = oblasts_plot(incid_100k = FALSE, facet = FALSE))
 }

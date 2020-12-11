@@ -94,6 +94,8 @@ if (!skip_var) {
     
     source_d("oblasts.R")
     export(file = "C03_oblasts_count", plot = oblasts_plot(incid_100k = FALSE))
+    export(file = "C03_oblasts_c_cmp", plot = oblasts_plot(incid_100k = FALSE,
+                                                           facet = FALSE))
     export(file = "C02_oblasts_i100k", plot = oblasts_plot(incid_100k = TRUE))
     export(file = "C02_oblasts_i_cmp", plot = oblasts_plot(incid_100k = TRUE,
                                                            facet = FALSE))
