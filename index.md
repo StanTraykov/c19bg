@@ -25,6 +25,7 @@
 |Нови случаи по възраст, средно|Нови случаи по възраст, дневно|
 |-----|-----|
 |[![Случаи](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C05_age_7.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C05_age_7.svg)|[![Случаи дневно](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C06_age_1.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C06_age_1.svg)|
+|[![Случаи](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C05_age_dis.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C05_age_dis.svg)||
 
 # Общо случаи, хоспитализирани
 
@@ -41,13 +42,17 @@
 
 [![Сравнение Европа свръхсмъртност](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C12_exd1m_eurp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C12_exd1m_eurp.svg)
 
-|Заболеваемост Европа|Заболеваемост свят|
-|-----|-----|
-|[![Сравнение Европа заболеваемост](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C11_cmp_i_eurp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C11_cmp_i_eurp.svg)|[![Сравнение свят заболеваемост](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C10_cmp_i_wrld.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C10_cmp_i_wrld.svg)|
+[![Сравнение Европа хоспитализирани](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C13_cmp_h_eurp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C13_cmp_h_eurp.svg)
 
 |Смъртност Европа|Смъртност свят|
 |-----|-----|
 |[![Сравнение Европа смъртност](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C11_cmp_d_eurp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C11_cmp_d_eurp.svg)|[![Сравнение свят смъртност](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C10_cmp_d_wrld.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C10_cmp_d_wrld.svg)|
+
+|Заболеваемост Европа|Заболеваемост свят|
+|-----|-----|
+|[![Сравнение Европа заболеваемост](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C11_cmp_i_eurp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C11_cmp_i_eurp.svg)|[![Сравнение свят заболеваемост](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C10_cmp_i_wrld.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C10_cmp_i_wrld.svg)|
+
+
 
 # Свръхсмъртност
 
