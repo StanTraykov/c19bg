@@ -1,4 +1,4 @@
-# R plot from estR.csv and gen data 
+# R plot from estR.csv and gen data
 
 library(tidyverse)
 library(zoo)
@@ -22,7 +22,7 @@ line_sz <- 0.5
 lty_norm <- "solid"
 lty_mva <- "dotted"
 clr_leg <- list(linetype = c(lty_norm, lty_norm, lty_mva, lty_norm),
-                size = c(line_sz, line_sz , line_sz, line_sz))
+                size = c(line_sz, line_sz, line_sz, line_sz))
 fill_leg <- list(alpha = c(0x66, 0x77, 0x99) / (0xFF * 1.5))
 clr <- list(cri = "#0082df66",
             cri_txt = "#0082df99",
@@ -107,10 +107,10 @@ r_plot <- function() {
     cmx <- max(ttab %>% select(new_cases) %>% pull(), na.rm = TRUE)
     rmx <- max(ttab %>% select(R.Quantile.0.975.R.) %>% pull(), na.rm = TRUE)
     pmx <- max(ttab %>% select(s7_nt) %>% pull(), na.rm = TRUE)
-    r_scale <- tick_choice[tick_choice >= cmx/rmx][1]
+    r_scale <- tick_choice[tick_choice >= cmx / rmx][1]
     c_max <- r_scale * rmx # cases axis limit
     c_by <- r_scale        # cases axis tick
-    pcr_scale <- pcr_choice[pcr_choice >= pmx/c_max][1]
+    pcr_scale <- pcr_choice[pcr_choice >= pmx / c_max][1]
     plt <- ggplot(data = ftab, mapping = aes(x = date))
     plt <- plt +
         geom_col(mapping = aes(y = new_cases, fill = is_sun),

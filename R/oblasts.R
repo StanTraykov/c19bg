@@ -117,11 +117,7 @@ dummy <- data.frame(date = as.Date("2020-11-08"), # for fixing y lower limit
 # - facet: whether to geo split into small charts (default TRUE)               #
 ################################################################################
 oblasts_plot <- function(incid_100k, facet = TRUE) {
-    if (incid_100k)
-        vy <- "i100k"
-    else
-        vy <- "mva7"
-    print(otab)
+    vy <- ifelse(incid_100k, "i100k", "mva7")
     plt <- ggplot(data = otab,
                   mapping = aes(x = date,
                                 y = .data[[vy]],
@@ -142,7 +138,7 @@ oblasts_plot <- function(incid_100k, facet = TRUE) {
     plt <- plt +
         guides(color = FALSE) +
         geom_line(mapping = aes(size = ifelse(!(oblast %in% big_oblasts),
-                                              ifelse(facet,"B", "A"),
+                                              ifelse(facet, "B", "A"),
                                               "B"))) +
         scale_size_manual(values = line_sizes, guide = FALSE) +
         scale_color_manual(values = obl_colors)
@@ -159,8 +155,12 @@ oblasts_plot <- function(incid_100k, facet = TRUE) {
             arrange(date) %>%
             select("date")
         first_sunday <- dates_with_mva %>%
-            filter(weekdays(date) == "Sunday") %>% slice_head() %>% pull()
-        first_mva7 <- dates_with_mva %>% slice_head() %>% pull()
+            filter(weekdays(date) == "Sunday") %>%
+            slice_head() %>%
+            pull()
+        first_mva7 <- dates_with_mva %>%
+            slice_head() %>%
+            pull()
         plot_end_date <- tail(otab$date, n = 1)
         days_till_sunday <- 7 - lubridate::wday(plot_end_date, week_start = 1)
         last_sunday_inc <- plot_end_date + days_till_sunday
@@ -183,7 +183,6 @@ oblasts_plot <- function(incid_100k, facet = TRUE) {
                             segment.size = 0.2,
                             segment.alpha	= 0.5,
                             show.legend = FALSE) +
-            
             labs_no_facet +
             theme(axis.text.x = element_text(angle = 45, hjust = 1))
     }

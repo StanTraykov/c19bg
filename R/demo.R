@@ -67,7 +67,7 @@ egrid <- data.frame(row = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4,
                     code = names(cnames),
                     name = cnames)
 # for country factor comparison
-comp_f = c("BG", "UK", "BE", "NL", "FR", "ES", "IT", "RO")
+comp_f <- c("BG", "UK", "BE", "NL", "FR", "ES", "IT", "RO")
 
 ##### visuals config
 txt_title1 <- enc("Умирания в")
@@ -197,7 +197,8 @@ ecdc_tab <- read.csv(gzfile(local_covid_file)) %>%
                     popData2019) %>%
     ungroup() %>%
     arrange(geo)
-cd_tab <- ecdc_tab %>% filter(geo %in% comp_f) %>%
+cd_tab <- ecdc_tab %>%
+    filter(geo %in% comp_f) %>%
     select("date", "daily_d", "geo") %>%
     filter(date >= as.Date("2020-01-01")) %>%
     group_by(geo) %>%
@@ -234,7 +235,7 @@ ci14_plot <- function(itype = "i14d",
     pal <- c(hue_pal()(geo_count))
     geos <- distinct_geo %>% pull()
     bg_pos <- which(geos == "BG")
-    pal[bg_pos] = "black"
+    pal[bg_pos] <- "black"
     plt <- ggplot(data = ci_tab,
                   mapping = aes(x = date, y = .data[[vy]], color = geo)) +
         geom_line(size = 0.3) +

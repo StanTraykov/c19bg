@@ -82,7 +82,7 @@ if (!skip_var) {
                                          roll_window = 7,
                                          line_legend = "0"))
     export(file = "C06_age_1", plot = var_plot("age", line_legend = "0"))
-    
+
     source_d("heat.R")
     heat_map <- hplot()
     ggsave(file = filenames("C01_heat")$jpg,
@@ -91,7 +91,7 @@ if (!skip_var) {
     ggsave(file = filenames("C01_heat")$png,
            width = 11, height = 5.5, dpi = 125,
            plot = heat_map)
-    
+
     source_d("oblasts.R")
     export(file = "C03_oblasts_count", plot = oblasts_plot(incid_100k = FALSE))
     export(file = "C03_oblasts_c_cmp", plot = oblasts_plot(incid_100k = FALSE,
