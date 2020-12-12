@@ -2,6 +2,7 @@
 
 library(tidyverse)
 library(zoo)
+library(ggrepel)
 
 library(extrafont)            # } comment these out to use default fonts
 loadfonts(device = "win")     # }
@@ -24,16 +25,18 @@ translate <- function(x) {
 }
 line_fields <- list(casesdeaths = "new_cases|new_deaths",
                     age = "([2-8]|^)0\\+|new_deaths",
+                    dis = "0-|90\\+",
                     hospitalized = "active_cases",
                     positivity = "date|posit7|s7_nt")
 area_fields <- list(cases = "^cases$|active_cases",
                     hospitalized = "hospitalized|in_icu")
 tick_choice <- c(10, 20, 25, 50) * rep(c(1, 10, 100, 1000), each = 4)
-no_na <- c(age = "0+", positivity = "posit7")
+no_na <- c(age = "0+", dis = "0-19", positivity = "posit7")
 thin <- 0.5   # } lines
 thick <- 1    # }
 line_sizes <- list(casesdeaths = list(rgx = "NONE", sizes = c(thin)),
                    age = list(rgx = "^[2-8]", sizes = c(thin, thick)),
+                   dis = list(rgx = "NONE", sizes = c(thin)),
                    hospitalized = list(rgx = "NONE", sizes = c(thin)),
                    positivity = list(rgx = "NONE", sizes = c(thin)))
 casesdeaths_colors <- c("blue" = enc("нови случаи"),
@@ -43,6 +46,9 @@ age_colors <- c("dark green",
                 "blue",
                 rep("dark orange", 3),
                 "red")
+dis_colors <- c("lightgreen", "green1", "green4",
+                "#5555FF", "blue4", "violet",
+                "orange", "red", "red4")
 age_labels <- function(x) ifelse(x == "new_deaths", enc("смъртни случаи"), x)
 age_guide <- guide_legend(nrow = 1,
                           override.aes = list(size = c(thick,
@@ -64,7 +70,9 @@ plot_colors <- c(casesdeaths = make_scale(scale_color_manual,
                  hospitalized = make_scale(scale_color_manual,
                                            hospitalized_colors),
                  positivity = make_scale(scale_color_manual,
-                                         positivity_colors))
+                                         positivity_colors),
+                 dis = scale_color_manual(values = dis_colors,
+                                          guide = guide_legend(nrow = 1)))
 
 plot_fills <- c(cases = make_scale(scale_fill_manual,
                                    cases_fills),
@@ -79,8 +87,14 @@ plot_labels <- list(
                        x = x_label,
                        y = enc("регистрирани случаи")),
     age = labs(title = paste(enc("Регистрирани нови случаи"),
-                             enc("(възрастово разпределение) и "),
+                             enc("(възрастови групи) и "),
                              enc("смъртни случаи")),
+               caption = enc("данни: data.egov.bg"),
+               color = enc("дневно"),
+               x = x_label,
+               y = enc("регистрирани случаи")),
+    dis = labs(title = paste(enc("Регистрирани нови случаи"),
+                             enc("(дезагрегирани възрастови групи)")),
                caption = enc("данни: data.egov.bg"),
                color = enc("дневно"),
                x = x_label,
@@ -261,13 +275,14 @@ var_plot <- function(chart,
     }
     if (!is.null(line_legend)) {
         plt <- plt +
-            geom_text(data = ptab %>%
+            geom_text_repel(data = ptab %>%
                           filter(date == plot_end_date,
                                  str_detect(metric, line_legend)),
                       mapping = aes(x = date,
                                     y = value,
                                     color = metric,
                                     label = metric),
+                      direction = "y",
                       size = 4,
                       nudge_x = 4,
                       show.legend = FALSE)
@@ -331,4 +346,8 @@ save_all <- function() {
                                            roll_window = 7,
                                            line_legend = "0"))
     export(file = "age_1", plot = var_plot("age", line_legend = "0"))
+    export(file = "age_dis", plot = var_plot("dis",
+                                           roll_func = mean,
+                                           roll_window = 7,
+                                           line_legend = "."))
 }

@@ -82,6 +82,10 @@ if (!skip_var) {
                                          roll_func = mean,
                                          roll_window = 7,
                                          line_legend = "0"))
+    export(file = "C05_age_dis", plot = var_plot("dis",
+                                               roll_func = mean,
+                                               roll_window = 7,
+                                               line_legend = "."))
     export(file = "C06_age_1", plot = var_plot("age", line_legend = "0"))
 
     source_d("heat.R")
@@ -103,6 +107,7 @@ if (!skip_var) {
 }
 if (!skip_dall) {
     source_d("demo.R")
+    export(plot = ci14_plot("hosp1m"), file = "C13_cmp_h_eurp")
     export(plot = exd_plot(), file = "C12_exd1m_eurp")
     export(plot = ci14_plot("i14d"), file = "C10_cmp_i_wrld")
     export(plot = ci14_plot("d14d"), file = "C10_cmp_d_wrld")

@@ -44,11 +44,16 @@ df_url <- paste0("https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/",
                  "BulkDownloadListing?file=data/",
                  deaths_file)
 dl_missing(df_url, local_deaths_file)
-# ECDC
+# ECDC cases/deaths
 local_covid_file <- file.path("data", "ecdc_covid.csv.gz")
 cf_url <- paste0("https://opendata.ecdc.europa.eu/covid19/casedistribution/",
                  "csv/data.csv")
 dl_missing(cf_url, local_covid_file, zip_local = TRUE)
+# ECDC hosp
+local_hosp_file <- file.path("data", "ecdc_hosp.csv.gz")
+hf_url <- paste0("https://opendata.ecdc.europa.eu/covid19/",
+                 "hospitalicuadmissionrates/csv/data.csv")
+dl_missing(hf_url, local_hosp_file, zip_local = TRUE)
 
 ##### country config
 # country codes->names, EU+ grid (Ireland deaths data missing from EUROSTAT)
@@ -85,6 +90,7 @@ f_col <- c(enc("средно 2015-2019 г."),
 thin <- 0.3  # lines
 thick <- 0.7
 wthin <- 0.6 # for whole page plots
+mthick <- 0.8
 wthick <- 1.1
 f_color_scale <- scale_color_manual(values = c("dark gray",
                                                "red",
@@ -120,7 +126,12 @@ v_labs <- list(i14d = labs(title = paste(enc("14-дневна COVID-19"),
                                          enc("смъртност на 1 млн.")),
                            caption = enc("данни: ECDC"),
                            x = enc("дата на докладване (седмица)"),
-                           y =  enc("14-дневна смъртност на 1 млн.")))
+                           y =  enc("14-дневна смъртност на 1 млн.")),
+               hosp1m = labs(title = paste(enc("Брой хоспитализирани с"),
+                                           enc("COVID-19 на 1 млн.")),
+                             caption = enc("данни: ECDC"),
+                             x = enc("дата на докладване (седмица)"),
+                             y =  enc("хоспитализирани на 1 млн.")))
 map_vline <- list(size = 0.2, col = "dark grey") # vline last week with BG data
 ext_line_cols <- c("#BBBBBB", "#BBBBBB", "#BBBBBB", "#BBBBBB", "#777777",
                    "#88AAAA", "#BBAA00", "#008800", "#0000BB", "#000000",
@@ -190,16 +201,17 @@ cmp_tab <- left_join(mean_tab, tt_tab, by = c("geo", "week")) %>%
     mutate(excess_deaths = d_2020 - mean_deaths) %>%
     mutate(excess_deaths_star = d_2020 - mean_deaths_star)
 
-## ECDC
+## ECDC cased/deaths
 ecdc_tab <- read.csv(gzfile(local_covid_file)) %>%
     rename(date = dateRep,
            geo = geoId,
            daily_d = deaths,
-           geo_name = countriesAndTerritories,
+           country = countriesAndTerritories,
            i14d =
                Cumulative_number_for_14_days_of_COVID.19_cases_per_100000) %>%
     mutate(date = as.Date(date, format = "%d/%m/%Y")) %>%
-    mutate(geo_name = gsub("_", " ", substr(enc(geo_name), 1, 13))) %>%
+    mutate(country = gsub("_", " ", enc(country))) %>%
+    mutate(geo_name = substr(country, 1, 13)) %>%
     group_by(geo) %>%
     arrange(date) %>%
     mutate(d14d = 1000000 * rollsum(daily_d, 14, align = "right", fill = NA) /
@@ -220,11 +232,28 @@ cd_tab <- ecdc_tab %>%
     rename(covid_deaths = s7_d) %>%
     select("geo", "week", "geo_name", "covid_deaths", "popData2019")
 
-# EUROSTAT & ECDC data incl. factors & excess mortality per 1M
+## EUROSTAT & ECDC data incl. factors & excess mortality per 1M
 factor_tab <- left_join(cmp_tab, cd_tab, by = c("geo", "week")) %>%
     mutate(ed_covid_factor = excess_deaths / covid_deaths) %>%
     mutate(ed_factor = d_2020 / mean_deaths) %>%
     mutate(em_1m = 1000000 * excess_deaths_star / popData2019)
+
+## ECDC hospitalization
+hosp_tab <- read.csv(gzfile(local_hosp_file))
+names(hosp_tab)[1] = "country"
+hosp_tab <- hosp_tab %>% filter(indicator == "Daily hospital occupancy") %>%
+    select("country", "date", "year_week", "value") %>%
+    mutate(date = as.Date(date)) %>%
+    rename(hosp = value)
+hosp_tab <- left_join(hosp_tab,
+                      ecdc_tab %>%
+                          select("geo",
+                                 "geo_name",
+                                 "country",
+                                 "popData2019") %>%
+                          distinct(),
+                      by = "country") %>%
+    mutate(hosp1m = 1000000 * hosp / popData2019)
 
 ################################################################################
 # excess deaths per 1M                                                         #
@@ -284,7 +313,7 @@ exd_plot <- function(top_n = 30) {
         scale_x_continuous(breaks = seq(1, 53, by = 2),
                            expand = expansion(mult = c(0.02, 0.15))) +
         scale_color_manual(values = pal) +
-        scale_size_manual(values = c(wthick, wthin)) +
+        scale_size_manual(values = c(mthick, thin)) +
         guides(color = FALSE, size = FALSE) +
         d_labs +
         gtheme1
@@ -293,22 +322,34 @@ exd_plot <- function(top_n = 30) {
 
 ################################################################################
 # 14d country incidence/deaths comparison; arguments:                          #
-# itype: "i14d" or "d14d" -- cumulative 14d incidence/deaths per 100K/1M       #
-# continet -- regexp default "Asia|Africa|Europe|Oceania|America"              #
+# itype: "i14d" / "d14d" -- cumulative 14d incidence/deaths per 100K/1M        #
+#        "hosp1m" -- hospitalized plot (continent ignored; only for Europe)    #
+# continent -- regexp default "Asia|Africa|Europe|Oceania|America"             #
 # top_n -- number of countries to label (beginning at highest count)           #
 ################################################################################
 ci14_plot <- function(itype = "i14d",
                       continent = "Asia|Africa|Europe|Oceania|America",
                       top_n = 25) {
     vy <- itype
-    ci_tab <- ecdc_tab %>%
-        filter(date >= as.Date("2020-03-01"),
-               str_detect(continentExp, continent))
+    if (itype == "hosp1m") {
+        continent <- "Europe"
+        ci_tab <- hosp_tab %>% filter(date >= as.Date("2020-03-01"))
+    } else {
+        ci_tab <- ecdc_tab %>%
+            filter(date >= as.Date("2020-03-01"),
+                   str_detect(continentExp, continent))
+    }
     distinct_geo <- ci_tab %>% select("geo") %>% distinct()
     geo_count <- distinct_geo %>% count() %>% pull()
     bg_tab <- ci_tab %>% filter(geo == "BG")
     set.seed(42)
     plot_end_date <- tail(ci_tab$date, n = 1)
+    last_data_pt <- ci_tab %>%
+        filter(!is.na(.data[[vy]])) %>%
+        group_by(geo) %>%
+        arrange(date) %>%
+        slice_tail() %>%
+        ungroup
     days_till_sunday <- 7 - lubridate::wday(plot_end_date, week_start = 1)
     last_sunday_inc <- plot_end_date + days_till_sunday
     pal <- c(hue_pal()(geo_count))
@@ -324,12 +365,11 @@ ci14_plot <- function(itype = "i14d",
                                   by = "7 days"),
                      limits = c(ci_tab$date[1], last_sunday_inc + 4),
                      date_labels = "%d.%m. (%U)",
-                     expand = expansion(mult = c(0.02, 0.24))) +
+                     expand = expansion(mult = c(0.02, 0.27))) +
         scale_y_continuous(expand = expansion(mult = c(0.02, 0.02)),
                            limits = c(0, NA)) +
         guides(color = FALSE) +
-        geom_text_repel(data = ci_tab %>%
-                            filter(date == plot_end_date) %>%
+        geom_text_repel(data = last_data_pt %>%
                             arrange(.data[[vy]]) %>%
                             slice_tail(n = top_n),
                         mapping = aes(x = date,
@@ -343,14 +383,14 @@ ci14_plot <- function(itype = "i14d",
                                                      round(.data[[vy]]),
                                                      ")")),
                         size = 3.6,
-                        nudge_x = 26,
+                        nudge_x = 30,
                         hjust = 0,
-                        direction = "y",
+                        direction = ifelse(itype == "hosp1m", "both", "y"),
                         point.padding = NA,
                         box.padding = unit(1.1, units = "pt"),
-                        segment.color	= "dark gray",
-                        segment.size = 0.2,
-                        segment.alpha	= 0.5,
+                        segment.color	= "#444444",
+                        segment.size = 0.3,
+                        segment.alpha = 0.5,
                         show.legend = FALSE) +
         scale_color_manual(values = pal) +
         v_labs[itype] +
@@ -489,6 +529,7 @@ save_all <- function() {
     export <- function(plot, file, w = 11, h = 7) {
         ggsave(file = file, width = w, height = h, plot = plot)
     }
+    export(ci14_plot("hosp1m", top_n = 100), "cmp_hosp_europe.svg")
     export(exd_plot(), "cmp_excd_europe.svg")
     export(ci14_plot("i14d"), "cmp_i14d_world.svg")
     export(ci14_plot("d14d"), "cmp_d14d_world.svg")
