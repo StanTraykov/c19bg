@@ -204,6 +204,7 @@ var_plot <- function(chart,
                      roll_align = "right",
                      roll_fill = NA,
                      line_legend = NULL) {
+    set.seed(42)
     ptab <- ftab %>%
         select(matches(all_fields(chart)))
     # scale secondary axis values
@@ -285,6 +286,9 @@ var_plot <- function(chart,
                       direction = "y",
                       size = 4,
                       nudge_x = 4,
+                      segment.color	= "#333333",
+                      segment.size = 0.3,
+                      segment.alpha = 0.3,
                       show.legend = FALSE)
         exp_fix <- 3
     } else {
