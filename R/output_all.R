@@ -13,6 +13,7 @@ library(stringr)
 
 if (!exists("skip_var")) skip_var <- FALSE
 if (!exists("skip_demo")) skip_demo <- FALSE
+if (!exists("skip_dall")) skip_dall <- FALSE
 if (!exists("skip_r")) skip_r <- FALSE
 
 # set this to installation/platform-specific locations
@@ -100,12 +101,11 @@ if (!skip_var) {
     export(file = "C02_oblasts_i_cmp", plot = oblasts_plot(incid_100k = TRUE,
                                                            facet = FALSE))
 }
-if (!skip_demo) {
+if (!skip_dall) {
     source_d("demo.R")
-    export(plot = ci14_plot("i14d"),
-           file = "C10_cmp_i_wrld")
-    export(plot = ci14_plot("d14d"),
-           file = "C10_cmp_d_wrld")
+    export(plot = exd_plot(), file = "C12_exd1m_eurp")
+    export(plot = ci14_plot("i14d"), file = "C10_cmp_i_wrld")
+    export(plot = ci14_plot("d14d"), file = "C10_cmp_d_wrld")
     export(plot = ci14_plot("i14d", continent = "Europe"),
            file = "C11_cmp_i_eurp")
     export(plot = ci14_plot("d14d", continent = "Europe"),
@@ -117,14 +117,16 @@ if (!skip_demo) {
            width = 14.4,
            pix_width = 1800,
            plot = fplot())
-    for (c in names(cnames))
-        export(file = paste0("D",
-                             str_pad(which(sort(cnames) == cnames[c]),
-                                     2,
-                                     pad = "0"),
-                             "_",
-                             c),
-               plot = cplot(c))
+    if (!skip_demo) {
+        for (c in names(cnames))
+            export(file = paste0("D",
+                                 str_pad(which(sort(cnames) == cnames[c]),
+                                         2,
+                                         pad = "0"),
+                                 "_",
+                                 c),
+                   plot = cplot(c))
+    }
 }
 if (!skip_r) {
     cat("calculating R...\n")

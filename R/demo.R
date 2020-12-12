@@ -75,8 +75,6 @@ txt_v <- enc("ъв")
 txt_title2 <- enc("по седмици и възрастови групи")
 txt_title3 <- enc("по седмици")
 txt_titlei <- enc("Умирания по страни и седмици")
-txt_titlec <- paste(enc("Фактори на надвишаване (свръхсмъртност /"),
-                    enc("PCR-доказана смъртност)"))
 f_col <- c(enc("средно 2015-2019 г."),
            enc("2020 г. без PCR-доказани смъртни случаи"),
            enc("2020 г."))
@@ -99,10 +97,16 @@ common_labs <- labs(caption = enc("данни: EUROSTAT"),
                     color = enc("година"),
                     x = enc("седмица"),
                     y =  enc("умирания"))
-f_labs <- labs(caption = enc("данни: EUROSTAT, ECDC"),
+f_labs <- labs(title = paste(enc("Фактори на надвишаване (свръхсмъртност /"),
+                             enc("PCR-доказана смъртност)")),
+               caption = enc("данни: EUROSTAT, ECDC"),
                color = enc("умирания"),
                x = enc("седмица"),
                y =  enc("умирания"))
+d_labs <- labs(title = paste(enc("Свръхсмъртност на 1 млн. (сравнение ЕС+)")),
+               caption = enc("данни: EUROSTAT, ECDC"),
+               x = enc("седмица"),
+               y =  enc("свръхсмъртност на 1 млн."))
 v_labs <- list(i14d = labs(title = paste(enc("14-дневна COVID-19"),
                                          enc("заболеваемост на 100 хил.")),
                            caption = enc("данни: ECDC"),
@@ -160,24 +164,27 @@ dtab <- dtab %>%
     mutate(deaths = as.integer(gsub("[: p]", "", deaths)),
            age = agrp_names(age)) %>%
     arrange(year, week, age)
-
-mean_tab <- dtab %>% # mean 2015-2019
+mean_tab <- dtab %>% # mean 2015-2019 & mean 2015-2019* *with NA removed
     filter(sex == "T",
-           geo %in% comp_f,
            year >= 2015,
            year <= 2019,
            age == "TOTAL") %>%
     group_by(geo, week) %>%
-    summarize(mean_deaths = mean(deaths))
-tt_tab <- dtab %>% # 2020
+    summarize(mean_deaths = mean(deaths),
+              mean_deaths_star = mean(deaths, na.rm = TRUE))
+tt_tab <- dtab %>% # 2020 deaths
     filter(sex == "T",
-           geo %in% comp_f,
            year == 2020,
            age == "TOTAL") %>%
     select("geo", "week", "deaths") %>%
     rename(d_2020 = deaths)
+last_bg_wk <- tt_tab %>%
+    filter(geo == "BG", d_2020 > 0) %>%
+    summarize(max(week)) %>%
+    pull()
 cmp_tab <- left_join(mean_tab, tt_tab, by = c("geo", "week")) %>%
-    mutate(excess_deaths = d_2020 - mean_deaths)
+    mutate(excess_deaths = d_2020 - mean_deaths) %>%
+    mutate(excess_deaths_star = d_2020 - mean_deaths_star)
 
 ## ECDC
 ecdc_tab <- read.csv(gzfile(local_covid_file)) %>%
@@ -197,9 +204,9 @@ ecdc_tab <- read.csv(gzfile(local_covid_file)) %>%
                     popData2019) %>%
     ungroup() %>%
     arrange(geo)
+# weekly COVID deaths from ECDC
 cd_tab <- ecdc_tab %>%
-    filter(geo %in% comp_f) %>%
-    select("date", "daily_d", "geo") %>%
+    select("date", "daily_d", "geo", "geo_name", "popData2019") %>%
     filter(date >= as.Date("2020-01-01")) %>%
     group_by(geo) %>%
     arrange(date) %>%
@@ -207,16 +214,84 @@ cd_tab <- ecdc_tab %>%
     filter(weekdays(date) == "Monday") %>%
     mutate(week = lubridate::isoweek(date) - 1) %>%
     rename(covid_deaths = s7_d) %>%
-    select("geo", "week", "covid_deaths")
+    select("geo", "week", "geo_name", "covid_deaths", "popData2019")
 
-# factor
+# EUROSTAT & ECDC data incl. factors & excess mortality per 1M
 factor_tab <- left_join(cmp_tab, cd_tab, by = c("geo", "week")) %>%
     mutate(ed_covid_factor = excess_deaths / covid_deaths) %>%
-    mutate(ed_factor = d_2020 / mean_deaths)
+    mutate(ed_factor = d_2020 / mean_deaths) %>%
+    mutate(em_1m = 1000000 * excess_deaths_star / popData2019)
 
 ################################################################################
-# 14d country incidence/deaths comparison                                      #
-# argument: "i14d" or "d14d" -- cumulative 14d incidence/deaths per 100K/1M    #
+# excess deaths per 1M                                                         #
+# top_n -- number of countries to label (beginning at highest count)           #
+################################################################################
+exd_plot <- function(top_n = 30) {
+    set.seed(42)
+    distinct_geo <- factor_tab %>% ungroup() %>% select("geo") %>% distinct()
+    geo_count <- distinct_geo %>% count() %>% pull()
+    pal <- c(hue_pal()(geo_count))
+    geos <- distinct_geo %>% pull()
+    bg_pos <- which(geos == "BG")
+    pal[bg_pos] <- "black"
+    bg_tab <- factor_tab %>% filter(geo == "BG")
+    last_data_pt <- factor_tab %>%
+        filter(!is.na(em_1m)) %>%
+        group_by(geo) %>%
+        arrange(week) %>%
+        slice_tail() %>%
+        ungroup
+    plt <- ggplot(data = factor_tab,
+                  mapping = aes(x = week,
+                                y = em_1m,
+                                color  = geo,
+                                fontface = ifelse(geo == "BG",
+                                                  "bold",
+                                                  "plain"),
+                                label = paste0(geo_name,
+                                               " (",
+                                               round(em_1m),
+                                               ")"),
+                                size = ifelse(geo == "BG",
+                                              "A",
+                                              "B")))
+    plt <- plt +
+        geom_line() +
+        geom_point(data = last_data_pt, size = 2) +
+        geom_point(size = 1) +
+        geom_label_repel(data = last_data_pt %>%
+                            arrange(em_1m) %>%
+                            slice_tail(n = top_n),
+                        size = 3.6,
+                        nudge_x = 3,
+                        hjust = 0,
+                        direction = "y",
+                        point.padding = NA,
+                        box.padding = unit(1.1, units = "pt"),
+                        label.padding = unit(0.12, units = "line"),
+                        fill = "#FFFFFF88",
+                        segment.color	= "#333333",
+                        segment.size = 0.4,
+                        segment.alpha = 0.5,
+                        show.legend = FALSE) +
+        geom_vline(xintercept = last_bg_wk,
+                   size = map_vline$size,
+                   color = map_vline$col) +
+        scale_x_continuous(breaks = seq(1, 53, by = 2),
+                           expand = expansion(mult = c(0.02, 0.15))) +
+        scale_color_manual(values = pal) +
+        scale_size_manual(values = c(wthick, wthin)) +
+        guides(color = FALSE, size = FALSE) +
+        d_labs +
+        gtheme1
+    return(plt)
+}
+
+################################################################################
+# 14d country incidence/deaths comparison; arguments:                          #
+# itype: "i14d" or "d14d" -- cumulative 14d incidence/deaths per 100K/1M       #
+# continet -- regexp default "Asia|Africa|Europe|Oceania|America"              #
+# top_n -- number of countries to label (beginning at highest count)           #
 ################################################################################
 ci14_plot <- function(itype = "i14d",
                       continent = "Asia|Africa|Europe|Oceania|America",
@@ -281,11 +356,13 @@ ci14_plot <- function(itype = "i14d",
         theme(axis.text.x = element_text(angle = 45, hjust = 1))
     return(plt)
 }
+
 ################################################################################
 # factor comparison                                                            #
 ################################################################################
 fplot <- function() {
     ptab <- factor_tab %>%
+        filter(geo %in% comp_f) %>% 
         mutate(cname = cnames[geo])
     ftab <- ptab %>%
         filter(ed_factor > 1.2)
@@ -309,11 +386,11 @@ fplot <- function() {
         f_color_scale +
         common_xweek_scale +
         facet_wrap(~ cname, ncol = 2, scales = "free_y") +
-        labs(title = txt_titlec) +
         f_labs +
         gtheme1
     return(plt)
 }
+
 ################################################################################
 # contry by age groups plot (argument: country code, e.g. "BG", "UK", "EL")    #
 ################################################################################
@@ -382,10 +459,6 @@ mplot <- function() {
                age == "TOTAL",
                year >= 2015) %>%
         mutate(cname = cnames[geo])
-    last_bg_wk <- idata %>%
-        filter(geo == "BG", year == 2020, deaths > 0) %>%
-        summarize(max(week)) %>%
-        pull()
     plt <- ggplot(data = idata,
                   mapping = aes(x = week,
                                 y = deaths,
@@ -412,6 +485,7 @@ save_all <- function() {
     export <- function(plot, file, w = 11, h = 7) {
         ggsave(file = file, width = w, height = h, plot = plot)
     }
+    export(exd_plot(), "cmp_excd_europe.svg")
     export(ci14_plot("i14d"), "cmp_i14d_world.svg")
     export(ci14_plot("d14d"), "cmp_d14d_world.svg")
     export(ci14_plot("i14d", continent = "Europe"), "cmp_i14d_europe.svg")
