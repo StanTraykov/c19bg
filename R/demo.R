@@ -1,4 +1,8 @@
-# plot weekly deaths data from EUROSTAT: per country and overview map
+# plot EUROSTAT and ECDC data
+# - weekly deaths / age groups / comparison map / etc. (EUROSTAT)
+# - 14-day COVID-19 incidence/registered deaths (ECDC)
+# - excess deaths per 1M (EUROSTAT + ECDC)
+# - excess factor (EUROSTAT + ECDC)
 
 library(scales)
 library(stringr)
@@ -269,7 +273,7 @@ exd_plot <- function(top_n = 30) {
                         point.padding = NA,
                         box.padding = unit(1.1, units = "pt"),
                         label.padding = unit(0.12, units = "line"),
-                        fill = "#FFFFFF88",
+                        fill = "#FFFFFF99",
                         segment.color	= "#333333",
                         segment.size = 0.4,
                         segment.alpha = 0.5,
