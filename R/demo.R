@@ -113,7 +113,8 @@ f_labs <- labs(title = paste(enc("Фактори на надвишаване (с
                color = enc("умирания"),
                x = enc("седмица"),
                y =  enc("умирания"))
-d_labs <- labs(title = paste(enc("Свръхсмъртност на 1 млн. (сравнение ЕС+)")),
+d_labs <- labs(title = paste(enc("Седмична свръхсмъртност на 1 млн."),
+                             enc("(сравнение ЕС+)")),
                caption = enc("данни: EUROSTAT, ECDC"),
                x = enc("седмица"),
                y =  enc("свръхсмъртност на 1 млн."))
