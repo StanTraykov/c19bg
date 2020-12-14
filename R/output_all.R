@@ -8,9 +8,6 @@
 # To skip some of the time-consuming stuff:
 # > skip_demo <- TRUE; skip_r <- TRUE; source_d("output_all.R")
 
-library(tools)
-library(stringr)
-
 if (!exists("skip_var")) skip_var <- FALSE
 if (!exists("skip_demo")) skip_demo <- FALSE
 if (!exists("skip_dall")) skip_dall <- FALSE
@@ -52,10 +49,10 @@ export <- function(file,
                    pix_width = 1375) {
     fn <- filenames(file)
     if (make_svg)
-        ggsave(file = fn$svg,
-               width = width,
-               height = height,
-               plot = plot)
+        ggplot2::ggsave(file = fn$svg,
+                        width = width,
+                        height = height,
+                        plot = plot)
     if (make_png)
         runcmd(paste(inkscape,
                      fn$svg,
@@ -74,28 +71,28 @@ if (!skip_var) {
     source_d("var_plot.R")
     export(file = "C09_posit", plot = var_plot("positivity"))
     export(file = "C04_cd", plot = var_plot("casesdeaths",
-                                               roll_func = mean,
-                                               roll_window = 7))
+                                            roll_func = mean,
+                                            roll_window = 7))
     export(file = "C08_cases", plot = var_plot("cases"))
     export(file = "C07_hospitalized", plot = var_plot("hospitalized"))
     export(file = "C05_age_7", plot = var_plot("age",
-                                         roll_func = mean,
-                                         roll_window = 7,
-                                         line_legend = "0"))
-    export(file = "C05_age_dis", plot = var_plot("dis",
                                                roll_func = mean,
                                                roll_window = 7,
-                                               line_legend = "."))
+                                               line_legend = "0"))
+    export(file = "C05_age_dis", plot = var_plot("dis",
+                                                 roll_func = mean,
+                                                 roll_window = 7,
+                                                 line_legend = "."))
     export(file = "C06_age_1", plot = var_plot("age", line_legend = "0"))
 
     source_d("heat.R")
     heat_map <- hplot()
-    ggsave(file = filenames("C01_heat")$jpg,
-           width = 11, height = 5.5, quality = 100, dpi = 125,
-           plot = heat_map)
-    ggsave(file = filenames("C01_heat")$png,
-           width = 11, height = 5.5, dpi = 125,
-           plot = heat_map)
+    ggplot2::ggsave(file = filenames("C01_heat")$jpg,
+                    width = 11, height = 5.5, quality = 100, dpi = 125,
+                    plot = heat_map)
+    ggplot2::ggsave(file = filenames("C01_heat")$png,
+                    width = 11, height = 5.5, dpi = 125,
+                    plot = heat_map)
 
     source_d("oblasts.R")
     export(file = "C03_oblasts_count", plot = oblasts_plot(incid_100k = FALSE))
@@ -123,14 +120,13 @@ if (!skip_dall) {
            pix_width = 1800,
            plot = fplot())
     if (!skip_demo) {
-        for (c in names(cnames))
-            export(file = paste0("D",
-                                 str_pad(which(sort(cnames) == cnames[c]),
-                                         2,
-                                         pad = "0"),
-                                 "_",
-                                 c),
+        for (c in names(cnames)) {
+            pad_num <- stringr::str_pad(which(sort(cnames) == cnames[c]),
+                                        2,
+                                        pad = "0")
+            export(file = paste0("D", pad_num, "_", c),
                    plot = cplot(c))
+        }
     }
 }
 if (!skip_r) {

@@ -1,11 +1,15 @@
-# various plots: cases/active, new cases/deaths, age plot, hospitlzd, positivity
+# various plots:
+# cases/active ("cases")
+# new cases + new deaths ("casedeaths")
+# age plot ("age")
+# disaggregated age plot ("dis")
+# hospitalized / icu ("hospitalized")
+# share of tests confirming new cases ("positivity")
 
-library(tidyverse)
-library(zoo)
-library(ggrepel)
+library(magrittr)
 
-library(extrafont)            # } comment these out to use default fonts
-loadfonts(device = "win")     # }
+extrafont::loadfonts(device = "win") # comment out to use default fonts
+
 enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
 # enc <- function(x) x
 
@@ -47,10 +51,10 @@ dis_colors <- c("lightgreen", "green1", "green4",
                 "#5555FF", "blue4", "violet",
                 "orange", "red", "red4")
 age_labels <- function(x) ifelse(x == "new_deaths", enc("смъртни случаи"), x)
-age_guide <- guide_legend(nrow = 1,
-                          override.aes = list(size = c(thick,
-                                                       rep(thin, 7),
-                                                       thick)))
+age_guide <- ggplot2::guide_legend(nrow = 1,
+                                   override.aes = list(size = c(thick,
+                                                                rep(thin, 7),
+                                                                thick)))
 cases_fills <- c("light blue" = enc("регистрирани случаи"),
                  "dark blue" = enc("активни случаи"))
 hospitalized_fills <- c("dark golden rod 1" = enc("хоспитализирани"),
@@ -59,59 +63,73 @@ hospitalized_colors <- c("black" = enc("активни случаи"))
 positivity_colors <- c("green 3" = enc("брой проби"),
                        "red 3" = enc("позитивни, доказващи нови случаи"))
 make_scale <- function(sf, x) sf(values = names(x), labels = unname(x))
-plot_colors <- c(casesdeaths = make_scale(scale_color_manual,
-                                          casesdeaths_colors),
-                 age = scale_color_manual(values = age_colors,
-                                          labels = age_labels,
-                                          guide = age_guide),
-                 hospitalized = make_scale(scale_color_manual,
-                                           hospitalized_colors),
-                 positivity = make_scale(scale_color_manual,
-                                         positivity_colors),
-                 dis = scale_color_manual(values = dis_colors,
-                                          guide = guide_legend(nrow = 1)))
+plot_colors <- c(
+    casesdeaths = make_scale(ggplot2::scale_color_manual,
+                             casesdeaths_colors),
+    age = ggplot2::scale_color_manual(values = age_colors,
+                                      labels = age_labels,
+                                      guide = age_guide),
+    hospitalized = make_scale(ggplot2::scale_color_manual,
+                              hospitalized_colors),
+    positivity = make_scale(ggplot2::scale_color_manual,
+                            positivity_colors),
+    dis = ggplot2::scale_color_manual(values = dis_colors,
+                                      guide = ggplot2::guide_legend(nrow = 1))
+)
 
-plot_fills <- c(cases = make_scale(scale_fill_manual,
+plot_fills <- c(cases = make_scale(ggplot2::scale_fill_manual,
                                    cases_fills),
-                hospitalized = make_scale(scale_fill_manual,
+                hospitalized = make_scale(ggplot2::scale_fill_manual,
                                           hospitalized_fills))
 x_label <- enc("дата на докладване (седмица)")
 plot_labels <- list(
-    casesdeaths = labs(title = paste(enc("Регистрирани нови случаи и"),
-                                     enc("смъртни случаи от COVID-19")),
-                       caption = enc("данни: НОЩ, data.egov.bg"),
-                       color = enc("дневно"),
-                       x = x_label,
-                       y = enc("регистрирани случаи")),
-    age = labs(title = paste(enc("Регистрирани нови случаи"),
-                             enc("(възрастови групи) и "),
-                             enc("смъртни случаи")),
-               caption = enc("данни: data.egov.bg"),
-               color = enc("дневно"),
-               x = x_label,
-               y = enc("регистрирани случаи")),
-    dis = labs(title = paste(enc("Регистрирани нови случаи"),
-                             enc("(дезагрегирани възрастови групи)")),
-               caption = enc("данни: data.egov.bg"),
-               color = enc("дневно"),
-               x = x_label,
-               y = enc("регистрирани случаи")),
-    cases = labs(title = enc("Регистрирани и активни случаи на COVID-19"),
-                 caption = enc("данни: НОЩ, data.egov.bg"),
-                 fill = NULL,
-                 x = x_label,
-                 y = NULL),
-    hospitalized = labs(title = enc("Хоспитализирани случаи на COVID-19"),
-                        caption = enc("данни: НОЩ, data.egov.bg"),
-                        fill = NULL,
-                        color = NULL,
-                        x = x_label,
-                        y = enc("хоспитализирани")),
-    positivity = labs(title = enc("Дял новодоказани случаи от PCR пробите"),
-                        caption = enc("данни: НОЩ, data.egov.bg"),
-                        color = enc("за последните 7 дни"),
-                        x = x_label,
-                        y = enc("брой проби"))
+    casesdeaths = ggplot2::labs(
+        title = paste(enc("Регистрирани нови случаи и"),
+                      enc("смъртни случаи от COVID-19")),
+        caption = enc("данни: НОЩ, data.egov.bg"),
+        color = enc("дневно"),
+        x = x_label,
+        y = enc("регистрирани случаи")
+    ),
+    age = ggplot2::labs(
+        title = paste(enc("Регистрирани нови случаи"),
+                      enc("(възрастови групи) и "),
+                      enc("смъртни случаи")),
+        caption = enc("данни: data.egov.bg"),
+        color = enc("дневно"),
+        x = x_label,
+        y = enc("регистрирани случаи")
+    ),
+    dis = ggplot2::labs(
+        title = paste(enc("Регистрирани нови случаи"),
+                      enc("(дезагрегирани възрастови групи)")),
+        caption = enc("данни: data.egov.bg"),
+        color = enc("дневно"),
+        x = x_label,
+        y = enc("регистрирани случаи")
+    ),
+    cases = ggplot2::labs(
+        title = enc("Регистрирани и активни случаи на COVID-19"),
+        caption = enc("данни: НОЩ, data.egov.bg"),
+        fill = NULL,
+        x = x_label,
+        y = NULL
+    ),
+    hospitalized = ggplot2::labs(
+        title = enc("Хоспитализирани случаи на COVID-19"),
+        caption = enc("данни: НОЩ, data.egov.bg"),
+        fill = NULL,
+        color = NULL,
+        x = x_label,
+        y = enc("хоспитализирани")
+    ),
+    positivity = ggplot2::labs(
+        title = enc("Дял новодоказани случаи от PCR пробите"),
+        caption = enc("данни: НОЩ, data.egov.bg"),
+        color = enc("за последните 7 дни"),
+        x = x_label,
+        y = enc("брой проби")
+    )
 )
 plot_order <- list(
     cases = c("cases", "active_cases"),
@@ -133,14 +151,15 @@ plot_sec_y <- list(
                       scale = 0.000005,
                       type = "percent")
 )
-plot_theme <- theme(text = element_text(size = 14,
-                                        family = windowsFont("Calibri")),
-                    panel.grid.minor.x = element_blank(),
-                    legend.position = "top",
-                    plot.title = element_text(hjust = 0.5,
-                                              face = "bold"),
-                    axis.text.x = element_text(angle = 45, hjust = 1),
-                    panel.grid.minor.y = element_blank())
+plot_theme <- ggplot2::theme(
+    text = ggplot2::element_text(size = 14,
+                                 family = grDevices::windowsFont("Calibri")),
+    panel.grid.minor.x = ggplot2::element_blank(),
+    legend.position = "top",
+    plot.title = ggplot2::element_text(hjust = 0.5, face = "bold"),
+    axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
+    panel.grid.minor.y = ggplot2::element_blank()
+)
 
 ##### clean up
 # age table
@@ -165,20 +184,26 @@ names(gtab) <- c("date", "tests", "new_tests",
                  "newly_recovered", "deaths",
                  "new_deaths")
 gtab[, 1] <- as.Date(gtab[, 1])
-if (!identical(as.integer(unname(rowSums(atab[, 2:10]))),
-               unname(gtab$new_cases[-1])))
-    stop("failed sanity check: new case counts != summed age brackets")
+# if (!identical(as.integer(unname(rowSums(atab[, 2:10]))),
+#                unname(gtab$new_cases[-1])))
+#     stop("failed sanity check: new case counts != summed age brackets")
 # clean wide table
-jtab <- left_join(gtab, atab, by = "date")
+jtab <- dplyr::left_join(gtab, atab, by = "date")
 # pre-opendata table
 htab <- read.csv(file = gen_hist) %>%
-    mutate(date = as.Date(date))
+    dplyr::mutate(date = as.Date(date))
 # clean wide table with figures before opendata
-ftab <- bind_rows(htab, jtab)
+ftab <- dplyr::bind_rows(htab, jtab)
 ftab <- ftab %>%
-    mutate(s7_nc = rollsum(new_cases, 7, align = "right", fill = NA)) %>%
-    mutate(s7_nt = rollsum(new_tests, 7, align = "right", fill = NA)) %>%
-    mutate(posit7 = s7_nc / s7_nt)
+    dplyr::mutate(s7_nc = zoo::rollsum(new_cases,
+                                       7,
+                                       align = "right",
+                                       fill = NA)) %>%
+    dplyr::mutate(s7_nt = zoo::rollsum(new_tests,
+                                       7,
+                                       align = "right",
+                                       fill = NA)) %>%
+    dplyr::mutate(posit7 = s7_nc / s7_nt)
 
 ################################################################################
 # return regex matching all fields for a chart type                            #
@@ -203,22 +228,24 @@ var_plot <- function(chart,
                      line_legend = NULL) {
     set.seed(42)
     ptab <- ftab %>%
-        select(matches(all_fields(chart)))
+        dplyr::select(dplyr::matches(all_fields(chart)))
     # scale secondary axis values
     if (chart %in% names(plot_sec_y)) {
         for (v in plot_sec_y[[chart]]$vars) {
             ptab <- ptab %>% # "{v}" := and .data[[v]] provide indirection
-                mutate("{v}" := .data[[v]] / plot_sec_y[[chart]]$scale)
+                dplyr::mutate("{v}" := .data[[v]] / plot_sec_y[[chart]]$scale)
         }
     }
     if (!is.null(roll_func)) {
         ptab <- ptab %>%
-            mutate(across(!matches("date"),
-                          function(x) rollapply(x,
-                                                roll_window,
-                                                roll_func,
-                                                align = roll_align,
-                                                fill = roll_fill)))
+            dplyr::mutate(dplyr::across(
+                !matches("date"),
+                function(x) zoo::rollapply(x,
+                                           roll_window,
+                                           roll_func,
+                                           align = roll_align,
+                                           fill = roll_fill)
+            ))
         legend_main <- paste0(roll_window,
                               translate(deparse(substitute(roll_func))))
     } else {
@@ -226,67 +253,76 @@ var_plot <- function(chart,
     }
     if (chart %in% names(no_na)) {
         field <- no_na[[chart]]
-        ptab <- ptab %>% filter(!is.na(.data[[field]]))
+        ptab <- ptab %>% dplyr::filter(!is.na(.data[[field]]))
     }
     ptab <- ptab %>%
-        pivot_longer(cols = !matches("date"),
-                     names_to = "metric",
-                     values_to = "value")
+        tidyr::pivot_longer(cols = !matches("date"),
+                            names_to = "metric",
+                            values_to = "value")
     if (chart %in% names(plot_order))
         ptab <- ptab %>%
-            mutate(metric = factor(metric, plot_order[[chart]]))
+            dplyr::mutate(metric = factor(metric, plot_order[[chart]]))
     first_sunday <- ptab %>%
-        select("date") %>%
-        filter(weekdays(date) == "Sunday") %>%
-        slice_head() %>%
-        pull()
+        dplyr::select("date") %>%
+        dplyr::filter(weekdays(date, abbreviate = FALSE) == "Sunday") %>%
+        dplyr::slice_head() %>%
+        dplyr::pull()
     plot_end_date <- tail(ptab$date, n = 1)
     days_till_sunday <- 7 - lubridate::wday(plot_end_date, week_start = 1)
     last_sunday_inc <- plot_end_date + days_till_sunday
     visibility_min <- 1.05 * max(ptab$value, na.rm = TRUE)
     tick_by <- tick_choice[tick_choice >= visibility_min / 7][1]
     tick_max <- 10 * tick_by
-    plt <- ggplot()
+    plt <- ggplot2::ggplot()
     if (chart %in% names(area_fields)) {
         plt <- plt +
-            geom_area(data = ptab %>%
-                          filter(str_detect(metric, area_fields[[chart]])),
-                      mapping = aes(x = date,
-                                    y = value,
-                                    fill = metric),
-                      position = "identity")
+            ggplot2::geom_area(
+                data = ptab %>%
+                    dplyr::filter(stringr::str_detect(metric,
+                                                      area_fields[[chart]])),
+                mapping = ggplot2::aes(x = date,
+                                       y = value,
+                                       fill = metric),
+                position = "identity"
+            )
     }
     if (chart %in% names(line_fields)) {
         plt <- plt +
-            geom_line(data = ptab %>%
-                          filter(str_detect(metric, line_fields[[chart]])),
-                      mapping = aes(x = date,
-                                    y = value,
-                                    color = metric,
-                                    size = ifelse(str_detect(metric,
-                                                             line_sizes[[chart]]
-                                                                          $rgx),
-                                                  "size1",
-                                                  "size2"))) +
-            scale_size_manual(values = line_sizes[[chart]]$sizes,
-                              guide = FALSE)
+            ggplot2::geom_line(
+                data = ptab %>%
+                    dplyr::filter(stringr::str_detect(metric,
+                                                      line_fields[[chart]])),
+                mapping = ggplot2::aes(
+                    x = date,
+                    y = value,
+                    color = metric,
+                    size = ifelse(stringr::str_detect(metric,
+                                                      line_sizes[[chart]]$rgx),
+                                  "size1",
+                                  "size2")
+                )
+            ) +
+            ggplot2::scale_size_manual(values = line_sizes[[chart]]$sizes,
+                                       guide = FALSE)
     }
     if (!is.null(line_legend)) {
         plt <- plt +
-            geom_text_repel(data = ptab %>%
-                          filter(date == plot_end_date,
-                                 str_detect(metric, line_legend)),
-                      mapping = aes(x = date,
-                                    y = value,
-                                    color = metric,
-                                    label = metric),
-                      direction = "y",
-                      size = 4,
-                      nudge_x = 5,
-                      segment.color	= "#333333",
-                      segment.size = 0.3,
-                      segment.alpha = 0.3,
-                      show.legend = FALSE)
+            ggrepel::geom_text_repel(
+                data = ptab %>%
+                    dplyr::filter(date == plot_end_date,
+                                  stringr::str_detect(metric, line_legend)),
+                mapping = ggplot2::aes(x = date,
+                                       y = value,
+                                       color = metric,
+                                       label = metric),
+                direction = "y",
+                size = 4,
+                nudge_x = 5,
+                segment.color = "#333333",
+                segment.size = 0.3,
+                segment.alpha = 0.3,
+                show.legend = FALSE
+            )
         exp_fix <- 5
     } else {
         exp_fix <- 0
@@ -296,35 +332,38 @@ var_plot <- function(chart,
             sec_labels <- scales::label_percent()
         else
             sec_labels <- scales::label_number()
-        secondary <- sec_axis(name = plot_sec_y[[chart]]$label,
-                              trans = ~.* plot_sec_y[[chart]]$scale,
-                              breaks = seq(0,
-                                           plot_sec_y[[chart]]$scale *
-                                               tick_max,
-                                           by = plot_sec_y[[chart]]$scale *
-                                               tick_by),
-                              labels = sec_labels)
+        secondary <- ggplot2::sec_axis(
+            name = plot_sec_y[[chart]]$label,
+            trans = ~.* plot_sec_y[[chart]]$scale,
+            breaks = seq(0,
+                         plot_sec_y[[chart]]$scale * tick_max,
+                         by = plot_sec_y[[chart]]$scale * tick_by),
+            labels = sec_labels
+        )
     } else {
-        secondary <- waiver()
+        secondary <- ggplot2::waiver()
     }
     plt <- plt +
         plot_colors[chart] +
         plot_fills[chart] +
-        scale_y_continuous(
+        ggplot2::scale_y_continuous(
             breaks = seq(0, tick_max, by = tick_by),
-            expand = expansion(mult = c(0.025, 0.05)),
+            expand = ggplot2::expansion(mult = c(0.025, 0.05)),
             labels = scales::label_number(),
-            sec.axis = secondary) +
-        scale_x_date(breaks = seq(first_sunday,
-                                  last_sunday_inc,
-                                  by = "7 days"),
-                     limits = c(ptab$date[1], last_sunday_inc + 4),
-                     date_labels = "%d.%m. (%U)",
-                     expand = expansion(mult = c(0.025, 0),
-                                        add = c(-1, 1 + exp_fix))) +
+            sec.axis = secondary
+        ) +
+        ggplot2::scale_x_date(
+            breaks = seq(first_sunday,
+                         last_sunday_inc,
+                         by = "7 days"),
+            limits = c(ptab$date[1], last_sunday_inc + 4),
+            date_labels = "%d.%m. (%U)",
+            expand = ggplot2::expansion(mult = c(0.025, 0),
+                                        add = c(-1, 1 + exp_fix))
+        ) +
         plot_labels[[chart]]
     if (!is.null(legend_main))
-        plt <- plt + labs(color = legend_main)
+        plt <- plt + ggplot2::labs(color = legend_main)
     plt <- plt + plot_theme
     return(plt)
 }
@@ -334,7 +373,10 @@ var_plot <- function(chart,
 ################################################################################
 save_all <- function() {
     export <- function(plot, file) {
-        ggsave(file = paste0(file, ".svg"), width = 11, height = 7, plot = plot)
+        ggplot2::ggsave(file = paste0(file, ".svg"),
+                        width = 11,
+                        height = 7,
+                        plot = plot)
     }
     export(file = "posit", plot = var_plot("positivity"))
     export(file = "cd", plot = var_plot("casesdeaths",
@@ -348,7 +390,7 @@ save_all <- function() {
                                            line_legend = "0"))
     export(file = "age_1", plot = var_plot("age", line_legend = "0"))
     export(file = "age_dis", plot = var_plot("dis",
-                                           roll_func = mean,
-                                           roll_window = 7,
-                                           line_legend = "."))
+                                             roll_func = mean,
+                                             roll_window = 7,
+                                             line_legend = "."))
 }

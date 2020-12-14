@@ -1,11 +1,8 @@
 # R plot from estR.csv and gen data
 
-library(tidyverse)
-library(zoo)
-library(shadowtext)
+library(magrittr)
 
-library(extrafont)            # } comment these out to use default fonts
-loadfonts(device = "win")     # }
+extrafont::loadfonts(device = "win") # comment out to use default fonts
 enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
 # enc <- function(x) x
 
@@ -30,22 +27,22 @@ clr <- list(cri = "#0082df66",
             r_med = "#0070c0",
             pcr = "#00b050",
             pos = "red 3")
-plot_theme <- theme(text = element_text(size = 14,
-                                        family = windowsFont("Calibri")),
-                    panel.grid.minor.x = element_blank(),
-                    panel.grid.major.x = element_blank(),
+plot_theme <- ggplot2::theme(text = ggplot2::element_text(size = 14,
+                                    family = grDevices::windowsFont("Calibri")),
+                    panel.grid.minor.x = ggplot2::element_blank(),
+                    panel.grid.major.x = ggplot2::element_blank(),
                     legend.position = "top",
-                    legend.title = element_blank(),
-                    legend.spacing = unit(0, units = "pt"),
-                    legend.margin = margin(0, 0, 0, 0),
-                    plot.title = element_text(hjust = 0.5,
-                                              face = "bold"),
-                    plot.subtitle = element_text(hjust = 0.5,
-                                                 size = 11.3),
-                    axis.text.x = element_text(angle = 45, hjust = 1),
-                    axis.text.y.right = element_text(size = 14))
+                    legend.title = ggplot2::element_blank(),
+                    legend.spacing = ggplot2::unit(0, units = "pt"),
+                    legend.margin = ggplot2::margin(0, 0, 0, 0),
+                    plot.title = ggplot2::element_text(hjust = 0.5,
+                                                       face = "bold"),
+                    plot.subtitle = ggplot2::element_text(hjust = 0.5,
+                                                          size = 11.3),
+                    axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
+                    axis.text.y.right = ggplot2::element_text(size = 14))
 
-plot_labels <- labs(
+plot_labels <- ggplot2::labs(
     title = paste(enc("Оценка на репродуктивно число Rₜ"),
                   enc("(time-varying instantaneous)"),
                   enc("за България")),
@@ -78,131 +75,172 @@ gtab[, 1] <- as.Date(gtab[, 1])
 rtab <- read.csv(file = est_r)
 rtab <- rbind(NA, NA, NA, NA, NA, NA, rtab, NA)
 htab <- read.csv(file = gen_hist) %>%
-    mutate(date = as.Date(date))
-ftab <- bind_rows(htab, gtab)
+    dplyr::mutate(date = as.Date(date))
+ftab <- dplyr::bind_rows(htab, gtab)
 ftab <- ftab %>%
-    mutate(s7_nc = rollsum(new_cases, 7, align = "right", fill = NA)) %>%
-    mutate(s7_nt = rollsum(new_tests, 7, align = "right", fill = NA)) %>%
-    mutate(posit7 = (s7_nc / s7_nt)) %>%
-    mutate(rollmean7 = s7_nc / 7) %>%
-    mutate(is_sun = ifelse(weekdays(date) == "Sunday",
+    dplyr::mutate(s7_nc = zoo::rollsum(new_cases,
+                                       7,
+                                       align = "right",
+                                       fill = NA)) %>%
+    dplyr::mutate(s7_nt = zoo::rollsum(new_tests,
+                                       7,
+                                       align = "right",
+                                       fill = NA)) %>%
+    dplyr::mutate(posit7 = (s7_nc / s7_nt)) %>%
+    dplyr::mutate(rollmean7 = s7_nc / 7) %>%
+    dplyr::mutate(is_sun = ifelse(weekdays(date,
+                                           abbreviate = FALSE) == "Sunday",
                            "yes",
                            "no"))
-ftab <- bind_cols(ftab, rtab)
+ftab <- dplyr::bind_cols(ftab, rtab)
 
 ################################################################################
 # R plot                                                                       #
 ################################################################################
 r_plot <- function() {
-    sundays_only <- ftab %>% filter(is_sun == "yes")
-    first_sunday <- sundays_only %>% select("date") %>% slice_head() %>% pull()
+    sundays_only <- ftab %>% dplyr::filter(is_sun == "yes")
+    first_sunday <- sundays_only %>% dplyr::select("date") %>%
+        dplyr::slice_head() %>%
+        dplyr::pull()
     plot_end_date <- tail(ftab$date, n = 1)
     days_till_sunday <- 7 - lubridate::wday(plot_end_date, week_start = 1)
     last_sunday_inc <- plot_end_date + days_till_sunday
-    secondary <- sec_axis(name = sec_axis_name, trans = ~./ r_scale)
-    clr_guide <- guide_legend(override.aes = clr_leg)
-    fill_guide <- guide_legend(override.aes = fill_leg)
-    ttab <- ftab %>% filter(date >= ftab$date[1] + skip_to)
-    cmx <- max(ttab %>% select(new_cases) %>% pull(), na.rm = TRUE)
-    rmx <- max(ttab %>% select(R.Quantile.0.975.R.) %>% pull(), na.rm = TRUE)
-    pmx <- max(ttab %>% select(s7_nt) %>% pull(), na.rm = TRUE)
+    secondary <- ggplot2::sec_axis(name = sec_axis_name, trans = ~./ r_scale)
+    clr_guide <- ggplot2::guide_legend(override.aes = clr_leg)
+    fill_guide <- ggplot2::guide_legend(override.aes = fill_leg)
+    ttab <- ftab %>% dplyr::filter(date >= ftab$date[1] + skip_to)
+    cmx <- max(ttab %>% dplyr::select(new_cases) %>% dplyr::pull(),
+               na.rm = TRUE)
+    rmx <- max(ttab %>% dplyr::select(R.Quantile.0.975.R.) %>% dplyr::pull(),
+               na.rm = TRUE)
+    pmx <- max(ttab %>% dplyr::select(s7_nt) %>% dplyr::pull(),
+               na.rm = TRUE)
     r_scale <- tick_choice[tick_choice >= cmx / rmx][1]
     c_max <- r_scale * rmx # cases axis limit
     c_by <- r_scale        # cases axis tick
     pcr_scale <- pcr_choice[pcr_choice >= pmx / c_max][1]
-    plt <- ggplot(data = ftab, mapping = aes(x = date))
+    plt <- ggplot2::ggplot(data = ftab, mapping = ggplot2::aes(x = date))
     plt <- plt +
-        geom_col(mapping = aes(y = new_cases, fill = is_sun),
-                 width = 0.9) +
-        geom_line(mapping = aes(y = rollmean7, color = "C_mva"),
-                  linetype = lty_mva,
-                  size = line_sz) +
-        geom_line(mapping = aes(y = R.Median.R. * r_scale, color = "D_med"),
-                  linetype = lty_norm,
-                  size = line_sz) +
-        geom_line(mapping = aes(y = s7_nt / pcr_scale, color = "A_pcr"),
-                  linetype = lty_norm,
-                  size = line_sz) +
-        geom_line(mapping = aes(y = posit7 * r_scale, color = "B_pos"),
-                  linetype = lty_norm,
-                  size = line_sz) +
-        geom_ribbon(mapping = aes(ymin = R.Quantile.0.025.R. * r_scale,
-                                  ymax = R.Quantile.0.975.R. * r_scale,
-                                  fill = "A_ribbon")) +
+        ggplot2::geom_col(mapping = ggplot2::aes(y = new_cases, fill = is_sun),
+                          width = 0.9) +
+        ggplot2::geom_line(mapping = ggplot2::aes(y = rollmean7, color = "C_mva"),
+                           linetype = lty_mva,
+                           size = line_sz) +
+        ggplot2::geom_line(mapping = ggplot2::aes(y = R.Median.R. * r_scale,
+                                                  color = "D_med"),
+                           linetype = lty_norm,
+                           size = line_sz) +
+        ggplot2::geom_line(mapping = ggplot2::aes(y = s7_nt / pcr_scale,
+                                                  color = "A_pcr"),
+                           linetype = lty_norm,
+                           size = line_sz) +
+        ggplot2::geom_line(mapping = ggplot2::aes(y = posit7 * r_scale,
+                                                  color = "B_pos"),
+                           linetype = lty_norm,
+                           size = line_sz) +
+        ggplot2::geom_ribbon(mapping =
+                    ggplot2::aes(ymin = R.Quantile.0.025.R. * r_scale,
+                                 ymax = R.Quantile.0.975.R. * r_scale,
+                                 fill = "A_ribbon")) +
         # % positivity labels
-        geom_text(data = sundays_only %>% filter(!is.na(posit7)),
-                  mapping = aes(x = date - 3.5,
-                                y = 0,
-                                color = "B_pos",
-                                label = paste0(round(100 * posit7), "%")),
+        ggplot2::geom_text(data = sundays_only %>%
+                               dplyr::filter(!is.na(posit7)),
+                  mapping = ggplot2::aes(x = date - 3.5,
+                                         y = 0,
+                                         color = "B_pos",
+                                         label = paste0(round(100 * posit7),
+                                                        "%")),
                   vjust = 1.3,
                   size = 2.7) +
         # % positivity labels label
-        geom_text(data = sundays_only %>%
-                      filter(is.na(posit7)) %>%
-                      slice_tail(),
-                  mapping = aes(x = date,
-                                y = 0,
-                                color = "B_pos",
-                                label = enc("седмична позитивност: ")),
-                  vjust = 1.3,
-                  hjust = 1,
-                  size = 2.7) +
+        ggplot2::geom_text(data = sundays_only %>%
+                               dplyr::filter(is.na(posit7)) %>%
+                               dplyr::slice_tail(),
+                           mapping = ggplot2::aes(
+                               x = date,
+                               y = 0,
+                               color = "B_pos",
+                               label = enc("седмична позитивност: ")
+                           ),
+                           vjust = 1.3,
+                           hjust = 1,
+                           size = 2.7) +
         # R median label
-        geom_shadowtext(data = ftab %>% filter(date == plot_end_date - 1),
-                  mapping = aes(x = date,
-                                y = R.Median.R. * r_scale,
-                                color = "D_med",
-                                label = format(round(R.Median.R., 2),
-                                               nsmall = 2)),
-                  #color = clr$r_med,
-                  bg.color = "#ebebeb",
-                  size = 3.4,
-                  nudge_x = 5) +
+        shadowtext::geom_shadowtext(data = ftab %>%
+                                        dplyr::filter(
+                                            date == plot_end_date - 1
+                                        ),
+                                    mapping = ggplot2::aes(
+                                        x = date,
+                                        y = R.Median.R. * r_scale,
+                                        color = "D_med",
+                                        label = format(round(R.Median.R., 2),
+                                                       nsmall = 2)
+                                    ),
+                                    bg.color = "#ebebeb",
+                                    size = 3.4,
+                                    nudge_x = 5) +
         # R CrI 95% lower
-        geom_shadowtext(data = ftab %>% filter(date == plot_end_date - 1),
-                  mapping = aes(x = date,
-                                y =  r_scale * min(R.Quantile.0.025.R.,
-                                                   R.Median.R. - 0.1),
-                                label = format(round(R.Quantile.0.025.R., 2),
-                                               nsmall = 2)),
-                  color = clr$cri_txt,
-                  bg.color = "#ebebeb",
-                  size = 3.4,
-                  nudge_x = 5) +
+        shadowtext::geom_shadowtext(data = ftab %>%
+                                        dplyr::filter(
+                                            date == plot_end_date - 1
+                                        ),
+                                    mapping = ggplot2::aes(
+                                        x = date,
+                                        y =  r_scale * min(R.Quantile.0.025.R.,
+                                                           R.Median.R. - 0.1),
+                                        label = format(round(R.Quantile.0.025.R., 2),
+                                                       nsmall = 2)
+                                    ),
+                                    color = clr$cri_txt,
+                                    bg.color = "#ebebeb",
+                                    size = 3.4,
+                                    nudge_x = 5) +
         # R CrI 95% upper
-        geom_shadowtext(data = ftab %>% filter(date == plot_end_date - 1),
-                  mapping = aes(x = date,
-                                y = r_scale * max(R.Quantile.0.975.R.,
-                                                  R.Median.R. + 0.1),
-                                label = format(round(R.Quantile.0.975.R., 2),
-                                               nsmall = 2)),
-                  color = clr$cri_txt,
-                  bg.color = "#ebebeb",
-                  size = 3.4,
-                  nudge_x = 5) +
-        scale_fill_manual(name = 2,
-                          values = c(clr$cri, clr$reg_c, clr$reg_s),
-                          labels = fill_labels,
-                          guide = fill_guide) +
-        scale_color_manual(name = 1,
-                           values = c(clr$pcr, clr$pos, "black", clr$r_med),
-                           labels = clr_labels,
-                           guide = clr_guide) +
-        scale_y_continuous(breaks = seq(0, c_max, by = c_by),
-                           labels = scales::label_number(),
-                           limits = c(0, c_max),
-                           sec.axis = secondary,
-                           expand = expansion(mult = c(0.025, 0.015))) +
-        scale_x_date(breaks = seq(first_sunday,
-                                  last_sunday_inc,
-                                  by = "7 days"),
-                     limits = c(ftab$date[1], last_sunday_inc + 4),
-                     date_labels = "%d.%m. (%U)",
-                     expand = expansion(mult = c(0.025, 0),
-                                        add = c(-1, 4))) +
+        shadowtext::geom_shadowtext(data = ftab %>%
+                                        dplyr::filter(
+                                            date == plot_end_date - 1
+                                        ),
+                                    mapping = ggplot2::aes(
+                                        x = date,
+                                        y = r_scale * max(R.Quantile.0.975.R.,
+                                                          R.Median.R. + 0.1),
+                                        label = format(round(R.Quantile.0.975.R., 2),
+                                                       nsmall = 2)
+                                    ),
+                                    color = clr$cri_txt,
+                                    bg.color = "#ebebeb",
+                                    size = 3.4,
+                                    nudge_x = 5) +
+        ggplot2::scale_fill_manual(
+            name = 2,
+            values = c(clr$cri, clr$reg_c, clr$reg_s),
+            labels = fill_labels,
+            guide = fill_guide
+        ) +
+        ggplot2::scale_color_manual(
+            name = 1,
+            values = c(clr$pcr, clr$pos, "black", clr$r_med),
+            labels = clr_labels,
+            guide = clr_guide
+        ) +
+        ggplot2::scale_y_continuous(
+            breaks = seq(0, c_max, by = c_by),
+            labels = scales::label_number(),
+            limits = c(0, c_max),
+            sec.axis = secondary,
+            expand = ggplot2::expansion(mult = c(0.025, 0.015))
+        ) +
+        ggplot2::scale_x_date(
+            breaks = seq(first_sunday,
+                         last_sunday_inc,
+                         by = "7 days"),
+            limits = c(ftab$date[1], last_sunday_inc + 4),
+            date_labels = "%d.%m. (%U)",
+            expand = ggplot2::expansion(mult = c(0.025, 0), add = c(-1, 4))
+        ) +
         plot_labels +
-        labs(y = sprintf(lab_y, pcr_scale)) +
+        ggplot2::labs(y = sprintf(lab_y, pcr_scale)) +
         plot_theme
     return(plt)
 }
@@ -211,5 +249,8 @@ r_plot <- function() {
 # output example                                                               #
 ################################################################################
 save_all <- function() {
-    ggsave(file = paste0("r_plot.svg"), width = 11, height = 7, plot = r_plot())
+    ggplot2::ggsave(file = paste0("r_plot.svg"),
+                    width = 11,
+                    height = 7,
+                    plot = r_plot())
 }

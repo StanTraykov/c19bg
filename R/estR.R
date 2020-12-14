@@ -1,9 +1,7 @@
 # estimate R and output to CSV
+# using EpiEstim package Cori et al. https://doi.org/10.1093/aje/kwt133
 
-library(EpiEstim) # Cori et al. https://doi.org/10.1093/aje/kwt133
-library(ggplot2)
 enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
-
 source(file.path("R", "bg_opendata.R")) # sets gen_data, age_data, obl_data
 
 gtab <- read.csv(file = gen_data)
@@ -15,6 +13,7 @@ nc_old <- c(4, 0, 2, 1, 16, 8, 10, 10, 11, 19, 11, 15, 20, 36, 22, 16,
             25, 33, 46, 31, 38, 37, 36, 24, 24, 33, 39, 41, 36, 19, 6, 10,
             17, 17, 8, 14, 14, 6, 19, 22, 25, 42)
 nc <- c(nc_old, gtab[[6]])
+
 #### COVID-19 generation times gamma distribution (transformed parameters)
 #### per Ferretti et al. https://doi.org/10.1101/2020.09.04.20188516
 mu <- 5.509073; stdev <- 2.112571
@@ -25,12 +24,13 @@ stdev_sd <- 0.5; stdev_trunc <- 1
 win <- 7; skip_to <- 2
 start <- seq(skip_to, length(nc) - win + 1)
 end <- start + win - 1
-res <- estimate_R(nc, method = "uncertain_si", config = make_config(list(
+res <- EpiEstim::estimate_R(nc,
+                            method = "uncertain_si",
+                            config = EpiEstim::make_config(list(
     seed = 12345, t_start = start, t_end = end, n1 = 1000, n2 = 1000,
     mean_si = mu, std_mean_si = mu_sd,
     min_mean_si = mu - mu_trunc, max_mean_si = mu + mu_trunc,
     std_si = stdev, std_std_si = stdev_sd,
     min_std_si = stdev - stdev_trunc, max_std_si = stdev + stdev_trunc)))
-#### plot / save csv
-# plot(res)
+#### save csv
 write.csv(res[1], file.path("data", "estR.csv"), row.names = FALSE)

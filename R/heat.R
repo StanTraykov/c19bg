@@ -1,9 +1,8 @@
 # heatmap incidence per 100K in age bands
 
-library(tidyverse)
-library(zoo)
-library(extrafont)            # } comment these out to use default fonts
-loadfonts(device = "win")     # }
+library(magrittr)
+
+extrafont::loadfonts(device = "win") # comment out to use default fonts
 enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
 
 ##### data
@@ -28,52 +27,55 @@ atab[, 11] <- rowSums(atab[, 2:10])
 names(atab)[11] <- str_all
 # 7-day sums; filter only mondays to get approx. real week data
 atab <- atab %>%
-    mutate(across(!matches("date"),
-                  function(x) rollapply(x,
-                                        7,
-                                        sum,
-                                        align = "right",
-                                        fill = NA))) %>%
-    filter(weekdays(date) == "Monday", !is.na(`0-19`))
+    dplyr::mutate(dplyr::across(!matches("date"),
+                                function(x) zoo::rollapply(x,
+                                                           7,
+                                                           sum,
+                                                           align = "right",
+                                                           fill = NA))) %>%
+    dplyr::filter(weekdays(date, abbreviate = FALSE) == "Monday",
+                  !is.na(`0-19`))
 
 # divide by pop struct
 atab[, -1] <- sweep(atab[, -1] * 100000, MARGIN = 2, pop_struct, `/`)
 # make longer and add week number
 atab <- atab %>%
-    pivot_longer(cols = matches(paste0("0|", str_all)),
-                 names_to = "group",
-                 values_to = "incidence") %>%
-    mutate(week = lubridate::isoweek(date) - 1)
+    tidyr::pivot_longer(cols = tidyr::matches(paste0("0|", str_all)),
+                        names_to = "group",
+                        values_to = "incidence") %>%
+    dplyr::mutate(week = lubridate::isoweek(date) - 1)
 
 ################################################################################
 # incidence/100K heatmap                                                       #
 ################################################################################
 hplot <- function() {
-    plt <- ggplot(data = atab,
-                  aes(x = week,
-                      y = group,
-                      fill = incidence,
-                      label = round(incidence))) +
-        geom_tile() +
-        geom_text(size = 3.6) +
-        geom_hline(yintercept = 1.5, size = 1.5) +
-        scale_fill_viridis_c() +
-        #scale_fill_distiller(direction = 1) +
-        theme_minimal() +
-        theme(text = element_text(size = 14,
-                                  family = windowsFont("Calibri")),
-              panel.grid = element_blank(),
-              plot.title = element_text(hjust = 0.5,
-                                        face = "bold")) +
-        scale_x_continuous(breaks = min(atab[, 4]):max(atab[, 4])) +
-        labs(title = paste(enc("Седмична заболеваемост на COVID-19"),
-                           enc("(регистрирани нови случаи на 100 хил.)")),
-             caption = paste(enc("*дясно подравнена 7-дневна сума спрямо"),
-                             enc("докладваните в понеделник на следващата"),
-                             enc("седмица; данни: data.egov.bg, НСИ")),
+    plt <- ggplot2::ggplot(data = atab,
+                           ggplot2::aes(x = week,
+                                        y = group,
+                                        fill = incidence,
+                                        label = round(incidence))) +
+        ggplot2::geom_tile() +
+        ggplot2::geom_text(size = 3.6) +
+        ggplot2::geom_hline(yintercept = 1.5, size = 1.5) +
+        ggplot2::scale_fill_viridis_c() +
+        ggplot2::theme_minimal() +
+        ggplot2::theme(text = ggplot2::element_text(size = 14,
+                                    family = grDevices::windowsFont("Calibri")),
+                       panel.grid = ggplot2::element_blank(),
+                       plot.title = ggplot2::element_text(hjust = 0.5,
+                                                          face = "bold")) +
+        ggplot2::scale_x_continuous(breaks = min(atab[, 4]):max(atab[, 4])) +
+        ggplot2::labs(title =
+                          paste(enc("Седмична заболеваемост на COVID-19"),
+                                enc("(регистрирани нови случаи на 100 хил.)")),
+                      caption = paste(enc("*дясно подравнена 7-дневна сума"),
+                                      enc("спрямо докладваните в понеделник"),
+                                      enc("на следващата седмица;"),
+                                      enc("данни: data.egov.bg, НСИ")),
              fill = enc("c/100K"),
              x = enc("календарна седмица*"),
              y = enc("група"))
+    return(plt)
 }
 
 ################################################################################
@@ -81,5 +83,5 @@ hplot <- function() {
 ################################################################################
 
 save_all <- function() {
-    ggsave(file = "heat.png", width = 11, height = 5, plot = hplot())
+    ggplot2::ggsave(file = "heat.png", width = 11, height = 5, plot = hplot())
 }

@@ -1,12 +1,8 @@
 # plot BG oblast data in a map: incidence (new cases) & incidence per 100K
 
-library(tidyverse)
-library(scales)
-library(ggrepel)
-library(zoo)
-library(geofacet)
-library(extrafont)            # } comment these out to use default fonts
-loadfonts(device = "win")     # }
+library(magrittr)
+
+extrafont::loadfonts(device = "win") # comment out to use default fonts
 enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
 # enc <- function(x) x
 
@@ -38,7 +34,7 @@ ggrid <- data.frame( # bg oblast grid from geofacet pkg; modified codes/names
             4L, 4L, 4L, 5L, 5L, 5L, 5L, 5L, 6L, 6L, 6L),
     col = c(1L, 3L, 6L, 4L, 5L, 5L, 2L, 3L, 1L, 4L, 5L, 4L, 3L, 1L, 2L, 2L, 5L,
             3L, 1L, 4L, 5L, 2L, 4L, 3L, 1L, 4L, 3L, 2L))
-obl_colors <- hue_pal()(length(pops))
+obl_colors <- scales::hue_pal()(length(pops))
 obl_colors[which(sort(ggrid$name) == enc("София-град"))] <- "black"
 obl_colors[which(sort(ggrid$name) == enc("Пловдив"))] <- "#CC0000"
 obl_colors[which(sort(ggrid$name) == enc("Варна"))] <- "#0000CC"
@@ -47,31 +43,35 @@ big_oblasts <- c(enc("София-град"),
                  enc("Пловдив"),
                  enc("Варна"),
                  enc("Бургас"))
-gtheme_count <- theme(text = element_text(size = 14,
-                                          family = windowsFont("Calibri")),
-                      panel.grid.minor.x = element_blank(),
-                      legend.position = "top",
-                      strip.text = element_text(margin = margin(3, 0, 3, 0)),
-                      plot.title = element_text(hjust = 0.5,
-                                                face = "bold"))
+gtheme_count <- ggplot2::theme(text = ggplot2::element_text(size = 14,
+                                                   family =
+                                             grDevices::windowsFont("Calibri")),
+                               panel.grid.minor.x = ggplot2::element_blank(),
+                               legend.position = "top",
+                               strip.text = ggplot2::element_text(margin =
+                                                   ggplot2::margin(3, 0, 3, 0)),
+                               plot.title = ggplot2::element_text(hjust = 0.5,
+                                                                 face = "bold"))
 gtheme_i100k <- gtheme_count +
-    theme(strip.background = element_rect(fill = "#a8bad2"),
-          axis.title.y = element_text(color = "#587ba9"),
-          plot.title = element_text(hjust = 0.5,
-                                    face = "bold",
-                                    color = "#587ba9"),
-          panel.spacing.x = unit(17, "pt"),
-          panel.grid.minor.y = element_blank())
-labs_count <- labs(x = enc("месец"),
-                   y = enc("7-дневно средно"),
-                   title = enc("Регистрирани нови случаи по области"),
-                   caption = enc("данни: data.egov.bg"))
-labs_i100k <- labs(x = enc("месец"),
-                   y = enc("заболеваемост на 100 хил."),
-                   title = paste(enc("7-дневна заболеваемост по области"),
-                                 enc("(регистрирани нови случаи на 100 хил.)")),
-                   caption = enc("данни: data.egov.bg, НСИ"))
-labs_no_facet <- labs(x = enc("дата на докладване (седмица)"))
+    ggplot2::theme(strip.background = ggplot2::element_rect(fill = "#a8bad2"),
+                   axis.title.y = ggplot2::element_text(color = "#587ba9"),
+                   plot.title = ggplot2::element_text(hjust = 0.5,
+                                                      face = "bold",
+                                                      color = "#587ba9"),
+                   panel.spacing.x = ggplot2::unit(17, "pt"),
+                   panel.grid.minor.y = ggplot2::element_blank())
+labs_count <- ggplot2::labs(x = enc("месец"),
+                            y = enc("7-дневно средно"),
+                            title = enc("Регистрирани нови случаи по области"),
+                            caption = enc("данни: data.egov.bg"))
+labs_i100k <- ggplot2::labs(x = enc("месец"),
+                            y = enc("заболеваемост на 100 хил."),
+                            title = paste(
+                                enc("7-дневна заболеваемост по области"),
+                                enc("(регистрирани нови случаи на 100 хил.)")
+                            ),
+                            caption = enc("данни: data.egov.bg, НСИ"))
+labs_no_facet <- ggplot2::labs(x = enc("дата на докладване (седмица)"))
 ##### tidy data
 o_name <- function(cd) { # return human field names
     if (cd == "date") return(cd)
@@ -95,18 +95,22 @@ otab[-1, -1] <- otab[-1, -1] - otab[-nrow(otab), -1] # repl. totals w/incidence
 otab <- otab[-1, ]
 names(otab)[1] <- "date"
 otab <- otab %>%
-    select(!ends_with("_ACT")) %>%
-    rename_with(~ sapply(.x, o_name)) %>%
-    mutate(date = as.Date(date)) %>%
-    pivot_longer(cols = !matches("date"),
-                 names_to = "oblast",
-                 values_to = "cases") %>%
-    group_by(oblast) %>%
-    mutate(mva7 = rollapply(cases, 7, mean, align = "right", fill = NA)) %>%
-    mutate(i100k = 100000 * 7 * mva7 / as.integer(o_pop(oblast)))
+    dplyr::select(!ends_with("_ACT")) %>%
+    dplyr::rename_with(~ sapply(.x, o_name)) %>%
+    dplyr::mutate(date = as.Date(date)) %>%
+    tidyr::pivot_longer(cols = !matches("date"),
+                        names_to = "oblast",
+                        values_to = "cases") %>%
+    dplyr::group_by(oblast) %>%
+    dplyr::mutate(mva7 = zoo::rollapply(cases,
+                                        7,
+                                        mean,
+                                        align = "right",
+                                        fill = NA)) %>%
+    dplyr::mutate(i100k = 100000 * 7 * mva7 / as.integer(o_pop(oblast)))
 
 dummy <- data.frame(date = as.Date("2020-11-08"), # for fixing y lower limit
-                    oblast = otab %>% distinct(oblast) %>% pull(),
+                    oblast = otab %>% dplyr::distinct(oblast) %>% dplyr::pull(),
                     mva7 = 0,
                     cases = 0,
                     i100k = 0)
@@ -118,16 +122,19 @@ dummy <- data.frame(date = as.Date("2020-11-08"), # for fixing y lower limit
 ################################################################################
 oblasts_plot <- function(incid_100k, facet = TRUE) {
     vy <- ifelse(incid_100k, "i100k", "mva7")
-    plt <- ggplot(data = otab,
-                  mapping = aes(x = date,
-                                y = .data[[vy]],
-                                color = oblast,
-                                fontface = ifelse(oblast %in% big_oblasts,
+    plt <- ggplot2::ggplot(data = otab,
+                           mapping = ggplot2::aes(
+                               x = date,
+                               y = .data[[vy]],
+                               color = oblast,
+                               fontface = ifelse(oblast %in%
+                                                     big_oblasts,
                                                  "bold",
                                                  "plain"),
-                                label = sprintf("%s (%d)",
-                                                o_short(oblast),
-                                                round(.data[[vy]]))))
+                               label = sprintf("%s (%d)",
+                                               o_short(oblast),
+                                               round(.data[[vy]]))
+                           ))
     if (incid_100k) {
         plt <- plt + labs_i100k + gtheme_i100k
         scales <- "fixed"
@@ -136,55 +143,58 @@ oblasts_plot <- function(incid_100k, facet = TRUE) {
         scales <- "free_y"
     }
     plt <- plt +
-        guides(color = FALSE) +
-        geom_line(mapping = aes(size = ifelse(!(oblast %in% big_oblasts),
-                                              ifelse(facet, "B", "A"),
-                                              "B"))) +
-        scale_size_manual(values = line_sizes, guide = FALSE) +
-        scale_color_manual(values = obl_colors)
+        ggplot2::guides(color = FALSE) +
+        ggplot2::geom_line(mapping =
+                    ggplot2::aes(size = ifelse(!(oblast %in% big_oblasts),
+                                               ifelse(facet, "B", "A"),
+                                               "B"))) +
+        ggplot2::scale_size_manual(values = line_sizes, guide = FALSE) +
+        ggplot2::scale_color_manual(values = obl_colors)
     if (facet) {
         plt <- plt +
-            scale_x_date(date_labels = "%m", date_breaks = "1 month") +
-            geom_blank(data = dummy) +
-            facet_geo(~ oblast, grid = ggrid, scales = scales)
+            ggplot2::scale_x_date(date_labels = "%m", date_breaks = "1 month") +
+            ggplot2::geom_blank(data = dummy) +
+            geofacet::facet_geo(~ oblast, grid = ggrid, scales = scales)
     } else {# no facet
         set.seed(42)
         dates_with_mva <- otab %>%
-            ungroup() %>%
-            filter(!is.na(mva7)) %>%
-            arrange(date) %>%
-            select("date")
+            dplyr::ungroup() %>%
+            dplyr::filter(!is.na(mva7)) %>%
+            dplyr::arrange(date) %>%
+            dplyr::select("date")
         first_sunday <- dates_with_mva %>%
-            filter(weekdays(date) == "Sunday") %>%
-            slice_head() %>%
-            pull()
+            dplyr::filter(weekdays(date) == "Sunday") %>%
+            dplyr::slice_head() %>%
+            dplyr::pull()
         first_mva7 <- dates_with_mva %>%
-            slice_head() %>%
-            pull()
+            dplyr::slice_head() %>%
+            dplyr::pull()
         plot_end_date <- tail(otab$date, n = 1)
         days_till_sunday <- 7 - lubridate::wday(plot_end_date, week_start = 1)
         last_sunday_inc <- plot_end_date + days_till_sunday
         plt <- plt +
-            scale_x_date(breaks = seq(first_sunday,
-                                      last_sunday_inc,
-                                      by = "7 days"),
-                         limits = c(first_mva7, last_sunday_inc + 4),
-                         date_labels = "%d.%m. (%U)",
-                         expand = expansion(mult = c(0.02, 0.26))) +
-            geom_text_repel(data = otab %>%
-                                filter(date == plot_end_date),
+            ggplot2::scale_x_date(breaks = seq(first_sunday,
+                                               last_sunday_inc,
+                                               by = "7 days"),
+                                  limits = c(first_mva7, last_sunday_inc + 4),
+                                  date_labels = "%d.%m. (%U)",
+                                  expand = ggplot2::expansion(mult = c(0.02,
+                                                                       0.26))) +
+            ggrepel::geom_text_repel(data = otab %>%
+                                dplyr::filter(date == plot_end_date),
                             size = 3.6,
                             nudge_x = 20,
                             hjust = 0,
                             direction = "y",
                             point.padding = NA,
-                            box.padding = unit(0.6, units = "pt"),
+                            box.padding = ggplot2::unit(0.6, units = "pt"),
                             segment.color	= "dark gray",
                             segment.size = 0.2,
                             segment.alpha	= 0.5,
                             show.legend = FALSE) +
             labs_no_facet +
-            theme(axis.text.x = element_text(angle = 45, hjust = 1))
+            ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
+                                                               hjust = 1))
     }
     return(plt)
 }
@@ -194,16 +204,16 @@ oblasts_plot <- function(incid_100k, facet = TRUE) {
 ################################################################################
 save_all <- function() {
     w <- 11; h <- 7
-    ggsave(file = "oblasts_i100k.svg",
-                  width = w, height = h,
-                  plot = oblasts_plot(incid_100k = TRUE))
-    ggsave(file = "oblasts_count.svg",
-                  width = w, height = h,
-                  plot = oblasts_plot(incid_100k = FALSE))
-    ggsave(file = "oblasts_i_cmp.svg",
-           width = w, height = h,
-           plot = oblasts_plot(incid_100k = TRUE, facet = FALSE))
-    ggsave(file = "oblasts_c_cmp.svg",
-           width = w, height = h,
-           plot = oblasts_plot(incid_100k = FALSE, facet = FALSE))
+    ggplot2::ggsave(file = "oblasts_i100k.svg",
+                    width = w, height = h,
+                    plot = oblasts_plot(incid_100k = TRUE))
+    ggplot2::ggsave(file = "oblasts_count.svg",
+                    width = w, height = h,
+                    plot = oblasts_plot(incid_100k = FALSE))
+    ggplot2::ggsave(file = "oblasts_i_cmp.svg",
+                    width = w, height = h,
+                    plot = oblasts_plot(incid_100k = TRUE, facet = FALSE))
+    ggplot2::ggsave(file = "oblasts_c_cmp.svg",
+                    width = w, height = h,
+                    plot = oblasts_plot(incid_100k = FALSE, facet = FALSE))
 }
