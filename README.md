@@ -12,7 +12,7 @@
 ### 1. Уверете се, че ползвате актуална версия на R и инсталирайте необходимите пакети:
 
 ```R
-install.packages(c("tidyverse", "geofacet", "ggrepel", "zoo", "scales", "EpiEstim", "shadowtext", "R.utils", "purrr", "httr"))
+install.packages(c("tidyverse", "geofacet", "ggrepel", "zoo", "scales", "EpiEstim", "shadowtext", "R.utils", "httr"))
 ```
 
 ### 2. Изтеглете файловете от GitHub
