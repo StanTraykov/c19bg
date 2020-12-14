@@ -9,8 +9,7 @@ loadfonts(device = "win")     # }
 enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
 # enc <- function(x) x
 
-# download @ https://data.egov.bg/data/view/492e8186-0d00-43fb-8f5e-f2b0b183b64f
-gen_data <- file.path("data", enc("Обща статистика за разпространението.csv"))
+source(file.path("R", "bg_opendata.R")) # sets gen_data, age_data, obl_data
 est_r <- file.path("data", "estR.csv")
 gen_hist <- file.path("historical_data", "pre_opendata.csv")
 

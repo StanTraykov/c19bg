@@ -9,10 +9,7 @@ loadfonts(device = "win")     # }
 enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
 # enc <- function(x) x
 
-# download @ https://data.egov.bg/data/view/492e8186-0d00-43fb-8f5e-f2b0b183b64f
-gen_data <- file.path("data", enc("Обща статистика за разпространението.csv"))
-age_data <- file.path("data",
-                      enc("Разпределение по дата и по възрастови групи.csv"))
+source(file.path("R", "bg_opendata.R")) # sets gen_data, age_data, obl_data
 gen_hist <- file.path("historical_data", "pre_opendata.csv")
 
 ##### visuals config
@@ -193,7 +190,7 @@ all_fields <- function(chart) {
 
 ################################################################################
 # various plots                                                                #
-# chart - one of: "casesdeaths" | "age" | "cases" | "hospitalized" |           #
+# chart - one of: "casesdeaths" | "age" | "dis" | "cases" | "hospitalized" |   #
 #                 "positivity"                                                 #
 # roll_* - rolling application of function (e.g. mean for moving average)      #
 # line_legend - regex specifying fields/lines that should be labelled in-plot  #
@@ -285,12 +282,12 @@ var_plot <- function(chart,
                                     label = metric),
                       direction = "y",
                       size = 4,
-                      nudge_x = 4,
+                      nudge_x = 5,
                       segment.color	= "#333333",
                       segment.size = 0.3,
                       segment.alpha = 0.3,
                       show.legend = FALSE)
-        exp_fix <- 3
+        exp_fix <- 5
     } else {
         exp_fix <- 0
     }

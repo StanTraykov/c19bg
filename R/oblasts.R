@@ -10,8 +10,8 @@ loadfonts(device = "win")     # }
 enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
 # enc <- function(x) x
 
-# download @ https://data.egov.bg/data/view/492e8186-0d00-43fb-8f5e-f2b0b183b64f
-obl_data <- file.path("data", enc("Разпределение по дата и по области.csv"))
+source(file.path("R", "bg_opendata.R")) # sets gen_data, age_data, obl_data
+
 # NSI 2019 data
 pops <- c("82835", "236305", "171809", "215477", "108018", "172262", "159470",
           "232568", "127001", "110789", "469885", "110914", "106598", "226671",
@@ -174,11 +174,11 @@ oblasts_plot <- function(incid_100k, facet = TRUE) {
             geom_text_repel(data = otab %>%
                                 filter(date == plot_end_date),
                             size = 3.6,
-                            nudge_x = 18,
+                            nudge_x = 20,
                             hjust = 0,
                             direction = "y",
                             point.padding = NA,
-                            box.padding = unit(1.1, units = "pt"),
+                            box.padding = unit(0.6, units = "pt"),
                             segment.color	= "dark gray",
                             segment.size = 0.2,
                             segment.alpha	= 0.5,

@@ -4,8 +4,8 @@ library(EpiEstim) # Cori et al. https://doi.org/10.1093/aje/kwt133
 library(ggplot2)
 enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
 
-# download @ https://data.egov.bg/data/view/492e8186-0d00-43fb-8f5e-f2b0b183b64f
-gen_data <- file.path("data", enc("Обща статистика за разпространението.csv"))
+source(file.path("R", "bg_opendata.R")) # sets gen_data, age_data, obl_data
+
 gtab <- read.csv(file = gen_data)
 # case counts before open data (2020-03-08 - 2020-06-05)
 nc_old <- c(4, 0, 2, 1, 16, 8, 10, 10, 11, 19, 11, 15, 20, 36, 22, 16,
