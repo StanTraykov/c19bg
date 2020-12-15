@@ -184,9 +184,9 @@ names(gtab) <- c("date", "tests", "new_tests",
                  "newly_recovered", "deaths",
                  "new_deaths")
 gtab[, 1] <- as.Date(gtab[, 1])
-# if (!identical(as.integer(unname(rowSums(atab[, 2:10]))),
-#                unname(gtab$new_cases[-1])))
-#     stop("failed sanity check: new case counts != summed age brackets")
+if (!identical(as.integer(unname(rowSums(atab[, 2:10]))),
+               unname(gtab$new_cases[-1])))
+    stop("failed sanity check: new case counts != summed age brackets")
 # clean wide table
 jtab <- dplyr::left_join(gtab, atab, by = "date")
 # pre-opendata table
