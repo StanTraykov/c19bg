@@ -187,7 +187,7 @@ dtab <- dtab %>%
                         names_transform = list(year = as.integer,
                                                week = as.integer),
                         values_to = "deaths") %>%
-    dplyr::mutate(deaths = as.integer(gsub("[: p]", "", deaths)),
+    dplyr::mutate(deaths = as.integer(gsub("[: pe]", "", deaths)),
                   age = agrp_names(age)) %>%
     dplyr::arrange(year, week, age)
 mean_tab <- dtab %>% # mean 2015-2019 & mean 2015-2019* *with NA removed
