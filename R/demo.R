@@ -292,6 +292,19 @@ exd_plot <- function(top_n = 30) {
         dplyr::arrange(week) %>%
         dplyr::slice_tail() %>%
         dplyr::ungroup()
+    last_week <- function(x) {
+        ret <- last_data_pt %>%
+            dplyr::filter(geo == x) %>%
+            dplyr::select("week") %>%
+            dplyr::pull()
+        return(ret)
+    }
+    max_pt <- factor_tab %>%
+        dplyr::filter(!is.na(em_1m)) %>%
+        dplyr::group_by(geo) %>%
+        dplyr::filter(em_1m == max(em_1m)) %>%
+        dplyr::filter(week < last_week(geo) - 6) %>%
+        dplyr::ungroup()
     plt <- ggplot2::ggplot(
         data = factor_tab,
         mapping = ggplot2::aes(
@@ -322,6 +335,16 @@ exd_plot <- function(top_n = 30) {
             segment.color	= "#333333",
             segment.size = 0.4,
             segment.alpha = 0.5,
+            show.legend = FALSE
+        ) +
+        shadowtext::geom_shadowtext(
+            data = max_pt %>%
+                dplyr::arrange(em_1m) %>%
+                dplyr::slice_tail(n = 15),
+            mapping = ggplot2::aes(label = paste0(geo, enc("ᵐᵃˣ"))),
+            size = 3.0,
+            nudge_y = 7,
+            bg.color = "#ebebeb",
             show.legend = FALSE
         ) +
         ggplot2::geom_vline(xintercept = last_bg_wk,
