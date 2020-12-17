@@ -34,11 +34,13 @@ df_url <- paste0("https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/",
                  "BulkDownloadListing?file=data/",
                  deaths_file)
 dl_missing(df_url, local_deaths_file)
-# ECDC cases/deaths
-local_covid_file <- file.path("data", "ecdc_covid.csv.gz")
-cf_url <- paste0("https://opendata.ecdc.europa.eu/covid19/casedistribution/",
-                 "csv/data.csv")
-dl_missing(cf_url, local_covid_file, zip_local = TRUE)
+
+# ECDC nat'l case death
+local_ncd_file <- file.path("data", "ecdc_ncd.csv.gz")
+cf_url <- paste0("https://opendata.ecdc.europa.eu/covid19/",
+                 "nationalcasedeath/csv")
+dl_missing(cf_url, local_ncd_file, zip_local = TRUE)
+
 # ECDC hosp
 local_hosp_file <- file.path("data", "ecdc_hosp.csv.gz")
 hf_url <- paste0("https://opendata.ecdc.europa.eu/covid19/",
@@ -212,33 +214,56 @@ cmp_tab <- dplyr::left_join(mean_tab, tt_tab, by = c("geo", "week")) %>%
     dplyr::mutate(excess_deaths = d_2020 - mean_deaths) %>%
     dplyr::mutate(excess_deaths_star = d_2020 - mean_deaths_star)
 
-## ECDC cased/deaths
-ecdc_tab <- read.csv(gzfile(local_covid_file)) %>%
-    dplyr::rename(
-        date = dateRep,
-        geo = geoId,
-        daily_d = deaths,
-        country = countriesAndTerritories,
-        i14d = Cumulative_number_for_14_days_of_COVID.19_cases_per_100000
-    ) %>%
-    dplyr::mutate(date = as.Date(date, format = "%d/%m/%Y")) %>%
-    dplyr::mutate(country = gsub("_", " ", enc(country))) %>%
+## prog data
+codes_tab <- read.csv(file.path("prog_data", "ccodes.csv"),
+                      na.strings = "")
+
+## ECDC nat'l cases / deaths
+ncd_tab <- read.csv(gzfile(local_ncd_file), na.strings = "")
+names(ncd_tab)[1] = "country"
+ncd_tab <- ncd_tab %>%
+    dplyr::mutate(date = as.Date(date)) %>%
     dplyr::mutate(geo_name = substr(country, 1, 13)) %>%
+    tidyr::pivot_wider(names_from = "indicator",
+                       values_from = c("daily_count", "rate_14_day"))
+ncd_tab <- ncd_tab %>%
+    dplyr::rename(
+        daily_d = daily_count_deaths,
+        daily_c = `daily_count_confirmed cases`,
+        i14d = `rate_14_day_confirmed cases`,
+        d14d = rate_14_day_deaths,
+        tl_code = country_code
+    )
+ncd_tab <- dplyr::right_join(ncd_tab,
+                             codes_tab %>% dplyr::select("tl_code", "geo"),
+                             by = "tl_code")
+ncd_tab <- ncd_tab %>%
     dplyr::group_by(geo) %>%
     dplyr::arrange(date) %>%
     dplyr::mutate(
-        d14d = 1000000 * zoo::rollsum(daily_d, 14, align = "right", fill = NA) /
-            popData2019
+        d14X = 1000000 * zoo::rollsum(daily_d, 14, align = "right", fill = NA) /
+            population
     ) %>%
     dplyr::mutate(
-        i14X = 100000 * zoo::rollsum(cases, 14, align = "right", fill = NA) /
-            popData2019
+        i14X = 100000 * zoo::rollsum(daily_c, 14, align = "right", fill = NA) /
+            population
     ) %>%
     dplyr::ungroup() %>%
     dplyr::arrange(geo)
+
+diff_d <- ncd_tab %>%
+    dplyr::filter(d14d - d14X > 1e-10) %>% dplyr::count() %>% dplyr::pull()
+diff_i <- ncd_tab %>%
+    dplyr::filter(i14d - i14X > 1e-10) %>% dplyr::count() %>% dplyr::pull()
+if (diff_d + diff_i != 0)
+    stop(sprintf("check fail: 14d deaths (nrow): %d, 14d incid (nrow): %d",
+                 diff_d,
+                 diff_i))
+    
+
 # weekly COVID deaths from ECDC
-cd_tab <- ecdc_tab %>%
-    dplyr::select("date", "daily_d", "geo", "geo_name", "popData2019") %>%
+cd_tab <- ncd_tab %>%
+    dplyr::select("date", "daily_d", "geo", "geo_name", "population") %>%
     dplyr::filter(date >= as.Date("2020-01-01")) %>%
     dplyr::group_by(geo) %>%
     dplyr::arrange(date) %>%
@@ -248,13 +273,13 @@ cd_tab <- ecdc_tab %>%
     dplyr::filter(weekdays(date, abbreviate = FALSE) == "Monday") %>%
     dplyr::mutate(week = lubridate::isoweek(date) - 1) %>%
     dplyr::rename(covid_deaths = s7_d) %>%
-    dplyr::select("geo", "week", "geo_name", "covid_deaths", "popData2019")
+    dplyr::select("geo", "week", "geo_name", "covid_deaths", "population")
 
 ## EUROSTAT & ECDC data incl. factors & excess mortality per 1M
 factor_tab <- dplyr::left_join(cmp_tab, cd_tab, by = c("geo", "week")) %>%
     dplyr::mutate(ed_covid_factor = excess_deaths / covid_deaths) %>%
     dplyr::mutate(ed_factor = d_2020 / mean_deaths) %>%
-    dplyr::mutate(em_1m = 1000000 * excess_deaths_star / popData2019)
+    dplyr::mutate(em_1m = 1000000 * excess_deaths_star / population)
 
 ## ECDC hospitalization
 hosp_tab <- read.csv(gzfile(local_hosp_file))
@@ -264,11 +289,11 @@ hosp_tab <- hosp_tab %>%
     dplyr::select("country", "date", "year_week", "value") %>%
     dplyr::mutate(date = as.Date(date)) %>%
     dplyr::rename(hosp = value)
-geo_info_from_ecdc <- ecdc_tab %>%
-    dplyr::select("geo", "geo_name", "country", "popData2019") %>%
+geo_info_from_ecdc <- ncd_tab %>%
+    dplyr::select("geo", "geo_name", "country", "population") %>%
     dplyr::distinct()
 hosp_tab <- dplyr::left_join(hosp_tab, geo_info_from_ecdc, by = "country") %>%
-    dplyr::mutate(hosp1m = 1000000 * hosp / popData2019)
+    dplyr::mutate(hosp1m = 1000000 * hosp / population)
 
 ################################################################################
 # excess deaths per 1M                                                         #
@@ -365,21 +390,21 @@ exd_plot <- function(top_n = 30) {
 ################################################################################
 # 14d country incidence/deaths comparison; arguments:                          #
 # itype: "i14d" / "d14d" -- cumulative 14d incidence/deaths per 100K/1M        #
-#        "hosp1m" -- hospitalized plot (continent ignored; only for Europe)    #
-# continent -- regexp default "Asia|Africa|Europe|Oceania|America"             #
+#        "hosp1m" -- hospitalized plot (continents ignored; only for Europe)   #
+# continents -- regexp default "Asia|Africa|Europe|Oceania|America"            #
 # top_n -- number of countries to label (beginning at highest count)           #
 ################################################################################
 ci14_plot <- function(itype = "i14d",
-                      continent = "Asia|Africa|Europe|Oceania|America",
+                      continents = "Asia|Africa|Europe|Oceania|America",
                       top_n = 25) {
     vy <- itype
     if (itype == "hosp1m") {
-        continent <- "Europe"
+        continents <- "Europe"
         ci_tab <- hosp_tab %>% dplyr::filter(date >= as.Date("2020-03-01"))
     } else {
-        ci_tab <- ecdc_tab %>%
+        ci_tab <- ncd_tab %>%
             dplyr::filter(date >= as.Date("2020-03-01"),
-                          stringr::str_detect(continentExp, continent))
+                          stringr::str_detect(continent, continents))
     }
     distinct_geo <- ci_tab %>% dplyr::select("geo") %>% dplyr::distinct()
     geo_count <- distinct_geo %>% dplyr::count() %>% dplyr::pull()
@@ -443,7 +468,7 @@ ci14_plot <- function(itype = "i14d",
         v_labs[itype] +
         ggplot2::labs(title = sprintf("%s (%s)",
                                       v_labs[[itype]]$title,
-                                      gsub("\\|", ", ", continent))) +
+                                      gsub("\\|", ", ", continents))) +
         gtheme1 +
         ggplot2::theme(
             axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
@@ -601,8 +626,8 @@ save_all <- function() {
     export(exd_plot(), "cmp_excd_europe.svg")
     export(ci14_plot("i14d"), "cmp_i14d_world.svg")
     export(ci14_plot("d14d"), "cmp_d14d_world.svg")
-    export(ci14_plot("i14d", continent = "Europe"), "cmp_i14d_europe.svg")
-    export(ci14_plot("d14d", continent = "Europe"), "cmp_d14d_europe.svg")
+    export(ci14_plot("i14d", continents = "Europe"), "cmp_i14d_europe.svg")
+    export(ci14_plot("d14d", continents = "Europe"), "cmp_d14d_europe.svg")
     export(mplot(), "00_eur_map.svg")
     export(fplot(), "00_cmp.svg", w = 14.4, h = 8)
     export(tplot("BG"), "00_BG_totals.svg")

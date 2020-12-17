@@ -108,9 +108,9 @@ if (!skip_dall) {
     export(plot = exd_plot(), file = "C12_exd1m_eurp")
     export(plot = ci14_plot("i14d"), file = "C10_cmp_i_wrld")
     export(plot = ci14_plot("d14d"), file = "C10_cmp_d_wrld")
-    export(plot = ci14_plot("i14d", continent = "Europe"),
+    export(plot = ci14_plot("i14d", continents = "Europe"),
            file = "C11_cmp_i_eurp")
-    export(plot = ci14_plot("d14d", continent = "Europe"),
+    export(plot = ci14_plot("d14d", continents = "Europe"),
            file = "C11_cmp_d_eurp")
     export(file = "D00_BG_t", plot = tplot("BG"))
     export(file = "D00_map", plot = mplot())
