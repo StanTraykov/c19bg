@@ -179,11 +179,11 @@ oblasts_plot <- function(incid_100k, facet = TRUE) {
                                   limits = c(first_mva7, last_sunday_inc + 4),
                                   date_labels = "%d.%m. (%U)",
                                   expand = ggplot2::expansion(mult = c(0.02,
-                                                                       0.26))) +
+                                                                       0.19))) +
             ggrepel::geom_text_repel(data = otab %>%
                                 dplyr::filter(date == plot_end_date),
                             size = 3.6,
-                            nudge_x = 20,
+                            nudge_x = 15,
                             hjust = 0,
                             direction = "y",
                             point.padding = NA,

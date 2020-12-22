@@ -104,13 +104,22 @@ if (!skip_var) {
 }
 if (!skip_dall) {
     source_d("demo.R")
-    export(plot = ci14_plot("hosp1m"), file = "C13_cmp_h_eurp")
-    export(plot = exd_plot(), file = "C12_exd1m_eurp")
-    export(plot = ci14_plot("i14d"), file = "C10_cmp_i_wrld")
-    export(plot = ci14_plot("d14d"), file = "C10_cmp_d_wrld")
-    export(plot = ci14_plot("i14d", continents = "Europe"),
+    export(plot = wk_plot(indicator = "hosp_1m", top_n = 100),
+           file = "C13_cmp_h_eurp")
+    export(plot = wk_plot(indicator = "em_1m"),
+           file = "C12_exd1m_eurp")
+    export(plot = wk_plot(indicator = "r14_cases",
+                          lower_y = 0),
+           file = "C10_cmp_i_wrld")
+    export(plot = wk_plot(indicator = "r14_deaths", lower_y = 0),
+           file = "C10_cmp_d_wrld")
+    export(plot = wk_plot(indicator = "r14_cases",
+                          continents = "Europe",
+                          lower_y = 0),
            file = "C11_cmp_i_eurp")
-    export(plot = ci14_plot("d14d", continents = "Europe"),
+    export(plot = wk_plot(indicator = "r14_deaths",
+                          continents = "Europe",
+                          lower_y = 0),
            file = "C11_cmp_d_eurp")
     export(file = "D00_BG_t", plot = tplot("BG"))
     export(file = "D00_map", plot = mplot())

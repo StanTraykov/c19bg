@@ -123,7 +123,8 @@ r_plot <- function() {
     plt <- plt +
         ggplot2::geom_col(mapping = ggplot2::aes(y = new_cases, fill = is_sun),
                           width = 0.9) +
-        ggplot2::geom_line(mapping = ggplot2::aes(y = rollmean7, color = "C_mva"),
+        ggplot2::geom_line(mapping = ggplot2::aes(y = rollmean7,
+                                                  color = "C_mva"),
                            linetype = lty_mva,
                            size = line_sz) +
         ggplot2::geom_line(mapping = ggplot2::aes(y = R.Median.R. * r_scale,
@@ -138,80 +139,80 @@ r_plot <- function() {
                                                   color = "B_pos"),
                            linetype = lty_norm,
                            size = line_sz) +
-        ggplot2::geom_ribbon(mapping =
-                    ggplot2::aes(ymin = R.Quantile.0.025.R. * r_scale,
-                                 ymax = R.Quantile.0.975.R. * r_scale,
-                                 fill = "A_ribbon")) +
+        ggplot2::geom_ribbon(
+            mapping = ggplot2::aes(ymin = R.Quantile.0.025.R. * r_scale,
+                                   ymax = R.Quantile.0.975.R. * r_scale,
+                                   fill = "A_ribbon")
+        ) +
         # % positivity labels
-        ggplot2::geom_text(data = sundays_only %>%
-                               dplyr::filter(!is.na(posit7)),
-                  mapping = ggplot2::aes(x = date - 3.5,
-                                         y = 0,
-                                         color = "B_pos",
-                                         label = paste0(round(100 * posit7),
-                                                        "%")),
-                  vjust = 1.3,
-                  size = 2.7) +
+        ggplot2::geom_text(
+            data = sundays_only %>%
+                dplyr::filter(!is.na(posit7)),
+            mapping = ggplot2::aes(x = date - 3.5,
+                                   y = 0,
+                                   color = "B_pos",
+                                   label = paste0(round(100 * posit7),
+                                                  "%")),
+            vjust = 1.3,
+            size = 2.7
+        ) +
         # % positivity labels label
-        ggplot2::geom_text(data = sundays_only %>%
-                               dplyr::filter(is.na(posit7)) %>%
-                               dplyr::slice_tail(),
-                           mapping = ggplot2::aes(
-                               x = date,
-                               y = 0,
-                               color = "B_pos",
-                               label = enc("седмична позитивност: ")
-                           ),
-                           vjust = 1.3,
-                           hjust = 1,
-                           size = 2.7) +
+        ggplot2::geom_text(
+            data = sundays_only %>%
+                dplyr::filter(is.na(posit7)) %>%
+                dplyr::slice_tail(),
+            mapping = ggplot2::aes(
+                x = date,
+                y = 0,
+                color = "B_pos",
+                label = enc("седмична позитивност: ")
+            ),
+            vjust = 1.3,
+            hjust = 1,
+            size = 2.7
+        ) +
         # R median label
-        shadowtext::geom_shadowtext(data = ftab %>%
-                                        dplyr::filter(
-                                            date == plot_end_date - 1
-                                        ),
-                                    mapping = ggplot2::aes(
-                                        x = date,
-                                        y = R.Median.R. * r_scale,
-                                        color = "D_med",
-                                        label = format(round(R.Median.R., 2),
-                                                       nsmall = 2)
-                                    ),
-                                    bg.color = "#ebebeb",
-                                    size = 3.4,
-                                    nudge_x = 5) +
+        shadowtext::geom_shadowtext(
+            data = ftab %>%
+                dplyr::filter(date == plot_end_date - 1),
+            mapping = ggplot2::aes(
+                x = date,
+                y = R.Median.R. * r_scale,
+                color = "D_med",
+                label = format(round(R.Median.R., 2), nsmall = 2)
+            ),
+            bg.color = "#ebebeb",
+            size = 3.4,
+            nudge_x = 5
+        ) +
         # R CrI 95% lower
-        shadowtext::geom_shadowtext(data = ftab %>%
-                                        dplyr::filter(
-                                            date == plot_end_date - 1
-                                        ),
-                                    mapping = ggplot2::aes(
-                                        x = date,
-                                        y =  r_scale * min(R.Quantile.0.025.R.,
-                                                           R.Median.R. - 0.1),
-                                        label = format(round(R.Quantile.0.025.R., 2),
-                                                       nsmall = 2)
-                                    ),
-                                    color = clr$cri_txt,
-                                    bg.color = "#ebebeb",
-                                    size = 3.4,
-                                    nudge_x = 5) +
+        shadowtext::geom_shadowtext(
+            data = ftab %>%
+                dplyr::filter(date == plot_end_date - 1),
+            mapping = ggplot2::aes(
+                x = date,
+                y =  r_scale * min(R.Quantile.0.025.R., R.Median.R. - 0.1),
+                label = format(round(R.Quantile.0.025.R., 2), nsmall = 2)
+            ),
+            color = clr$cri_txt,
+            bg.color = "#ebebeb",
+            size = 3.4,
+            nudge_x = 5
+        ) +
         # R CrI 95% upper
-        shadowtext::geom_shadowtext(data = ftab %>%
-                                        dplyr::filter(
-                                            date == plot_end_date - 1
-                                        ),
-                                    mapping = ggplot2::aes(
-                                        x = date,
-                                        y = r_scale * max(R.Quantile.0.975.R.,
-                                                          R.Median.R. + 0.1),
-                                        label = format(round(R.Quantile.0.975.R., 2),
-                                                       nsmall = 2)
-                                    ),
-                                    color = clr$cri_txt,
-                                    bg.color = "#ebebeb",
-                                    size = 3.4,
-                                    nudge_x = 5) +
+        shadowtext::geom_shadowtext(
+            data = ftab %>%
+                dplyr::filter(date == plot_end_date - 1),
+            mapping = ggplot2::aes(
+                x = date,
+                y = r_scale * max(R.Quantile.0.975.R., R.Median.R. + 0.1),
+                label = format(round(R.Quantile.0.975.R., 2), nsmall = 2)
+            ),
+            color = clr$cri_txt,
+            bg.color = "#ebebeb",
+            size = 3.4,
+            nudge_x = 5
+        ) +
         ggplot2::scale_fill_manual(
             name = 2,
             values = c(clr$cri, clr$reg_c, clr$reg_s),
