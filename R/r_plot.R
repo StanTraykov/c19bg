@@ -99,9 +99,9 @@ ftab <- dplyr::bind_cols(ftab, rtab)
 ################################################################################
 r_plot <- function() {
     sundays_only <- ftab %>% dplyr::filter(is_sun == "yes")
-    first_sunday <- sundays_only %>% dplyr::select("date") %>%
+    first_sunday <- sundays_only %>% 
         dplyr::slice_head() %>%
-        dplyr::pull()
+        dplyr::pull(date)
     plot_end_date <- tail(ftab$date, n = 1)
     days_till_sunday <- 7 - lubridate::wday(plot_end_date, week_start = 1)
     last_sunday_inc <- plot_end_date + days_till_sunday
@@ -109,11 +109,11 @@ r_plot <- function() {
     clr_guide <- ggplot2::guide_legend(override.aes = clr_leg)
     fill_guide <- ggplot2::guide_legend(override.aes = fill_leg)
     ttab <- ftab %>% dplyr::filter(date >= ftab$date[1] + skip_to)
-    cmx <- max(ttab %>% dplyr::select(new_cases) %>% dplyr::pull(),
+    cmx <- max(ttab %>% dplyr::pull(new_cases),
                na.rm = TRUE)
-    rmx <- max(ttab %>% dplyr::select(R.Quantile.0.975.R.) %>% dplyr::pull(),
+    rmx <- max(ttab %>% dplyr::pull(R.Quantile.0.975.R.),
                na.rm = TRUE)
-    pmx <- max(ttab %>% dplyr::select(s7_nt) %>% dplyr::pull(),
+    pmx <- max(ttab %>% dplyr::pull(s7_nt),
                na.rm = TRUE)
     r_scale <- tick_choice[tick_choice >= cmx / rmx][1]
     c_max <- r_scale * rmx # cases axis limit

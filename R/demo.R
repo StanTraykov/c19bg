@@ -49,27 +49,46 @@ hf_url <- paste0("https://opendata.ecdc.europa.eu/covid19/",
 dl_missing(hf_url, local_hosp_file, zip_local = TRUE)
 
 ##### country config
-# country codes->names, EU+ grid (Ireland deaths data missing from EUROSTAT)
-cnames <- c(IS = enc("Исландия"), NO = enc("Норвегия"), SE = enc("Швеция"),
-            FI = enc("Финландия"), EE = enc("Естония"),
-            UK = enc("Великобритания"), DK = enc("Дания"),
-            NL = enc("Нидерландия"), LV = enc("Латвия"), LT = enc("Литва"),
-            DE = enc("Германия"), PL = enc("Полша"), BE = enc("Белгия"),
-            CZ = enc("Чехия"), SK = enc("Словакия"), FR = enc("Франция"),
-            AT = enc("Австрия"), LU = enc("Люксембург"), RS = enc("Сърбия"),
-            RO = enc("Румъния"), HU = enc("Унгария"), SI = enc("Словения"),
-            ES = enc("Испания"), PT = enc("Португалия"), CH = enc("Швейцария"),
-            BG = enc("България"), ME = enc("Черна гора"), HR = enc("Хърватия"),
-            IT = enc("Италия"), AL = enc("Албания"), EL = enc("Гърция"),
-            MT = enc("Малта"), CY = enc("Кипър"))
+# for deaths comparison / eu map (Ireland deaths data missing from EUROSTAT)
+eu_codes <- c("IS", "NO", "SE", "FI", "EE", "UK", "DK", "NL", "LV", "LT", 
+              "DE", "PL", "BE", "CZ", "SK", "FR", "AT", "LU", "RS", "RO", "HU", 
+              "SI", "ES", "PT", "CH", "BG", "ME", "HR", "IT", "AL", "EL", "MT", 
+              "CY")
+
+# for excess deaths factor comparison
+comp_f <- c("BG", "UK", "BE", "NL", "FR", "ES", "IT", "RO")
+
+##### country names
+bg_names <- read.csv(file.path("prog_data", "bg_cnames.csv"), na.strings = "")
+bg_names <- bg_names %>%
+    dplyr::mutate(bg_name = enc(bg_name)) %>%
+    dplyr::rename(geo_name = bg_name)
+codes_tab <- read.csv(file.path("prog_data", "ccodes.csv"), na.strings = "")
+codes_tab <- codes_tab %>%
+    dplyr::left_join(bg_names, by = "tl_code") # use Bulgarian names
+
+# return geo names in target language from EU 2-letter or ISO 3-letter codes
+get_geo_names <- function(codes) {
+    ret <- sapply(codes,
+                  function(x) codes_tab %>%
+                      dplyr::filter(geo == x | tl_code == x) %>%
+                      dplyr::pull(geo_name))
+    return(ret)
+}
+
+# map grid
 egrid <- data.frame(row = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4,
                             4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7),
                     col = c(1, 4, 5, 6, 7, 1, 4, 3, 7, 7, 4, 6, 3, 5, 5, 2, 4,
                             3, 6, 7, 5, 4, 2, 1, 3, 7, 6, 5, 3, 6, 7, 2, 7),
-                    code = names(cnames),
-                    name = cnames)
-# for country factor comparison
-comp_f <- c("BG", "UK", "BE", "NL", "FR", "ES", "IT", "RO")
+                    code = eu_codes,
+                    name = get_geo_names(eu_codes))
+
+# rearrange EU codes in target language alphabetical order
+eu_codes <- codes_tab %>% 
+    dplyr::filter(geo %in% eu_codes) %>%
+    dplyr::arrange(geo_name) %>%
+    dplyr::pull(geo)
 
 ##### visuals config
 txt_title1 <- enc("Умирания в")
@@ -138,7 +157,7 @@ v_labs <- list(
     hosp_1m = ggplot2::labs(
         title = enc("Брой хоспитализирани с COVID-19 на 1 млн."),
         caption = enc("данни: ECDC"),
-        x = enc("дата на докладване (седмица)"),
+        x = enc("седмица"),
         y =  enc("хоспитализирани на 1 млн.")
     )
 )
@@ -219,14 +238,6 @@ cmp_tab <- dplyr::left_join(mean_tab, tt_tab, by = c("geo", "week")) %>%
     dplyr::mutate(excess_deaths = d_2020 - mean_deaths) %>%
     dplyr::mutate(excess_deaths_star = d_2020 - mean_deaths_star) %>%
     dplyr::ungroup()
-
-## prog data
-codes_tab <- read.csv(file.path("prog_data", "ccodes.csv"), na.strings = "")
-bg_names <- read.csv(file.path("prog_data", "bg_cnames.csv"), na.strings = "")
-bg_names <- bg_names %>% dplyr::mutate(bg_name = enc(bg_name))
-codes_tab <- codes_tab %>%
-    dplyr::left_join(bg_names, by = "tl_code") %>%
-    dplyr::rename(geo_name = bg_name)
 
 ## ECDC nat'l cases / deaths
 ncd_tab <- read.csv(gzfile(local_ncd_file), na.strings = "")
@@ -315,8 +326,8 @@ wk_plot <- function(
         dplyr::slice_tail() %>%
         dplyr::ungroup()
     max_week <- last_data_pt %>%
-        dplyr::select("week") %>%
-        dplyr::pull() %>% max()
+        dplyr::pull(week) %>%
+        max()
     max_pt <- pdata %>%
         dplyr::filter(!is.na(.data[[vy]])) %>%
         dplyr::group_by(geo) %>%
@@ -388,8 +399,7 @@ wk_plot <- function(
 ################################################################################
 fplot <- function() {
     ptab <- factor_tab %>%
-        dplyr::filter(geo %in% comp_f) %>% 
-        dplyr::mutate(cname = cnames[geo])
+        dplyr::filter(geo %in% comp_f)
     ftab <- ptab %>%
         dplyr::filter(ed_factor > 1.2)
     plt <- ggplot2::ggplot(data = ptab,
@@ -416,7 +426,7 @@ fplot <- function() {
         ) +
         f_color_scale +
         common_xweek_scale +
-        ggplot2::facet_wrap(~ cname, ncol = 2, scales = "free_y") +
+        ggplot2::facet_wrap(~ geo_name, ncol = 2, scales = "free_y") +
         f_labs +
         gtheme1
     return(plt)
@@ -426,7 +436,7 @@ fplot <- function() {
 # contry by age groups plot (argument: country code, e.g. "BG", "UK", "EL")    #
 ################################################################################
 cplot <- function(country_code) {
-    if (substr(cnames[country_code], 1, 1) %in% c(enc("В"), enc("Ф")))
+    if (substr(get_geo_names(country_code), 1, 1) %in% c(enc("В"), enc("Ф")))
         title_pre <- paste0(txt_title1, txt_v)
     else
         title_pre <- txt_title1
@@ -449,7 +459,7 @@ cplot <- function(country_code) {
         common_xweek_scale +
         ggplot2::facet_wrap(~ age, nrow = 2) +
         ggplot2::labs(
-            title = paste(title_pre, cnames[country_code], txt_title2)
+            title = paste(title_pre, get_geo_names(country_code), txt_title2)
         ) +
         common_labs +
         gtheme1
@@ -460,7 +470,7 @@ cplot <- function(country_code) {
 # contry totals plot (argument: country code, e.g. "BG", "UK", "EL")           #
 ################################################################################
 tplot <- function(country_code) {
-    if (substr(cnames[country_code], 1, 1) %in% c(enc("В"), enc("Ф")))
+    if (substr(get_geo_names(country_code), 1, 1) %in% c(enc("В"), enc("Ф")))
         title_pre <- paste0(txt_title1, txt_v)
     else
         title_pre <- txt_title1
@@ -484,7 +494,7 @@ tplot <- function(country_code) {
         w_size_scale +
         common_xweek_scale +
         ggplot2::labs(
-            title = paste(title_pre, cnames[country_code], txt_title3)
+            title = paste(title_pre, get_geo_names(country_code), txt_title3)
         ) +
         common_labs +
         gtheme1
@@ -496,11 +506,12 @@ tplot <- function(country_code) {
 ################################################################################
 mplot <- function() {
     idata <- dtab %>%
-        dplyr::filter(geo %in% names(cnames),
+        dplyr::filter(geo %in% eu_codes,
                       sex == "T",
                       age == "TOTAL",
                       year >= 2015) %>%
-        dplyr::mutate(cname = cnames[geo])
+        dplyr::left_join(codes_tab %>% dplyr::select("geo", "geo_name"),
+                         by = "geo")
     plt <- ggplot2::ggplot(
         data = idata,
         mapping = ggplot2::aes(
@@ -517,7 +528,9 @@ mplot <- function() {
         common_size_scale +
         common_color_scale +
         common_xweek_scale +
-        geofacet::facet_geo(~ cname, grid = egrid, scales = "free_y") +
+        geofacet::facet_geo(~ geo_name,
+                            grid = egrid,
+                            scales = "free_y") +
         ggplot2::labs(title = txt_titlei) +
         common_labs +
         gtheme2
@@ -550,9 +563,9 @@ save_all <- function() {
     export(mplot(), "00_eur_map.svg")
     export(fplot(), "00_cmp.svg", w = 14.4, h = 8)
     export(tplot("BG"), "00_BG_totals.svg")
-    for (c in names(cnames)) {
-        # add numbers to filenames per BG alphabetical order of countries
-        pn <- stringr::str_pad(which(sort(cnames) == cnames[c]), 2, pad = "0")
-        export(cplot(c), paste0(pn, "_", c, ".svg"))
+    for (n in seq_along(eu_codes)) {
+        # add numbers to filenames per alphabetical order of countries
+        pn <- stringr::str_pad(n, 2, pad = "0")
+        export(cplot(eu_codes[n]), paste0(pn, "_", eu_codes[n], ".svg"))
     }
 }
