@@ -129,12 +129,10 @@ if (!skip_dall) {
            pix_width = 1800,
            plot = fplot())
     if (!skip_demo) {
-        for (c in names(cnames)) {
-            pad_num <- stringr::str_pad(which(sort(cnames) == cnames[c]),
-                                        2,
-                                        pad = "0")
-            export(file = paste0("D", pad_num, "_", c),
-                   plot = cplot(c))
+        for (n in seq_along(eu_codes)) {
+            pn <- stringr::str_pad(n, 2, pad = "0")
+            export(file = paste0("D", pn, "_", eu_codes[n]),
+                   plot = cplot(eu_codes[n]))
         }
     }
 }
