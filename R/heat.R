@@ -65,16 +65,17 @@ hplot <- function() {
                        plot.title = ggplot2::element_text(hjust = 0.5,
                                                           face = "bold")) +
         ggplot2::scale_x_continuous(breaks = min(atab[, 4]):max(atab[, 4])) +
-        ggplot2::labs(title =
-                          paste(enc("Седмична заболеваемост на COVID-19"),
-                                enc("(регистрирани нови случаи на 100 хил.)")),
-                      caption = paste(enc("*дясно подравнена 7-дневна сума"),
-                                      enc("спрямо докладваните в понеделник"),
-                                      enc("на следващата седмица;"),
-                                      enc("данни: data.egov.bg, НСИ")),
-             fill = enc("c/100K"),
-             x = enc("календарна седмица*"),
-             y = enc("група"))
+        ggplot2::labs(
+            title = paste(enc("Седмична заболеваемост на COVID-19"),
+                          enc("(регистрирани нови случаи на 100 хил.)")),
+            caption = paste(enc("*дясно подравнена 7-дневна сума"),
+                            enc("спрямо докладваните в понеделник"),
+                            enc("на следващата седмица;"),
+                            enc("данни: data.egov.bg, НСИ")),
+            fill = enc("c/100K"),
+            x = enc("календарна седмица*"),
+            y = enc("група")
+        )
     return(plt)
 }
 

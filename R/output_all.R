@@ -104,6 +104,13 @@ if (!skip_var) {
 }
 if (!skip_dall) {
     source_d("demo.R")
+    export(plot = wk_plot(indicator = "tests_100k", top_n = 100),
+           file = "C14_cmp_tst_eurp")
+    export(plot = wk_plot(indicator = "positivity",
+                          top_n = 100,
+                          label_fun = function(x) sprintf("%.1f%%", 100 * x),
+                          axis_labels = scales::label_percent()),
+           file = "C15_cmp_pos_eurp")
     export(plot = wk_plot(indicator = "hosp_1m", top_n = 100),
            file = "C13_cmp_h_eurp")
     export(plot = wk_plot(indicator = "em_1m"),
