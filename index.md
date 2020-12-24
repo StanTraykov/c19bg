@@ -52,7 +52,9 @@
 |-----|-----|
 |[![Сравнение Европа заболеваемост](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C11_cmp_i_eurp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C11_cmp_i_eurp.svg)|[![Сравнение свят заболеваемост](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C10_cmp_i_wrld.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C10_cmp_i_wrld.svg)|
 
-
+|Тестове Европа|Позитивност Европа|
+|-----|-----|
+|[![Сравнение Европа тестове](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C14_cmp_tst_eurp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C14_cmp_tst_eurp.svg)|[![Сравнение Европа позитивност](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C15_cmp_pos_eurp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C15_cmp_pos_eurp.svg)|
 
 # Свръхсмъртност
 
