@@ -58,13 +58,13 @@
 
 # Свръхсмъртност
 
-[![Възрасти](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D04_BG.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D04_BG.svg)
-
-[![Фактори](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_cmp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_cmp.svg)
-
-|Обща свръхсмъртност|Сравнителна карта ЕС+|
+|По седмици|+ възрастови групи|
 |-----|-----|
-|[![Общо](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_BG_t.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_BG_t.svg)|[![Карта](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_map.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_map.svg)|
+|[![Общо](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_BG_t.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_BG_t.svg)|[![По възрасти](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D04_BG.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D04_BG.svg)|
+
+|Фактори|Сравнителна карта ЕС+|
+|-----|-----|
+|[![Фактори](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_cmp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_cmp.svg)|[![Карта](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_map.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/D00_map.svg)|
 
 # Източници
 * [Портал за "отворени" данни](https://data.egov.bg/data/view/492e8186-0d00-43fb-8f5e-f2b0b183b64f)
