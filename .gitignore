@@ -4,3 +4,6 @@
 .Ruserdata
 data
 debug.log
+*.svg
+*.png
+*.jpg

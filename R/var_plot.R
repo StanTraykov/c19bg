@@ -451,9 +451,6 @@ var_plot_save_all <- function() {
                                                roll_func = mean,
                                                roll_window = 7,
                                                line_legend = "."))
-    export(file = "age_dis_1", plot = var_plot(bg_data,
-                                               "dis",
-                                               roll_func = mean,
-                                               roll_window = 1,
-                                               line_legend = "."))
+    export(file = "age_dis_1",
+           plot = var_plot(bg_data, "dis", line_legend = "."))
 }
