@@ -6,149 +6,152 @@ extrafont::loadfonts(device = "win") # comment out to use default fonts
 enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
 # enc <- function(x) x
 
-source(file.path("R", "bg_opendata.R")) # sets gen_data, age_data, obl_data
-
-# NSI 2019 data
-pops <- c("82835", "236305", "171809", "215477", "108018", "172262", "159470",
-          "232568", "127001", "110789", "469885", "110914", "106598", "226671",
-          "122546", "1328790", "409265", "313396", "119190", "184119", "117335",
-          "252776", "225317", "666801", "116915", "158204", "103532", "302694")
-
-##### visuals config
-line_sizes <- c(0.5, 0.7)
-ggrid <- data.frame( # bg oblast grid from geofacet pkg; modified codes/names
-    code = c("VID", "PVN", "DOB", "RSE", "SLS", "SHU",
-             "VRC", "VTR", "MON", "RAZ", "VAR", "TGV", "GAB", "SFO", "LOV",
-             "SOF", "BGS", "SZR", "PER", "SLV", "JAM", "PAZ", "HKV", "PDV",
-             "KNL", "KRZ", "SML", "BLG"),
-    name = c(enc("Видин"), enc("Плевен"), enc("Добрич"), enc("Русе"),
-             enc("Силистра"), enc("Шумен"), enc("Враца"),
-             enc("Велико Търново"), enc("Монтана"), enc("Разград"),
-             enc("Варна"), enc("Търговище"), enc("Габрово"),
-             enc("Софийска област"), enc("Ловеч"), enc("София-град"),
-             enc("Бургас"), enc("Стара Загора"), enc("Перник"),
-             enc("Сливен"), enc("Ямбол"), enc("Пазарджик"),
-             enc("Хасково"), enc("Пловдив"), enc("Кюстендил"),
-             enc("Кърджали"), enc("Смолян"), enc("Благоевград")),
-    row = c(1L, 1L, 1L, 1L, 1L, 2L, 2L, 2L, 2L, 2L, 3L, 3L, 3L, 3L, 3L, 4L, 4L,
-            4L, 4L, 4L, 5L, 5L, 5L, 5L, 5L, 6L, 6L, 6L),
-    col = c(1L, 3L, 6L, 4L, 5L, 5L, 2L, 3L, 1L, 4L, 5L, 4L, 3L, 1L, 2L, 2L, 5L,
-            3L, 1L, 4L, 5L, 2L, 4L, 3L, 1L, 4L, 3L, 2L))
-obl_colors <- scales::hue_pal()(length(pops))
-obl_colors[which(sort(ggrid$name) == enc("София-град"))] <- "black"
-obl_colors[which(sort(ggrid$name) == enc("Пловдив"))] <- "#CC0000"
-obl_colors[which(sort(ggrid$name) == enc("Варна"))] <- "#0000CC"
-obl_colors[which(sort(ggrid$name) == enc("Бургас"))] <- "#008800"
-big_oblasts <- c(enc("София-град"),
-                 enc("Пловдив"),
-                 enc("Варна"),
-                 enc("Бургас"))
-gtheme_count <- ggplot2::theme(text = ggplot2::element_text(size = 14,
-                                                   family =
-                                             grDevices::windowsFont("Calibri")),
-                               panel.grid.minor.x = ggplot2::element_blank(),
-                               legend.position = "top",
-                               strip.text = ggplot2::element_text(margin =
-                                                   ggplot2::margin(3, 0, 3, 0)),
-                               plot.title = ggplot2::element_text(hjust = 0.5,
-                                                                 face = "bold"))
-gtheme_i100k <- gtheme_count +
-    ggplot2::theme(strip.background = ggplot2::element_rect(fill = "#a8bad2"),
-                   axis.title.y = ggplot2::element_text(color = "#587ba9"),
-                   plot.title = ggplot2::element_text(hjust = 0.5,
-                                                      face = "bold",
-                                                      color = "#587ba9"),
-                   panel.spacing.x = ggplot2::unit(17, "pt"),
-                   panel.grid.minor.y = ggplot2::element_blank())
-labs_count <- ggplot2::labs(x = enc("месец"),
-                            y = enc("7-дневно средно"),
-                            title = enc("Регистрирани нови случаи по области"),
-                            caption = enc("данни: data.egov.bg"))
-labs_i100k <- ggplot2::labs(x = enc("месец"),
-                            y = enc("заболеваемост на 100 хил."),
-                            title = paste(
-                                enc("7-дневна заболеваемост по области"),
-                                enc("(регистрирани нови случаи на 100 хил.)")
-                            ),
-                            caption = enc("данни: data.egov.bg, НСИ"))
-labs_no_facet <- ggplot2::labs(x = enc("дата на докладване (седмица)"))
-##### tidy data
-o_name <- function(cd) { # return human field names
-    if (cd == "date") return(cd)
-    cd <- sub("_ALL", "", cd)
-    name <- ggrid[which(ggrid$code == cd), 2]
-    return(enc(name))
+################################################################################
+# oblasts plot visuals                                                         #
+################################################################################
+oblasts_plot_vis <- function() {
+    gtheme_count <- ggplot2::theme(
+        text = ggplot2::element_text(size = 14,
+                                     family =
+                                         grDevices::windowsFont("Calibri")),
+        panel.grid.minor.x = ggplot2::element_blank(),
+        legend.position = "top",
+        strip.text = ggplot2::element_text(margin =
+                                               ggplot2::margin(3, 0, 3, 0)),
+        plot.title = ggplot2::element_text(hjust = 0.5,
+                                           face = "bold")
+    )
+    gtheme_i100k <- gtheme_count + ggplot2::theme(
+        strip.background = ggplot2::element_rect(fill = "#a8bad2"),
+        axis.title.y = ggplot2::element_text(color = "#587ba9"),
+        plot.title = ggplot2::element_text(hjust = 0.5,
+                                           face = "bold",
+                                           color = "#587ba9"),
+        panel.spacing.x = ggplot2::unit(17, "pt"),
+        panel.grid.minor.y = ggplot2::element_blank()
+        )
+    vis <- list(
+        line_sizes = c(0.5, 0.7),
+        labs_count = ggplot2::labs(
+            x = enc("месец"),
+            y = enc("7-дневно средно"),
+            title = enc("Регистрирани нови случаи по области"),
+            caption = enc("данни: data.egov.bg")
+        ),
+        labs_i100k = ggplot2::labs(
+            x = enc("месец"),
+            y = enc("заболеваемост на 100 хил."),
+            title = paste(
+                enc("7-дневна заболеваемост по области"),
+                enc("(регистрирани нови случаи на 100 хил.)")
+            ),
+            caption = enc("данни: data.egov.bg, НСИ")
+        ),
+        labs_no_facet = ggplot2::labs(x = enc("дата на докладване (седмица)")),
+        theme_count = gtheme_count,
+        theme_i100k = gtheme_i100k
+    )
+    return(vis)
 }
 
-o_short <- function(x) { # short oblast name
-    x <- sub(enc("Велико"), enc("В."), x)
-    x <- sub(enc("област"), enc("обл."), x)
-    return(x)
+################################################################################
+# oblasts plot tidy                                                            #
+################################################################################
+oblasts_plot_tidy <- function(country_data) {
+    ggrid <- country_data$subdiv_grid
+    # NSI 2019 data
+    pops <- c(82835, 236305, 171809, 215477, 108018, 172262, 159470,
+              232568, 127001, 110789, 469885, 110914, 106598, 226671,
+              122546, 1328790, 409265, 313396, 119190, 184119, 117335,
+              252776, 225317, 666801, 116915, 158204, 103532, 302694)
+    
+    o_name <- function(cd) { # return human field names
+        if (cd == "date") return(cd)
+        cd <- sub("_ALL", "", cd)
+        name <- ggrid[which(ggrid$code == cd), 2]
+        return(enc(name))
+    }
+    
+    o_pop <- function(oblast) { # return pop
+        return(pops[match(oblast, ggrid$name)])
+    }
+    
+    otab <- country_data$subdivs %>%
+        dplyr::select(!ends_with("_ACT")) %>%
+        dplyr::rename_with(~ sapply(.x, o_name)) %>%
+        dplyr::mutate(date = as.Date(date)) %>%
+        tidyr::pivot_longer(cols = !matches("date"),
+                            names_to = "oblast",
+                            values_to = "cases") %>%
+        dplyr::group_by(oblast) %>%
+        dplyr::mutate(mva7 = zoo::rollapply(cases,
+                                            7,
+                                            mean,
+                                            align = "right",
+                                            fill = NA)) %>%
+        dplyr::mutate(i100k = 100000 * 7 * mva7 / as.integer(o_pop(oblast)))
+    return(otab)
 }
-
-o_pop <- function(oblast) { # return pop
-    return(pops[match(oblast, ggrid$name)])
-}
-
-otab <- read.csv(file = obl_data)
-otab[-1, -1] <- otab[-1, -1] - otab[-nrow(otab), -1] # repl. totals w/incidence
-otab <- otab[-1, ]
-names(otab)[1] <- "date"
-otab <- otab %>%
-    dplyr::select(!ends_with("_ACT")) %>%
-    dplyr::rename_with(~ sapply(.x, o_name)) %>%
-    dplyr::mutate(date = as.Date(date)) %>%
-    tidyr::pivot_longer(cols = !matches("date"),
-                        names_to = "oblast",
-                        values_to = "cases") %>%
-    dplyr::group_by(oblast) %>%
-    dplyr::mutate(mva7 = zoo::rollapply(cases,
-                                        7,
-                                        mean,
-                                        align = "right",
-                                        fill = NA)) %>%
-    dplyr::mutate(i100k = 100000 * 7 * mva7 / as.integer(o_pop(oblast)))
-
-dummy <- data.frame(date = as.Date("2020-11-08"), # for fixing y lower limit
-                    oblast = otab %>% dplyr::distinct(oblast) %>% dplyr::pull(),
-                    mva7 = 0,
-                    cases = 0,
-                    i100k = 0)
 
 ################################################################################
 # oblast incidence plot; arguments:                                            #
 # - incid_100k: whether to plot incidence/100K instead of raw incid (def FALSE)#
 # - facet: whether to geo split into small charts (default TRUE)               #
 ################################################################################
-oblasts_plot <- function(incid_100k, facet = TRUE) {
+oblasts_plot <- function(country_data, incid_100k, facet = TRUE) {
+
+    o_short <- function(x) { # short oblast name
+        x <- sub(enc("Велико"), enc("В."), x)
+        x <- sub(enc("Стара"), enc("Ст."), x)
+        x <- sub(enc("Софийска област"), enc("Соф. обл."), x)
+        return(x)
+    }
+
+    otab <- oblasts_plot_tidy(country_data)
+    vis <- oblasts_plot_vis()
+    ggrid <- country_data$subdiv_grid
+    obl_colors <- scales::hue_pal()(nrow(country_data$subdiv_grid))
+    big_oblasts <- c(enc("София-град"),
+                     enc("Пловдив"),
+                     enc("Варна"),
+                     enc("Бургас"))
+    obl_colors[which(sort(ggrid$name) == enc("София-град"))] <- "black"
+    obl_colors[which(sort(ggrid$name) == enc("Пловдив"))] <- "#CC0000"
+    obl_colors[which(sort(ggrid$name) == enc("Варна"))] <- "#0000CC"
+    obl_colors[which(sort(ggrid$name) == enc("Бургас"))] <- "#008800"
+    dummy <- data.frame(
+        date = as.Date("2020-11-08"), # for fixing y lower limit
+        oblast = otab %>% dplyr::distinct(oblast) %>% dplyr::pull(),
+        mva7 = 0,
+        cases = 0,
+        i100k = 0
+    )
     vy <- ifelse(incid_100k, "i100k", "mva7")
-    plt <- ggplot2::ggplot(data = otab,
-                           mapping = ggplot2::aes(
-                               x = date,
-                               y = .data[[vy]],
-                               color = oblast,
-                               fontface = ifelse(oblast %in%
-                                                     big_oblasts,
-                                                 "bold",
-                                                 "plain"),
-                               label = sprintf("%s (%d)",
-                                               o_short(oblast),
-                                               round(.data[[vy]]))
-                           ))
+    plt <- ggplot2::ggplot(
+        data = otab,
+        mapping = ggplot2::aes(
+            x = date,
+            y = .data[[vy]],
+            color = oblast,
+            fontface = ifelse(oblast %in% big_oblasts, "bold", "plain"),
+            label = sprintf("%s (%d)", o_short(oblast), round(.data[[vy]]))
+        )
+    )
     if (incid_100k) {
-        plt <- plt + labs_i100k + gtheme_i100k
+        plt <- plt + vis$labs_i100k + vis$theme_i100k
         scales <- "fixed"
     } else {
-        plt <- plt + labs_count + gtheme_count
+        plt <- plt + vis$labs_count + vis$theme_count
         scales <- "free_y"
     }
     plt <- plt +
         ggplot2::guides(color = FALSE) +
-        ggplot2::geom_line(mapping =
-                    ggplot2::aes(size = ifelse(!(oblast %in% big_oblasts),
-                                               ifelse(facet, "B", "A"),
-                                               "B"))) +
-        ggplot2::scale_size_manual(values = line_sizes, guide = FALSE) +
+        ggplot2::geom_line(
+            mapping = ggplot2::aes(size = ifelse(!(oblast %in% big_oblasts),
+                                                 ifelse(facet, "B", "A"),
+                                                 "B"))
+        ) +
+        ggplot2::scale_size_manual(values = vis$line_sizes, guide = FALSE) +
         ggplot2::scale_color_manual(values = obl_colors)
     if (facet) {
         plt <- plt +
@@ -192,7 +195,7 @@ oblasts_plot <- function(incid_100k, facet = TRUE) {
                             segment.size = 0.2,
                             segment.alpha	= 0.5,
                             show.legend = FALSE) +
-            labs_no_facet +
+            vis$labs_no_facet +
             ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
                                                                hjust = 1))
     }
@@ -202,18 +205,21 @@ oblasts_plot <- function(incid_100k, facet = TRUE) {
 ################################################################################
 # example output                                                               #
 ################################################################################
-save_all <- function() {
+oblasts_plot_save <- function() {
     w <- 11; h <- 7
-    ggplot2::ggsave(file = "oblasts_i100k.svg",
-                    width = w, height = h,
-                    plot = oblasts_plot(incid_100k = TRUE))
-    ggplot2::ggsave(file = "oblasts_count.svg",
-                    width = w, height = h,
-                    plot = oblasts_plot(incid_100k = FALSE))
-    ggplot2::ggsave(file = "oblasts_i_cmp.svg",
-                    width = w, height = h,
-                    plot = oblasts_plot(incid_100k = TRUE, facet = FALSE))
-    ggplot2::ggsave(file = "oblasts_c_cmp.svg",
-                    width = w, height = h,
-                    plot = oblasts_plot(incid_100k = FALSE, facet = FALSE))
+    charts <- list(
+        list(file = "oblasts_i100k.svg", i = TRUE, f = TRUE),
+        list(file = "oblasts_count.svg", i = FALSE, f = TRUE),
+        list(file = "oblasts_i_cmp.svg", i = TRUE, f = FALSE),
+        list(file = "oblasts_c_cmp.svg", i = FALSE, f = FALSE)
+    )
+    source(file.path("R", "bg_opendata.R")) # sets bg_data
+    for (c in charts) {
+        ggplot2::ggsave(
+            file = c$file,
+            width = w,
+            height = h,
+            plot = oblasts_plot(bg_data, incid_100k = c$i, facet = c$f)
+        )
+    }
 }

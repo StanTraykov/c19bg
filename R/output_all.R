@@ -67,26 +67,39 @@ for (d in dirs)
     if (!file.exists(d))
         dir.create(d)
 
+source(file.path("R", "bg_opendata.R")) # sets bg_data
+
 if (!skip_var) {
     source_d("var_plot.R")
-    export(file = "C09_posit", plot = var_plot("positivity"))
-    export(file = "C04_cd", plot = var_plot("casesdeaths",
-                                            roll_func = mean,
-                                            roll_window = 7))
-    export(file = "C08_cases", plot = var_plot("cases"))
-    export(file = "C07_hospitalized", plot = var_plot("hospitalized"))
-    export(file = "C05_age_7", plot = var_plot("age",
+    export(file = "C09_pos", plot = var_plot(bg_data, "positivity"))
+    export(file = "C09_pos_pcr", plot = var_plot(bg_data, "pospcr"))
+    export(file = "C09_pos_ag", plot = var_plot(bg_data, "posag"))
+    export(
+        file = "C04_cd",
+        plot = var_plot(bg_data,
+                        "casesdeaths",
+                        roll_func = mean,
+                        roll_window = 7)
+    )
+    export(file = "C08_cases", plot = var_plot(bg_data, "cases"))
+    export(file = "C07_hospitalized", plot = var_plot(bg_data, "hospitalized"))
+    export(file = "C05_age_7", plot = var_plot(bg_data,
+                                               "age",
                                                roll_func = mean,
                                                roll_window = 7,
                                                line_legend = "0"))
-    export(file = "C05_age_dis", plot = var_plot("dis",
+    export(file = "C05_age_dis", plot = var_plot(bg_data,
+                                                 "dis",
                                                  roll_func = mean,
                                                  roll_window = 7,
                                                  line_legend = "."))
-    export(file = "C06_age_1", plot = var_plot("age", line_legend = "0"))
+    export(
+        file = "C06_age_1",
+        plot = var_plot(bg_data, "age", line_legend = "0")
+    )
 
     source_d("heat.R")
-    heat_map <- hplot()
+    heat_map <- hplot(bg_data)
     ggplot2::ggsave(file = filenames("C01_heat")$jpg,
                     width = 11, height = 5.5, quality = 100, dpi = 125,
                     plot = heat_map)
@@ -95,11 +108,15 @@ if (!skip_var) {
                     plot = heat_map)
 
     source_d("oblasts.R")
-    export(file = "C03_oblasts_count", plot = oblasts_plot(incid_100k = FALSE))
-    export(file = "C03_oblasts_c_cmp", plot = oblasts_plot(incid_100k = FALSE,
+    export(file = "C03_oblasts_count", plot = oblasts_plot(bg_data,
+                                                           incid_100k = FALSE))
+    export(file = "C03_oblasts_c_cmp", plot = oblasts_plot(bg_data,
+                                                           incid_100k = FALSE,
                                                            facet = FALSE))
-    export(file = "C02_oblasts_i100k", plot = oblasts_plot(incid_100k = TRUE))
-    export(file = "C02_oblasts_i_cmp", plot = oblasts_plot(incid_100k = TRUE,
+    export(file = "C02_oblasts_i100k", plot = oblasts_plot(bg_data,
+                                                           incid_100k = TRUE))
+    export(file = "C02_oblasts_i_cmp", plot = oblasts_plot(bg_data,
+                                                           incid_100k = TRUE,
                                                            facet = FALSE))
 }
 if (!skip_dall) {
@@ -143,11 +160,23 @@ if (!skip_dall) {
         }
     }
 }
+r_calc_csv <- file.path("data", "estR.csv")
+hfile <- file.path("data", ".Rhash")
 if (!skip_r) {
-    cat("calculating R...\n")
-    source_d("estR.R")
+    old_hash <- ""
+    if (file.exists(hfile) && file.exists(r_calc_csv)) {
+        old_hash = scan(hfile, what = "")
+    }
+    new_hash <- digest::sha1(file.path("data", "bg_gen.csv"))
+    if (old_hash != new_hash) {
+        cat("calculating R...\n")
+        source_d("estR.R")
+        write(new_hash, hfile)
+    } else {
+        cat("skipping R calc (data unchanged)\n")
+    }
 }
-if (file.exists(file.path("data", "estR.csv"))) {
+if (file.exists(r_calc_csv)) {
     source_d("r_plot.R")
-    export(file = "C00_R", plot = r_plot())
+    export(file = "C00_R", plot = r_plot(bg_data))
 }

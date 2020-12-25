@@ -5,50 +5,45 @@ library(magrittr)
 extrafont::loadfonts(device = "win") # comment out to use default fonts
 enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
 
-##### data
-source(file.path("R", "bg_opendata.R")) # sets gen_data, age_data, obl_data
-
-atab <- read.csv(file = age_data)
-# from https://www.nsi.bg/bg/content/2977/%D0%BD%D0%B0%D1%81%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BF%D0%BE-%D1%81%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8-%D1%80%D0%B0%D0%B9%D0%BE%D0%BD%D0%B8-%D0%B2%D1%8A%D0%B7%D1%80%D0%B0%D1%81%D1%82-%D0%BC%D0%B5%D1%81%D1%82%D0%BE%D0%B6%D0%B8%D0%B2%D0%B5%D0%B5%D0%BD%D0%B5-%D0%B8-%D0%BF%D0%BE%D0%BB
-# population struct 0-19, 20-29, 30-39, 40-49,
-#                   50-59, 60-69, 70-79, 80-89, 90+, total
-pop_struct <- c(1315235, 692250, 956388, 1055350,
-                953355, 938635, 701964, 301703, 36602, 6951482)
-str_all <- enc("всички")
-
-##### tidy
-atab[-1, -1] <- atab[-1, -1] - atab[-nrow(atab), -1] # repl. totals w/incidence
-atab <- atab[-1, ]                                   # (losing one day of data)
-names(atab)[1] <- "date"
-names(atab)[10] <- "90+"
-names(atab) <- sub("X([0-9]+)\\.\\.\\.([0-9]+)", "\\1-\\2", names(atab))
-atab[, 1] <- as.Date(atab[, 1])
-atab[, 11] <- rowSums(atab[, 2:10])
-names(atab)[11] <- str_all
-# 7-day sums; filter only mondays to get approx. real week data
-atab <- atab %>%
-    dplyr::mutate(dplyr::across(!matches("date"),
-                                function(x) zoo::rollapply(x,
-                                                           7,
-                                                           sum,
-                                                           align = "right",
-                                                           fill = NA))) %>%
-    dplyr::filter(weekdays(date, abbreviate = FALSE) == "Monday",
-                  !is.na(`0-19`))
-
-# divide by pop struct
-atab[, -1] <- sweep(atab[, -1] * 100000, MARGIN = 2, pop_struct, `/`)
-# make longer and add week number
-atab <- atab %>%
-    tidyr::pivot_longer(cols = tidyr::matches(paste0("0|", str_all)),
-                        names_to = "group",
-                        values_to = "incidence") %>%
-    dplyr::mutate(week = lubridate::isoweek(date) - 1)
+################################################################################
+# hplot tidy                                                                   #
+################################################################################
+hplot_tidy <- function(atab) {
+    # from https://www.nsi.bg/bg/content/2977/%D0%BD%D0%B0%D1%81%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BF%D0%BE-%D1%81%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8-%D1%80%D0%B0%D0%B9%D0%BE%D0%BD%D0%B8-%D0%B2%D1%8A%D0%B7%D1%80%D0%B0%D1%81%D1%82-%D0%BC%D0%B5%D1%81%D1%82%D0%BE%D0%B6%D0%B8%D0%B2%D0%B5%D0%B5%D0%BD%D0%B5-%D0%B8-%D0%BF%D0%BE%D0%BB
+    # population struct 0-19, 20-29, 30-39, 40-49,
+    #                   50-59, 60-69, 70-79, 80-89, 90+, total
+    pop_struct <- c(1315235, 692250, 956388, 1055350,
+                    953355, 938635, 701964, 301703, 36602, 6951482)
+    str_all <- enc("всички")
+    atab[, 11] <- rowSums(atab[, 2:10])
+    names(atab)[11] <- str_all
+    # 7-day sums; filter only mondays to get approx. real week data
+    atab <- atab %>%
+        dplyr::mutate(dplyr::across(!matches("date"),
+                                    function(x) zoo::rollapply(x,
+                                                               7,
+                                                               sum,
+                                                               align = "right",
+                                                               fill = NA))) %>%
+        dplyr::filter(weekdays(date, abbreviate = FALSE) == "Monday",
+                      !is.na(`0-19`))
+    
+    # divide by pop struct
+    atab[, -1] <- sweep(atab[, -1] * 100000, MARGIN = 2, pop_struct, `/`)
+    # make longer and add week number
+    atab <- atab %>%
+        tidyr::pivot_longer(cols = tidyr::matches(paste0("0|", str_all)),
+                            names_to = "group",
+                            values_to = "incidence") %>%
+        dplyr::mutate(week = lubridate::isoweek(date) - 1)
+    return(atab)
+}
 
 ################################################################################
 # incidence/100K heatmap                                                       #
 ################################################################################
-hplot <- function() {
+hplot <- function(country_data) {
+    atab <- hplot_tidy(country_data$age)
     plt <- ggplot2::ggplot(data = atab,
                            ggplot2::aes(x = week,
                                         y = group,
@@ -82,7 +77,10 @@ hplot <- function() {
 ################################################################################
 # example output                                                               #
 ################################################################################
-
-save_all <- function() {
-    ggplot2::ggsave(file = "heat.png", width = 11, height = 5, plot = hplot())
+hplot_save <- function() {
+    source(file.path("R", "bg_opendata.R")) # sets bg_data
+    ggplot2::ggsave(file = "heat.png",
+                    width = 11,
+                    height = 5,
+                    plot = hplot(bg_data))
 }

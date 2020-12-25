@@ -1,10 +1,7 @@
 # estimate R and output to CSV
 # using EpiEstim package Cori et al. https://doi.org/10.1093/aje/kwt133
 
-enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
-source(file.path("R", "bg_opendata.R")) # sets gen_data, age_data, obl_data
-
-gtab <- read.csv(file = gen_data)
+source(file.path("R", "bg_opendata.R")) # sets bg_data
 # case counts before open data (2020-03-08 - 2020-06-05)
 nc_old <- c(4, 0, 2, 1, 16, 8, 10, 10, 11, 19, 11, 15, 20, 36, 22, 16,
             17, 24, 22, 29, 38, 15, 13, 40, 23, 35, 28, 18, 28, 18, 28, 16,
@@ -12,7 +9,7 @@ nc_old <- c(4, 0, 2, 1, 16, 8, 10, 10, 11, 19, 11, 15, 20, 36, 22, 16,
             59, 53, 63, 36, 48, 59, 49, 39, 24, 34, 52, 74, 51, 43, 49, 44,
             25, 33, 46, 31, 38, 37, 36, 24, 24, 33, 39, 41, 36, 19, 6, 10,
             17, 17, 8, 14, 14, 6, 19, 22, 25, 42)
-nc <- c(nc_old, gtab[[6]])
+nc <- c(nc_old, bg_data$general$new_cases)
 
 #### COVID-19 generation times gamma distribution (transformed parameters)
 #### per Ferretti et al. https://doi.org/10.1101/2020.09.04.20188516
