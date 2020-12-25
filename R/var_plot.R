@@ -319,12 +319,6 @@ var_plot <- function(country_data,
     }
     days_till_sunday <- 7 - lubridate::wday(plot_end_date, week_start = 1)
     last_sunday_inc <- plot_end_date + days_till_sunday
-    if (chart == "posag") {
-        print(plot_start_date)
-        print(plot_end_date)
-        print(first_sunday)
-        print(last_sunday_inc)
-    }
     visibility_min <- 1.05 * max(ptab$value, na.rm = TRUE)
     tick_choice <- vis$tick_choice
     tick_by <- tick_choice[tick_choice >= visibility_min / 7][1]
