@@ -4,9 +4,13 @@
 
 # Общи данни
 
-|Нови случаи и см. случаи|PCR проби, дял новодоказани|
+|Нови случаи и см. случаи|Позитивност PCR+Ag|
 |-----|-----|
-|[![Регистрирани случаи и смъртни случаи](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C04_cd.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C04_cd.svg)|[![Позитивност](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C09_posit.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C09_posit.svg)|
+|[![Регистрирани случаи и смъртни случаи](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C04_cd.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C04_cd.svg)|[![Позитивност](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C09_posit.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C09_pos.svg)|
+
+|Позитивност PCR|Позитивност Ag|
+|-----|-----|
+|[![Позитивност PCR](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C09_pos_pcr.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C09_pos_pcr.svg)|[![Позитивност Ag](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C09_pos_ag.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C09_pos_ag.svg)|
 
 # Области
 
