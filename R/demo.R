@@ -237,8 +237,8 @@ wk_plot <- function(
                 dplyr::slice_tail(n = top_n),
             mapping = ggplot2::aes(x = max_week),
             family = grDevices::windowsFont("Calibri"),
-            size = 3.6,
-            nudge_x = 4.3,
+            size = ifelse(top_n > 20, 3.6, 4),
+            nudge_x = ifelse(top_n > 20, 4.3, 3.8),
             hjust = 0,
             direction = "y",
             point.padding = NA,
@@ -260,6 +260,7 @@ wk_plot <- function(
             mapping = ggplot2::aes(label = geo),
             size = 3.0,
             vjust = -0.3,
+            family = grDevices::windowsFont("Calibri"),
             bg.color = "#ebebeb",
             show.legend = FALSE
         ) +
@@ -312,6 +313,7 @@ fplot <- function(eu_data) {
                                    y = d_2020 - covid_deaths),
             angle = 90,
             size = 3.5,
+            family = grDevices::windowsFont("Calibri"),
             color = "black",
             bg.color = "white"
         ) +

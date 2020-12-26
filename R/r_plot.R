@@ -198,8 +198,9 @@ r_plot <- function(country_data) {
                 color = "D_med",
                 label = format(round(R.Median.R., 2), nsmall = 2)
             ),
+            family = grDevices::windowsFont("Calibri"),
             bg.color = "#ebebeb",
-            size = 3.4,
+            size = 3.7,
             nudge_x = 5
         ) +
         # R CrI 95% lower
@@ -212,8 +213,9 @@ r_plot <- function(country_data) {
                 label = format(round(R.Quantile.0.025.R., 2), nsmall = 2)
             ),
             color = vis$clr$cri_txt,
+            family = grDevices::windowsFont("Calibri"),
             bg.color = "#ebebeb",
-            size = 3.4,
+            size = 3.7,
             nudge_x = 5
         ) +
         # R CrI 95% upper
@@ -226,8 +228,9 @@ r_plot <- function(country_data) {
                 label = format(round(R.Quantile.0.975.R., 2), nsmall = 2)
             ),
             color = vis$clr$cri_txt,
+            family = grDevices::windowsFont("Calibri"),
             bg.color = "#ebebeb",
-            size = 3.4,
+            size = 3.7,
             nudge_x = 5
         ) +
         ggplot2::scale_fill_manual(
