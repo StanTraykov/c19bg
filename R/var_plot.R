@@ -370,6 +370,8 @@ var_plot <- function(country_data,
                 size = 4,
                 nudge_x = 5,
                 segment.color = "#333333",
+                box.padding = ggplot2::unit(0.15, units = "line"),
+                max.overlaps = Inf,
                 segment.size = 0.3,
                 segment.alpha = 0.3,
                 show.legend = FALSE

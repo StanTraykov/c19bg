@@ -191,10 +191,11 @@ oblasts_plot <- function(country_data, incid_100k, facet = TRUE) {
                             hjust = 0,
                             direction = "y",
                             point.padding = NA,
-                            box.padding = ggplot2::unit(0.6, units = "pt"),
+                            box.padding = ggplot2::unit(0.15, units = "line"),
+                            max.overlaps = Inf,
                             segment.color	= "dark gray",
                             segment.size = 0.2,
-                            segment.alpha	= 0.5,
+                            segment.alpha	= 0.4,
                             show.legend = FALSE) +
             vis$labs_no_facet +
             ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
