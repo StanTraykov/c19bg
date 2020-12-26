@@ -10,12 +10,11 @@ library(magrittr)
 
 extrafont::loadfonts(device = "win") # comment out to use default fonts
 enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
-# enc <- function(x) x
 
 ################################################################################
 # var plot visuals                                                             #
 ################################################################################
-var_plot_vis <- function() {
+make_var_plot_vis <- function() {
     translate <- function(x) {
         t <- list(mean = enc("-дневно плаващо средно"),
                   sum = enc("-дневна сума"))
@@ -217,8 +216,10 @@ var_plot_vis <- function() {
         sec_y = plot_sec_y,
         theme = plot_theme
     )
-    return(vis)
+    return(function() return(vis))
 }
+
+var_plot_vis <- make_var_plot_vis()
 
 ################################################################################
 # var plot tidy                                                                #
@@ -422,15 +423,14 @@ var_plot <- function(country_data,
 ################################################################################
 # output example                                                               #
 ################################################################################
-var_plot_save_all <- function() {
+var_plot_save <- function() {
     export <- function(plot, file) {
         ggplot2::ggsave(file = paste0(file, ".svg"),
                         width = 11,
                         height = 7,
                         plot = plot)
     }
-    
-    source(file.path("R", "bg_opendata.R")) # sets bg_data
+    bg_data <- get_bg_data()
     export(file = "posit", plot = var_plot(bg_data, "positivity"))
     export(file = "pospcr", plot = var_plot(bg_data, "pospcr"))
     export(file = "posag", plot = var_plot(bg_data, "posag"))

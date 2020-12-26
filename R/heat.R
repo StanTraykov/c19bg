@@ -77,8 +77,8 @@ hplot <- function(country_data) {
 ################################################################################
 # example output                                                               #
 ################################################################################
-hplot_save <- function() {
-    source(file.path("R", "bg_opendata.R")) # sets bg_data
+heat_save <- function() {
+    bg_data <- get_bg_data()
     ggplot2::ggsave(file = "heat.png",
                     width = 11,
                     height = 5,

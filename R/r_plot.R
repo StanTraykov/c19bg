@@ -4,12 +4,11 @@ library(magrittr)
 
 extrafont::loadfonts(device = "win") # comment out to use default fonts
 enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
-# enc <- function(x) x
 
 ################################################################################
 # R plot visuals                                                               #
 ################################################################################
-r_plot_vis <- function() {
+make_r_plot_vis <- function() {
     line_sz = 0.5
     lty_norm <- "solid"
     lty_mva <- "dotted"
@@ -78,7 +77,11 @@ r_plot_vis <- function() {
         fill_labels = fill_labels,
         sec_axis_name = enc("репродуктивно число, позитивност")
     )
+    return(function() return(vis))
 }
+
+r_plot_vis <- make_r_plot_vis()
+
 ################################################################################
 # R plot tidy                                                                  #
 ################################################################################
@@ -264,7 +267,7 @@ r_plot <- function(country_data) {
 # output example                                                               #
 ################################################################################
 r_plot_save <- function() {
-    source(file.path("R", "bg_opendata.R")) # sets bg_data
+    bg_data <- get_bg_data()
     ggplot2::ggsave(file = "r_plot.svg",
                     width = 11,
                     height = 7,

@@ -4,12 +4,11 @@ library(magrittr)
 
 extrafont::loadfonts(device = "win") # comment out to use default fonts
 enc <- function(x) iconv(x, from = "UTF-8", to = "UTF-8") # UC hack for Windows
-# enc <- function(x) x
 
 ################################################################################
 # oblasts plot visuals                                                         #
 ################################################################################
-oblasts_plot_vis <- function() {
+make_oblasts_plot_vis <- function() {
     gtheme_count <- ggplot2::theme(
         text = ggplot2::element_text(size = 14,
                                      family =
@@ -51,8 +50,10 @@ oblasts_plot_vis <- function() {
         theme_count = gtheme_count,
         theme_i100k = gtheme_i100k
     )
-    return(vis)
+    return(function() return(vis))
 }
+
+oblasts_plot_vis <- make_oblasts_plot_vis()
 
 ################################################################################
 # oblasts plot tidy                                                            #
@@ -205,7 +206,7 @@ oblasts_plot <- function(country_data, incid_100k, facet = TRUE) {
 ################################################################################
 # example output                                                               #
 ################################################################################
-oblasts_plot_save <- function() {
+oblasts_save <- function() {
     w <- 11; h <- 7
     charts <- list(
         list(file = "oblasts_i100k.svg", i = TRUE, f = TRUE),
@@ -213,7 +214,7 @@ oblasts_plot_save <- function() {
         list(file = "oblasts_i_cmp.svg", i = TRUE, f = FALSE),
         list(file = "oblasts_c_cmp.svg", i = FALSE, f = FALSE)
     )
-    source(file.path("R", "bg_opendata.R")) # sets bg_data
+    bg_data <- get_bg_data()
     for (c in charts) {
         ggplot2::ggsave(
             file = c$file,

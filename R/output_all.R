@@ -2,11 +2,12 @@
 # for JPEG compression yields slightly better results but is not really
 # necessary.
 #
-# - See the save_all() example functions in various files for quick HQ output.
-# - Alternatively just ggsave() to target format or plot() to screen.
+# * See the example functions at end of scripts for alternative simple output.
+#   -> You can run them all via save_all_charts() in helper.R
 #
-# To skip some of the time-consuming stuff:
-# > skip_demo <- TRUE; skip_r <- TRUE; source_d("output_all.R")
+# * The return value of plot functions can also be used to:
+#   -> save to desired file format (SVG/PNG/JPG) via ggsave()
+#   -> plot to screen via plot() / print()
 
 if (!exists("skip_var")) skip_var <- FALSE
 if (!exists("skip_demo")) skip_demo <- FALSE
@@ -19,7 +20,9 @@ magick <- "magick"
 inkopts <- "-w %d --export-filename"
 mgkopts <- "-quality 100"
 out_dir <- format(Sys.time(), "%b%d")
-source_d <- function(file) source(file.path("R", file))
+
+source(file.path("R", "helper.R"))
+load_all_scripts()
 
 ##### helper funcs
 dirs <- list(main = out_dir,
@@ -67,10 +70,9 @@ for (d in dirs)
     if (!file.exists(d))
         dir.create(d)
 
-source(file.path("R", "bg_opendata.R")) # sets bg_data
+bg_data <- get_bg_data()
 
 if (!skip_var) {
-    source_d("var_plot.R")
     export(file = "C09_pos", plot = var_plot(bg_data, "positivity"))
     export(file = "C09_pos_pcr", plot = var_plot(bg_data, "pospcr"))
     export(file = "C09_pos_ag", plot = var_plot(bg_data, "posag"))
@@ -98,7 +100,6 @@ if (!skip_var) {
         plot = var_plot(bg_data, "age", line_legend = "0")
     )
 
-    source_d("heat.R")
     heat_map <- hplot(bg_data)
     ggplot2::ggsave(file = filenames("C01_heat")$jpg,
                     width = 11, height = 5.5, quality = 100, dpi = 125,
@@ -107,7 +108,6 @@ if (!skip_var) {
                     width = 11, height = 5.5, dpi = 125,
                     plot = heat_map)
 
-    source_d("oblasts.R")
     export(file = "C03_oblasts_count", plot = oblasts_plot(bg_data,
                                                            incid_100k = FALSE))
     export(file = "C03_oblasts_c_cmp", plot = oblasts_plot(bg_data,
@@ -120,43 +120,50 @@ if (!skip_var) {
                                                            facet = FALSE))
 }
 if (!skip_dall) {
-    source_d("demo.R")
-    export(plot = wk_plot(indicator = "tests_100k", top_n = 100),
+    eud <- get_eu_data()
+    export(plot = wk_plot(eud, indicator = "tests_100k", top_n = 100),
            file = "C14_cmp_tst_eurp")
-    export(plot = wk_plot(indicator = "positivity",
+    export(plot = wk_plot(eud,
+                          indicator = "positivity",
                           top_n = 100,
                           label_fun = function(x) sprintf("%.1f%%", 100 * x),
                           axis_labels = scales::label_percent()),
            file = "C15_cmp_pos_eurp")
-    export(plot = wk_plot(indicator = "hosp_1m", top_n = 100),
+    export(plot = wk_plot(eud,
+                          indicator = "hosp_1m", top_n = 100),
            file = "C13_cmp_h_eurp")
-    export(plot = wk_plot(indicator = "em_1m"),
+    export(plot = wk_plot(eud,
+                          indicator = "em_1m"),
            file = "C12_exd1m_eurp")
-    export(plot = wk_plot(indicator = "r14_cases",
+    export(plot = wk_plot(eud,
+                          indicator = "r14_cases",
                           lower_y = 0),
            file = "C10_cmp_i_wrld")
-    export(plot = wk_plot(indicator = "r14_deaths", lower_y = 0),
+    export(plot = wk_plot(eud,
+                          indicator = "r14_deaths", lower_y = 0),
            file = "C10_cmp_d_wrld")
-    export(plot = wk_plot(indicator = "r14_cases",
+    export(plot = wk_plot(eud,
+                          indicator = "r14_cases",
                           continents = "Europe",
                           lower_y = 0),
            file = "C11_cmp_i_eurp")
-    export(plot = wk_plot(indicator = "r14_deaths",
+    export(plot = wk_plot(eud,
+                          indicator = "r14_deaths",
                           continents = "Europe",
                           lower_y = 0),
            file = "C11_cmp_d_eurp")
-    export(file = "D00_BG_t", plot = tplot("BG"))
-    export(file = "D00_map", plot = mplot())
+    export(file = "D00_BG_t", plot = tplot(eud, "BG"))
+    export(file = "D00_map", plot = mplot(eud))
     export(file = "D00_cmp",
            height = 8,
            width = 14.4,
            pix_width = 1800,
-           plot = fplot())
+           plot = fplot(eud))
     if (!skip_demo) {
-        for (n in seq_along(eu_codes)) {
+        for (n in seq_along(eud$eu_codes)) {
             pn <- stringr::str_pad(n, 2, pad = "0")
-            export(file = paste0("D", pn, "_", eu_codes[n]),
-                   plot = cplot(eu_codes[n]))
+            export(file = paste0("D", pn, "_", eud$eu_codes[n]),
+                   plot = cplot(eud, eud$eu_codes[n]))
         }
     }
 }
@@ -170,13 +177,12 @@ if (!skip_r) {
     new_hash <- digest::sha1(file.path("data", "bg_gen.csv"))
     if (old_hash != new_hash) {
         cat("calculating R...\n")
-        source_d("estR.R")
+        estimate_r(bg_data)
         write(new_hash, hfile)
     } else {
         cat("skipping R calc (data unchanged)\n")
     }
 }
 if (file.exists(r_calc_csv)) {
-    source_d("r_plot.R")
     export(file = "C00_R", plot = r_plot(bg_data))
 }
