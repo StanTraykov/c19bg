@@ -184,19 +184,25 @@ oblasts_plot <- function(country_data, incid_100k, facet = TRUE) {
                                   date_labels = "%d.%m. (%U)",
                                   expand = ggplot2::expansion(mult = c(0.02,
                                                                        0.19))) +
-            ggrepel::geom_text_repel(data = otab %>%
-                                dplyr::filter(date == plot_end_date),
-                            size = 3.6,
-                            nudge_x = 13,
-                            hjust = 0,
-                            direction = "y",
-                            point.padding = NA,
-                            box.padding = ggplot2::unit(0.12, units = "line"),
-                            max.overlaps = Inf,
-                            segment.color	= "dark gray",
-                            segment.size = 0.3,
-                            segment.alpha	= 0.5,
-                            show.legend = FALSE) +
+            ggrepel::geom_text_repel(
+                data = otab %>%
+                    dplyr::filter(date == plot_end_date),
+                family = grDevices::windowsFont("Calibri"),
+                size = 4,
+                nudge_x = 13,
+                hjust = 0,
+                direction = "y",
+                point.padding = NA,
+                box.padding = ggplot2::unit(0.12, units = "line"),
+                max.overlaps = Inf,
+                segment.color	= "dark gray",
+                segment.size = 0.3,
+                segment.alpha	= 0.5,
+                max.time = 5,
+                max.iter = 1000000,
+                bg.colour = "#ebebeb",
+                show.legend = FALSE
+            ) +
             vis$labs_no_facet +
             ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
                                                                hjust = 1))

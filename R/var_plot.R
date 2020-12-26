@@ -306,7 +306,6 @@ var_plot <- function(country_data,
     if (chart %in% names(vis$order))
         ptab <- ptab %>%
             dplyr::mutate(metric = factor(metric, vis$order[[chart]]))
-    if (chart == "posag") zzx <<- ptab
     plot_start_date <- head(ptab$date, n = 1)
     plot_end_date <- tail(ptab$date, n = 1)
     first_sunday <- ptab %>%
@@ -366,6 +365,7 @@ var_plot <- function(country_data,
                                        y = value,
                                        color = metric,
                                        label = metric),
+                family = grDevices::windowsFont("Calibri"),
                 direction = "y",
                 size = 4,
                 nudge_x = 2,
@@ -375,6 +375,7 @@ var_plot <- function(country_data,
                 segment.color	= "dark gray",
                 segment.size = 0.3,
                 segment.alpha	= 0.5,
+                bg.colour = "#ebebeb",
                 show.legend = FALSE
             )
         exp_fix <- 5

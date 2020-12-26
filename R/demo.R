@@ -236,8 +236,9 @@ wk_plot <- function(
                 dplyr::arrange(geo == "BG", .data[[vy]]) %>%
                 dplyr::slice_tail(n = top_n),
             mapping = ggplot2::aes(x = max_week),
+            family = grDevices::windowsFont("Calibri"),
             size = 3.6,
-            nudge_x = 2.6,
+            nudge_x = 4.3,
             hjust = 0,
             direction = "y",
             point.padding = NA,
@@ -246,6 +247,9 @@ wk_plot <- function(
             segment.color	= "dark gray",
             segment.size = 0.3,
             segment.alpha	= 0.5,
+            bg.colour = "#ebebeb",
+            max.time = 5,
+            max.iter = 1000000,
             show.legend = FALSE
         ) +
         shadowtext::geom_shadowtext(
@@ -262,7 +266,7 @@ wk_plot <- function(
         ggplot2::scale_x_continuous(
             breaks = seq(1, 53, by = 2),
             limits = c(lower_x, NA),
-            expand = ggplot2::expansion(mult = c(0.02, 0.26))
+            expand = ggplot2::expansion(mult = c(0.02, 0.3))
         ) +
         ggplot2::scale_y_continuous(
             limits = c(lower_y, NA),
