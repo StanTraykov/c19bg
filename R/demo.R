@@ -237,15 +237,15 @@ wk_plot <- function(
                 dplyr::slice_tail(n = top_n),
             mapping = ggplot2::aes(x = max_week),
             size = 3.6,
-            nudge_x = 3,
+            nudge_x = 2.6,
             hjust = 0,
             direction = "y",
             point.padding = NA,
-            box.padding = ggplot2::unit(0.15, units = "line"),
+            box.padding = ggplot2::unit(0.12, units = "line"),
             max.overlaps = Inf,
-            segment.color	= "#444444",
+            segment.color	= "dark gray",
             segment.size = 0.3,
-            segment.alpha = 0.4,
+            segment.alpha	= 0.5,
             show.legend = FALSE
         ) +
         shadowtext::geom_shadowtext(

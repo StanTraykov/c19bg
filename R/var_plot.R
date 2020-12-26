@@ -368,12 +368,13 @@ var_plot <- function(country_data,
                                        label = metric),
                 direction = "y",
                 size = 4,
-                nudge_x = 5,
-                segment.color = "#333333",
-                box.padding = ggplot2::unit(0.15, units = "line"),
+                nudge_x = 2,
+                box.padding = ggplot2::unit(0.12, units = "line"),
+                hjust = 0,
                 max.overlaps = Inf,
+                segment.color	= "dark gray",
                 segment.size = 0.3,
-                segment.alpha = 0.3,
+                segment.alpha	= 0.5,
                 show.legend = FALSE
             )
         exp_fix <- 5

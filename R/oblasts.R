@@ -187,15 +187,15 @@ oblasts_plot <- function(country_data, incid_100k, facet = TRUE) {
             ggrepel::geom_text_repel(data = otab %>%
                                 dplyr::filter(date == plot_end_date),
                             size = 3.6,
-                            nudge_x = 15,
+                            nudge_x = 13,
                             hjust = 0,
                             direction = "y",
                             point.padding = NA,
-                            box.padding = ggplot2::unit(0.15, units = "line"),
+                            box.padding = ggplot2::unit(0.12, units = "line"),
                             max.overlaps = Inf,
                             segment.color	= "dark gray",
-                            segment.size = 0.2,
-                            segment.alpha	= 0.4,
+                            segment.size = 0.3,
+                            segment.alpha	= 0.5,
                             show.legend = FALSE) +
             vis$labs_no_facet +
             ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
