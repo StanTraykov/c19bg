@@ -47,7 +47,9 @@ source("R/output_all.R")
 
 ```R
 source("R/var_plot.R")
-my_plot <- var_plot("age", roll_func = mean, roll_window = 7, line_legend = "0")
+source("R/bg_opendata.R")
+bg_data <- get_bg_data() 
+my_plot <- var_plot(bg_data, "age", roll_func = mean, roll_window = 7, line_legend = "0")
 # екран
 print(my_plot)
 # файл
