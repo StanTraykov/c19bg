@@ -4,7 +4,7 @@
 # age plot ("age")
 # disaggregated age plot ("dis")
 # hospitalized / icu ("hospitalized")
-# share of tests confirming new cases ("positivity")
+# share of tests confirming new cases ("positivity" | "posag" | "pospcr")
 
 library(magrittr)
 
@@ -26,7 +26,7 @@ make_var_plot_vis <- function() {
                         age = "([2-8]|^)0\\+|new_deaths",
                         dis = "0-|90\\+",
                         hospitalized = "active_cases",
-                        positivity = "date|posit7|s7_nt",
+                        positivity = "date|s7_nt$|posit7$|s7_nt_pcr|posit7_pcr",
                         pospcr = "date|posit7_pcr|s7_nt_pcr",
                         #posag = "date|posit7_ag|s7_nt_ag"
                         posag = "date|posit_ag|new_ag_tests")
@@ -42,14 +42,26 @@ make_var_plot_vis <- function() {
     )
     thin <- 0.5   # } lines
     thick <- 1    # }
-    sz_norm <- list(rgx = "NONE", sizes = c(thin))
-    line_sizes <- list(casesdeaths = sz_norm,
-                       age = list(rgx = "^[2-8]", sizes = c(thin, thick)),
-                       dis = sz_norm,
-                       hospitalized = sz_norm,
-                       positivity = sz_norm,
-                       pospcr = sz_norm,
-                       posag = sz_norm)
+    sz_norm <- list(rgx = "NONE", sizes = thin)
+    line_sizes <- list(
+        casesdeaths = sz_norm,
+        age = list(rgx = "^[2-8]", sizes = c(thin, thick)),
+        dis = sz_norm,
+        hospitalized = sz_norm,
+        positivity = sz_norm,
+        pospcr = sz_norm,
+        posag = sz_norm
+    )
+    type_norm <- list(rgx = "NONE", types = "solid")
+    line_types <- list(
+        casesdeaths = type_norm,
+        age = type_norm,
+        dis = type_norm,
+        hospitalized = type_norm,
+        positivity = list(rgx = "pcr", types = c("dotted", "solid")),
+        pospcr = type_norm,
+        posag = type_norm
+    )
     casesdeaths_colors <- c("blue" = enc("нови случаи"),
                             "red" = enc("смъртни случаи"))
     age_colors <- c("dark green",
@@ -67,13 +79,25 @@ make_var_plot_vis <- function() {
         nrow = 1,
         override.aes = list(size = c(thick, rep(thin, 7), thick))
     )
+    positivity_guide <- ggplot2::guide_legend(
+        nrow = 1,
+        override.aes = list(linetype = c(rep("solid", 2), rep("dotted", 2)))
+    )
     cases_fills <- c("light blue" = enc("регистрирани случаи"),
                      "dark blue" = enc("активни случаи"))
     hospitalized_fills <- c("dark golden rod 1" = enc("хоспитализирани"),
                             "dark red" = enc("от тях в интензивно"))
     hospitalized_colors <- c("black" = enc("активни случаи"))
-    positivity_colors <- c("green 3" = enc("брой тестове"),
-                           "red 3" = enc("позитивни (доказващи нови случаи)"))
+    positivity_colors4 <- c(
+        "green 3" = enc("брой тестове"),
+        "red 3" = enc("позитивни"),
+        "green 3" = enc("брой PCR"),
+        "red 3" = enc("позитивни PCR")
+    )
+    positivity_colors2 <- c(
+        "green 3" = enc("брой тестове"),
+        "red 3" = enc("позитивни")
+    )
     make_scale <- function(sf, x) sf(values = names(x), labels = unname(x))
     plot_colors <- c(
         casesdeaths = make_scale(ggplot2::scale_color_manual,
@@ -83,12 +107,15 @@ make_var_plot_vis <- function() {
                                           guide = age_guide),
         hospitalized = make_scale(ggplot2::scale_color_manual,
                                   hospitalized_colors),
-        positivity = make_scale(ggplot2::scale_color_manual,
-                                positivity_colors),
+        positivity = ggplot2::scale_color_manual(
+            values = names(positivity_colors4),
+            labels = unname(positivity_colors4),
+            guide = positivity_guide
+        ),
         pospcr = make_scale(ggplot2::scale_color_manual,
-                            positivity_colors),
+                            positivity_colors2),
         posag = make_scale(ggplot2::scale_color_manual,
-                           positivity_colors),
+                           positivity_colors2),
         dis = ggplot2::scale_color_manual(
             values = dis_colors,
             guide = ggplot2::guide_legend(nrow = 1)
@@ -166,7 +193,7 @@ make_var_plot_vis <- function() {
     plot_order <- list(
         cases = c("cases", "active_cases"),
         hospitalized = c("hospitalized", "in_icu", "active_cases"),
-        positivity = c("s7_nt", "posit7"),
+        positivity = c("s7_nt", "posit7", "s7_nt_pcr", "posit7_pcr"),
         pospcr = c("s7_nt_pcr", "posit7_pcr"),
         posag = c("new_ag_tests", "posit_ag")
     )
@@ -181,7 +208,7 @@ make_var_plot_vis <- function() {
                             vars = "active_cases",
                             scale = 10),
         positivity = list(label = enc("новодоказани случаи"),
-                          vars = "posit7",
+                          vars = c("posit7", "posit7_pcr"),
                           scale = 0.000005,
                           type = "percent"),
         pospcr = list(label = enc("новодоказани случаи"),
@@ -192,6 +219,10 @@ make_var_plot_vis <- function() {
                      vars = "posit_ag",
                      scale = 0.00005,
                      type = "percent")
+    )
+    plot_x_min <- list(
+        positivity = list(posit7_pcr = as.Date("2020-12-23"),
+                          s7_nt_pcr = as.Date("2020-12-23"))
     )
     plot_theme <- ggplot2::theme(
         text = ggplot2::element_text(
@@ -210,10 +241,12 @@ make_var_plot_vis <- function() {
         tick_choice = tick_choice,
         no_na = no_na,
         line_sizes = line_sizes,
+        line_types = line_types,
         colors = list(line = plot_colors, area = plot_fills),
         labels = plot_labels,
         order = plot_order,
         sec_y = plot_sec_y,
+        plot_x_min = plot_x_min,
         theme = plot_theme
     )
     return(function() return(vis))
@@ -280,6 +313,16 @@ var_plot <- function(country_data,
                 dplyr::mutate("{v}" := .data[[v]] / vis$sec_y[[chart]]$scale)
         }
     }
+    # remove values before min_x
+    if (chart %in% names(vis$plot_x_min)) {
+        for (v in names(vis$plot_x_min[[chart]])) {
+            minDate <- vis$plot_x_min[[chart]][[v]]
+            ptab <- ptab %>%
+                dplyr::mutate("{v}" := ifelse(date >= minDate,
+                                              .data[[v]],
+                                              NA))
+        }
+    }
     if (!is.null(roll_func)) {
         ptab <- ptab %>%
             dplyr::mutate(dplyr::across(
@@ -305,7 +348,9 @@ var_plot <- function(country_data,
                             values_to = "value")
     if (chart %in% names(vis$order))
         ptab <- ptab %>%
-            dplyr::mutate(metric = factor(metric, vis$order[[chart]]))
+            dplyr::mutate(
+                metric = forcats::fct_relevel(metric, vis$order[[chart]])
+            )
     plot_start_date <- head(ptab$date, n = 1)
     plot_end_date <- tail(ptab$date, n = 1)
     first_sunday <- ptab %>%
@@ -313,12 +358,13 @@ var_plot <- function(country_data,
         dplyr::filter(weekdays(date, abbreviate = FALSE) == "Sunday") %>%
         dplyr::slice_head() %>%
         dplyr::pull()
-    if (length(first_sunday) == 0) {
+    days_till_sunday <- 7 - lubridate::wday(plot_end_date, week_start = 1)
+    last_sunday_inc <- plot_end_date + days_till_sunday
+    if (length(first_sunday) == 0 || first_sunday == last_sunday_inc) {
         first_sunday = plot_start_date -
             lubridate::wday(plot_start_date, week_start = 1)
     }
-    days_till_sunday <- 7 - lubridate::wday(plot_end_date, week_start = 1)
-    last_sunday_inc <- plot_end_date + days_till_sunday
+    
     visibility_min <- 1.05 * max(ptab$value, na.rm = TRUE)
     tick_choice <- vis$tick_choice
     tick_by <- tick_choice[tick_choice >= visibility_min / 7][1]
@@ -349,11 +395,23 @@ var_plot <- function(country_data,
                                             vis$line_sizes[[chart]]$rgx),
                         "size1",
                         "size2"
+                    ),
+                    linetype = ifelse(
+                        stringr::str_detect(metric,
+                                            vis$line_types[[chart]]$rgx),
+                        "type1",
+                        "type2"
                     )
                 )
             ) +
-            ggplot2::scale_size_manual(values = vis$line_sizes[[chart]]$sizes,
-                                       guide = FALSE)
+            ggplot2::scale_size_manual(
+                values = vis$line_sizes[[chart]]$sizes,
+                guide = FALSE
+            ) +
+            ggplot2::scale_linetype_manual(
+                values = vis$line_types[[chart]]$types,
+                guide = FALSE
+            )
     }
     if (!is.null(line_legend)) {
         plt <- plt +

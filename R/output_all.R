@@ -177,7 +177,7 @@ if (!skip_r) {
     new_hash <- digest::sha1(file.path("data", "bg_gen.csv"))
     if (old_hash != new_hash) {
         cat("calculating R...\n")
-        estimate_r(bg_data)
+        estimate_r()
         write(new_hash, hfile)
     } else {
         cat("skipping R calc (data unchanged)\n")
