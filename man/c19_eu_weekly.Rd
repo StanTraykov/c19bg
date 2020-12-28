@@ -17,7 +17,7 @@ c19_eu_weekly(
 }
 \arguments{
 \item{indicator}{one of: "r14_cases", "r14_deaths", "em_1m", hosp_1m",
-"positivity"}
+"positivity", "tests_100k"}
 
 \item{continents}{def = c("Asia", "Africa", "Europe", "Oceania", "America")}
 

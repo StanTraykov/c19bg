@@ -127,7 +127,7 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
     first_sunday <- sundays_only %>%
         dplyr::slice_head() %>%
         dplyr::pull(date)
-    plot_end_date <- tail(ftab$date, n = 1)
+    plot_end_date <- utils::tail(ftab$date, n = 1)
     days_till_sunday <- 7 - lubridate::wday(plot_end_date, week_start = 1)
     last_sunday_inc <- plot_end_date + days_till_sunday
     secondary <- ggplot2::sec_axis(name = vis$sec_axis_name,

@@ -27,7 +27,7 @@ process_bg_data <- function() {
                 fields <- purrr::transpose(parsed_data[-1])
                 names(fields) <- parsed_data[[1]]
                 df <- data.frame(sapply(fields, unlist))
-                write.csv(df, full_name, row.names = FALSE)
+                utils::write.csv(df, full_name, row.names = FALSE)
                 Sys.sleep(sleep_time)
             }
         }
@@ -130,7 +130,6 @@ process_bg_data <- function() {
     return(bg_data)
 }
 
-#' @export
 c19_make_bg_data <- function() {
     processed_data <- list()
     get_data <- function(reload = FALSE) {

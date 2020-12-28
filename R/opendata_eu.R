@@ -16,7 +16,7 @@ process_eu_data <- function() {
         else
             down_dest <- local_fn
         if (!file.exists(local_fn)) {
-            download.file(url, down_dest)
+            utils::download.file(url, down_dest)
             if (zip_local) {
                 R.utils::gzip(down_dest,
                               destname = local_fn,
@@ -236,7 +236,6 @@ process_eu_data <- function() {
     return(eu_data)
 }
 
-#' @export
 c19_make_eu_data <- function() {
     processed_data <- list()
     get_data <- function(reload = FALSE) {

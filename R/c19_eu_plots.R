@@ -186,7 +186,7 @@ eu_vis <- make_eu_vis()
 #' Weekly plot from ECDC/EUROSTAT data
 #'
 #' @param indicator one of: "r14_cases", "r14_deaths", "em_1m", hosp_1m",
-#'                  "positivity"
+#'                  "positivity", "tests_100k"
 #' @param continents def = c("Asia", "Africa", "Europe", "Oceania", "America")
 #' @param top_n number of lines to label (default 20)
 #' @param lower_x week axis limit (default: NA = show all data)

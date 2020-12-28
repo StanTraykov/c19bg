@@ -13,7 +13,6 @@ Imports:
     digest,
     dplyr,
     EpiEstim,
-    extrafont,
     forcats,
     geofacet,
     ggplot2,
@@ -30,6 +29,8 @@ Imports:
     tidyr,
     utils,
     zoo
+Suggests:
+    extrafont
 Collate: 
     'settings.R'
     'c19_estimate_r.R'

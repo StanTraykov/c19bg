@@ -39,9 +39,6 @@ c19bg_setup <- function() {
     # platform-dependent init / config
     os_type <- .Platform$OS.type
     if (os_type == "windows") {
-        # needed for on-screen / bitmap output
-        # (works for win; default font will be used on unix)
-        extrafont::loadfonts(device = "win")
         inkpath <- "\"C:\\Program Files\\Inkscape\\bin\\inkscape.exe\""
         cfg$c19bg.output$inkscape <- inkpath
         cfg$c19bg.output$magick = "magick"
@@ -61,19 +58,19 @@ c19bg_setup <- function() {
 
         # these read files using native encoding and convert after
         cfg$c19bg.rt <- function(...) {
-            t <- read.table(...,
+            t <- utils::read.table(...,
                             na.strings = "",
                             stringsAsFactors = FALSE)
             return(read_unicode(t))
         }
         cfg$c19bg.rd <- function(...) {
-            t <- read.delim(...,
+            t <- utils::read.delim(...,
                             na.strings = "",
                             stringsAsFactors = FALSE)
             return(read_unicode(t))
         }
         cfg$c19bg.rc <- function(...) {
-            t <- read.csv(...,
+            t <- utils::read.csv(...,
                           na.strings = "",
                           stringsAsFactors = FALSE)
             return(read_unicode(t))
@@ -84,21 +81,21 @@ c19bg_setup <- function() {
 
         # NOT TESTED but this should probably work?
         cfg$c19bg.rt <- function(...) {
-            t <- read.table(...,
+            t <- utils::read.table(...,
                             fileEncoding = "UTF-8-BOM",
                             na.strings = "",
                             stringsAsFactors = FALSE)
             return(t)
         }
         cfg$c19bg.rd <- function(...) {
-            t <- read.delim(...,
+            t <- utils::read.delim(...,
                             fileEncoding = "UTF-8-BOM",
                             na.strings = "",
                             stringsAsFactors = FALSE)
             return(t)
         }
         cfg$c19bg.rc <- function(...) {
-            t <- read.csv(...,
+            t <- utils::read.csv(...,
                           fileEncoding = "UTF-8-BOM",
                           na.strings = "",
                           stringsAsFactors = FALSE)

@@ -186,7 +186,7 @@ c19_oblasts <- function(
         first_mva7 <- dates_with_mva %>%
             dplyr::slice_head() %>%
             dplyr::pull()
-        plot_end_date <- tail(otab$date, n = 1)
+        plot_end_date <- utils::tail(otab$date, n = 1)
         days_till_sunday <- 7 - lubridate::wday(plot_end_date, week_start = 1)
         last_sunday_inc <- plot_end_date + days_till_sunday
         plt <- plt +

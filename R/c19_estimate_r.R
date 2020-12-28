@@ -56,6 +56,6 @@ c19_estimate_r <- function(country_data = c19_bg_data()) {
     )
     # save csv, input hash
     if (!file.exists(down_dir)) dir.create(down_dir, recursive = TRUE)
-    write.csv(res[1], res_csv, row.names = FALSE)
+    utils::write.csv(res[1], res_csv, row.names = FALSE)
     write(new_hash, hfile)
 }

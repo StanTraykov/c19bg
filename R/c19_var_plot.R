@@ -364,8 +364,8 @@ c19_var_plot <- function(
             dplyr::mutate(
                 metric = forcats::fct_relevel(metric, vis$order[[chart]])
             )
-    plot_start_date <- head(ptab$date, n = 1)
-    plot_end_date <- tail(ptab$date, n = 1)
+    plot_start_date <- utils::head(ptab$date, n = 1)
+    plot_end_date <- utils::tail(ptab$date, n = 1)
     first_sunday <- ptab %>%
         dplyr::select("date") %>%
         dplyr::filter(weekdays(date, abbreviate = FALSE) == "Sunday") %>%
