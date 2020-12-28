@@ -112,7 +112,6 @@ View(bg_data$subdivs)      # по области (дневни)
 
 Примерна заявка (плаващо средно 7 дни по области)
 ```R
-# Примерна заявка
 library(dplyr)
 library(tidyr)
 library(c19bg)
