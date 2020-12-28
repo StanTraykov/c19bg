@@ -32,8 +32,10 @@ extrafont::font_import()
 
 ```R
 library(c19bg)
-if (.Platform$OS.type == "windows")
-    extrafont::loadfonts(device = "win")
+if (.Platform$OS.type == "windows" &&
+    "extrafont" %in% rownames(installed.packages())) {
+  extrafont::loadfonts(device = "win")
+}
 
 # сравнително бързо генериране на SVG
 c19_save_all()
