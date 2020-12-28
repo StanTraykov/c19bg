@@ -1,4 +1,6 @@
-# Пакет за генериране на COVID-19 графики от отворените данни на България, EUROSTAT, ECDC, НСИ.
+# c19bg
+
+Пакет за генериране на COVID-19 графики от отворените данни на България, EUROSTAT, ECDC, НСИ.
 
 ## Уеб страница
 
@@ -10,7 +12,7 @@
 
 ## Инсталация
 
-За инсталация директно от github, въведете в R или R Studio:
+За инсталация директно от *GitHub*, въведете в [R](https://www.r-project.org/) или [RStudio](https://rstudio.com/):
 
 ```R
 devtools::install_github("StanTraykov/c19bg")
@@ -69,6 +71,65 @@ c19_r_plot()
 ?c19_r_plot
 ```
 
+## Данни
+```R
+library(c19bg)
+
+# Данните могат да се достъпят с тези две функции
+# (те се използват и от графичните фукнции)
+
+eu_data <- c19_eu_data()
+bg_data <- c19_bg_data()
+
+# При първо изпълнение, те свалят и обработват данни от
+# data.egov.bg, ECDC, и EUROSTAT. Това трае известно време.
+# Последващи повиквания са евтини, освен ако не се изиска
+# презареждане.
+
+c19_eu_data(reload = TRUE)
+c19_bg_data(reload = TRUE)
+
+# Съдържанието може да се разглежда/задълбава в браузера
+# на данни на RStudio.
+
+# ECDC/EUROSTAT седмични случаи, смъртни случаи от COVID-19,
+# свръхсмъртност, фактори на надвишаване, брой хоспитализирани,
+# тестове, позитивност
+
+View(eu_data$factor_tab)
+
+# Умирания по седмици от EUROSTAT
+
+View(eu_data$eurostat_deaths)
+
+# За България
+
+View(bg_data$gen_inc_hist) # обща, вкл. ограничен набор данни
+                           # от преди да отворят данните
+View(bg_data$age)          # по възраст (днвени)
+View(bg_data$subdivs)      # по области (дневни)
+```
+
+Примерна заявка (плаващо средно 7 дни по области)
+```R
+library(dplyr)
+library(tidyr)
+library(c19bg)
+
+bg_data <- c19_bg_data()
+oblasts_table <- bg_data$subdivs %>%
+    select(!ends_with("_ACT")) %>%
+    mutate(date = as.Date(date)) %>%
+    pivot_longer(cols = !matches("date"),
+                 names_to = "oblast",
+                 values_to = "cases") %>%
+    group_by(oblast) %>%
+    mutate(mva7 = zoo::rollapply(cases,
+                                 7,
+                                 mean,
+                                 align = "right",
+                                 fill = NA))
+```
 ## Уики
 
 * [Методика за изчисление на R](https://github.com/StanTraykov/C19_BG/wiki/%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D0%B8%D0%BA%D0%B0-%D0%B7%D0%B0-%D0%B8%D0%B7%D1%87%D0%B8%D1%81%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%B0-R)
