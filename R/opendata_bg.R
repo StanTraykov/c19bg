@@ -117,7 +117,7 @@ process_bg_data <- function() {
     hgn_tab <- dplyr::bind_rows(hist_tab, gen_tab)
 
     ##### oblasts grid
-    ggrid <- read_tab(file.path(data_dir, "oblasts.cfg"), header = TRUE)
+    ggrid <- read_csv(file.path(data_dir, "oblasts.csv"))
 
     ##### bg_data
     bg_data <- list(

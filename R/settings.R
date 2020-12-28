@@ -107,9 +107,9 @@ c19bg_setup <- function() {
     }
 
     data_dir <- getOption("c19bg.data_dir", default = cfg$c19bg.data_dir)
-    trans <- cfg$c19bg.rt(file.path(data_dir, "trans_bg.cfg"))
+    trans <- cfg$c19bg.rc(file.path(data_dir, "trans_bg.csv"))
     tra_f <- function(x) {
-        ret <- trans %>% dplyr::filter(V1 == x) %>% dplyr::pull(V2)
+        ret <- trans %>% dplyr::filter(id == x) %>% dplyr::pull(translation)
         if (length(ret) == 0) {
             warning("MISSING TRANSLATION FOR:\n\t", x)
             return(x)
