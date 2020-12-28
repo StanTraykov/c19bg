@@ -120,8 +120,8 @@ oblasts_table <- bg_data$subdivs %>%
     select(!ends_with("_ACT")) %>%
     mutate(date = as.Date(date)) %>%
     pivot_longer(cols = !matches("date"),
-                        names_to = "oblast",
-                        values_to = "cases") %>%
+                 names_to = "oblast",
+                 values_to = "cases") %>%
     group_by(oblast) %>%
     mutate(mva7 = zoo::rollapply(cases,
                                  7,
