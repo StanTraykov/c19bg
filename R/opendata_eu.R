@@ -237,10 +237,10 @@ process_eu_data <- function() {
 }
 
 #' @export
-make_c19_eu_data <- function() {
+c19_make_eu_data <- function() {
     processed_data <- list()
-    get_data <- function() {
-        if (length(processed_data) == 0)
+    get_data <- function(reload = FALSE) {
+        if ((length(processed_data) == 0) || reload)
             processed_data <<- process_eu_data()
         return(processed_data)
     }
@@ -248,4 +248,4 @@ make_c19_eu_data <- function() {
 }
 
 #' @export
-c19_eu_data <- make_c19_eu_data()
+c19_eu_data <- c19_make_eu_data()

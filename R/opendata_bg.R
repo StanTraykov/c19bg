@@ -131,10 +131,10 @@ process_bg_data <- function() {
 }
 
 #' @export
-make_c19_bg_data <- function() {
+c19_make_bg_data <- function() {
     processed_data <- list()
-    get_data <- function() {
-        if (length(processed_data) == 0)
+    get_data <- function(reload = FALSE) {
+        if ((length(processed_data) == 0) || reload)
             processed_data <<- process_bg_data()
         return(processed_data)
     }
@@ -142,4 +142,4 @@ make_c19_bg_data <- function() {
 }
 
 #' @export
-c19_bg_data <- make_c19_bg_data()
+c19_bg_data <- c19_make_bg_data()
