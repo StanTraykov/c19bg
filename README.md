@@ -57,8 +57,10 @@ c19_inkmagick(d_all = TRUE)
 
 ```R
 library(c19bg)
-if (.Platform$OS.type == "windows")
-    extrafont::loadfonts(device = "win")
+if (.Platform$OS.type == "windows" &&
+    "extrafont" %in% rownames(installed.packages())) {
+  extrafont::loadfonts(device = "win")
+}
 
 # слчуаи по възрастови групи
 my_plot <- c19_var_plot("age", roll_func = mean, roll_window = 7, line_legend = "0")
