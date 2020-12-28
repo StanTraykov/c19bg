@@ -21,11 +21,11 @@ devtools::install_github("StanTraykov/c19bg")
 
 ### Опционално: extrafont, импорт на шрифтове
 
-Отнема време. Еднократно и незадължително, но препоръчително за по-добре излгеждащи графики.
+Еднократно и незадължително. `extrafont` не влияе на векторния SVG изход, но позволява ползването на шрифтове при извеждането на екран и директна растеризация с `ggsave()`.
 
 ```R
 install.packages("extrafont")
-extrafont::font_import()
+extrafont::font_import() # отнема време
 ```
 
 ## Генериране на всички графики
@@ -58,8 +58,8 @@ c19_inkmagick(d_all = TRUE)
 ```R
 library(c19bg)
 if (.Platform$OS.type == "windows" &&
-    "extrafont" %in% rownames(installed.packages())) {
-  extrafont::loadfonts(device = "win")
+        "extrafont" %in% rownames(installed.packages())) {
+    extrafont::loadfonts(device = "win")
 }
 
 # слчуаи по възрастови групи
