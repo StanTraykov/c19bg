@@ -19,24 +19,31 @@ devtools::install_github("StanTraykov/c19bg")
 ```
 Ако нямате `devtools`, може да го инсталирате с `install.packages("devtools")`. Повече информация ще намерите на [GitHub страницата на devtools](https://github.com/r-lib/devtools).
 
-### Импорт на шрифтове в R
+### Опционално: extrafont, импорт на шрифтове
 
-Еднократно и незадължително, но препоръчително за по-добре излгеждащи графики.
+Отнема време. Еднократно и незадължително, но препоръчително за по-добре излгеждащи графики.
 
 ```R
+install.packages("extrafont")
 extrafont::font_import()
 ```
+
 ## Генериране на всички графики
 
 ```R
 library(c19bg)
+if (.Platform$OS.type == "windows" &&
+    "extrafont" %in% rownames(installed.packages())) {
+  extrafont::loadfonts(device = "win")
+}
 
 # сравнително бързо генериране на SVG
 c19_save_all()
 
 # растеризация с Inkscape, JPEG компресия с ImageMagick
-# по-бавен вариант, трябва да ги имате инсталирани
-c19_inkmagick()
+# по-бавен вариант, трябва да ги имате инсталирани,
+# вижте раздел Опции по-долу за указване на пътища
+c19_inkmagick()  # генерира SVG, PNG и JPEG файлове
 
 # вкл. графики за умирания в други страни (ЕС+)
 c19_inkmagick(d_all = TRUE) 
@@ -50,6 +57,10 @@ c19_inkmagick(d_all = TRUE)
 
 ```R
 library(c19bg)
+if (.Platform$OS.type == "windows" &&
+    "extrafont" %in% rownames(installed.packages())) {
+  extrafont::loadfonts(device = "win")
+}
 
 # слчуаи по възрастови групи
 my_plot <- c19_var_plot("age", roll_func = mean, roll_window = 7, line_legend = "0")
@@ -69,6 +80,33 @@ c19_r_plot()
 ?c19_eu_weekly
 ?c19_oblasts
 ?c19_r_plot
+#...
+```
+
+## Опции
+
+```R
+# промяна на шрифт 
+options(c19bg.font_family = "Calibri")
+options(c19bg.font_scale = 1) # скалиране на всички текстове (напр. 0.8, 1.1)
+options(c19bg.font_size = 14) # базов размер (пробвайте първо font_scale)
+
+options(c19bg.output_dir = "c19bg/plots")
+options(c19bg.down_dir = "c19bg/downloads")
+
+# зa c19_inkmagick()
+options(c19bg.output = list(
+    inkopts = "-w %d --export-filename",
+    mgkopts = "-quality 100", 
+    pixwidth = 1375,
+    width = 11,
+    height = 7,
+    inkscape = "\"C:\\Program Files\\Inkscape\\bin\\inkscape.exe\"", 
+    magick = "magick"  # работи, ако е в PATH
+))
+
+# изобразяване на всички опции за c19bg
+names(options())[grep("c19bg",names(options()))]
 ```
 
 ## Данни
