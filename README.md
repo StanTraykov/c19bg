@@ -19,7 +19,7 @@ devtools::install_github("StanTraykov/c19bg")
 ```
 Ако нямате `devtools`, може да го инсталирате с `install.packages("devtools")`. Повече информация ще намерите на [GitHub страницата на devtools](https://github.com/r-lib/devtools).
 
-### extrafont, импорт на шрифтове
+### Опционално: extrafont, импорт на шрифтове
 
 Отнема време. Еднократно и незадължително, но препоръчително за по-добре излгеждащи графики.
 
@@ -43,7 +43,7 @@ c19_save_all()
 # растеризация с Inkscape, JPEG компресия с ImageMagick
 # по-бавен вариант, трябва да ги имате инсталирани,
 # вижте раздел Опции по-долу за указване на пътища
-c19_inkmagick()
+c19_inkmagick()  # генерира SVG, PNG и JPEG файлове
 
 # вкл. графики за умирания в други страни (ЕС+)
 c19_inkmagick(d_all = TRUE) 
