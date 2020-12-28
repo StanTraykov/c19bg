@@ -1,0 +1,43 @@
+Package: c19bg
+Type: Package
+Title: COVID-19 Charts for Bulgaria
+Version: 0.1.0
+Author: Stanislav Traykov
+Maintainer: Stanislav Traykov <st@gmuf.com>
+Description: COVID-19 charts for Bulgaria based on data.egov.bg, ECDC, EUROSTAT.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: false
+RoxygenNote: 7.1.1
+Imports:
+    digest,
+    dplyr,
+    EpiEstim,
+    extrafont,
+    forcats,
+    geofacet,
+    ggplot2,
+    ggrepel,
+    httr,
+    lubridate,
+    magrittr,
+    purrr,
+    R.utils,
+    scales,
+    shadowtext,
+    stringr,
+    tidyr,
+    utils,
+    zoo
+Collate: 
+    'settings.R'
+    'c19_estimate_r.R'
+    'c19_eu_plots.R'
+    'c19_heat.R'
+    'c19_inkmagick.R'
+    'c19_oblasts.R'
+    'c19_r_plot.R'
+    'c19_save_all.R'
+    'c19_var_plot.R'
+    'opendata_bg.R'
+    'opendata_eu.R'

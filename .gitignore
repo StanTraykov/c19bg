@@ -2,8 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
-data
 debug.log
-*.svg
-*.png
-*.jpg
+plots
+downloads
+c19bg
