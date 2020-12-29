@@ -26,7 +26,7 @@
 #' options(c19bg.output = list(
 #'   inkscape = "\"C:\\Program Files\\Inkscape\\bin\\inkscape.exe\"",
 #'   inkopts = "-w %d --export-filename",
-#'   magick = "magick"  # works, if it's in PATH
+#'   magick = "magick",  # works, if it's in PATH
 #'   imgkopts = "-quality 100",
 #'   pixwidth = 1375,
 #'   width = 11,
