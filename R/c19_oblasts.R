@@ -75,7 +75,7 @@ oblasts_tidy <- function(country_data) {
 
     o_name <- function(cd) { # return human field names
         if (cd == "date") return(cd)
-        cd = sub("_ALL", "", cd)
+        cd <- sub("_ALL", "", cd)
         name <- ggrid %>%
             dplyr::filter(code == cd) %>%
             dplyr::pull(name)

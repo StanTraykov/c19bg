@@ -99,7 +99,7 @@ c19_heat <- function(country_data = c19_bg_data()) {
 c19_heat_save <- function(file_ext = ".png", h = 5.5, ...) {
     if (file_ext == ".svg") {
         message("c19_heat_save: changing .svg output to .png")
-        file_ext = ".png"
+        file_ext <- ".png"
     }
     export(plot = c19_heat(),
            file = "C01_heat",

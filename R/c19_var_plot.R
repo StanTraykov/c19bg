@@ -331,9 +331,9 @@ c19_var_plot <- function(
     # remove values before min_x
     if (chart %in% names(vis$plot_x_min)) {
         for (v in names(vis$plot_x_min[[chart]])) {
-            minDate <- vis$plot_x_min[[chart]][[v]]
+            min_date <- vis$plot_x_min[[chart]][[v]]
             ptab <- ptab %>%
-                dplyr::mutate("{v}" := ifelse(date >= minDate,
+                dplyr::mutate("{v}" := ifelse(date >= min_date,
                                               .data[[v]],
                                               NA))
         }
@@ -376,7 +376,7 @@ c19_var_plot <- function(
     days_till_sunday <- 7 - lubridate::wday(plot_end_date, week_start = 1)
     last_sunday_inc <- plot_end_date + days_till_sunday
     if (length(first_sunday) == 0 || first_sunday == last_sunday_inc) {
-        first_sunday = plot_start_date -
+        first_sunday <- plot_start_date -
             lubridate::wday(plot_start_date, week_start = 1)
     }
 
@@ -462,7 +462,7 @@ c19_var_plot <- function(
             sec_labels <- scales::label_number()
         secondary <- ggplot2::sec_axis(
             name = vis$sec_y[[chart]]$label,
-            trans = ~.* vis$sec_y[[chart]]$scale,
+            trans = ~ . * vis$sec_y[[chart]]$scale,
             breaks = seq(0,
                          vis$sec_y[[chart]]$scale * tick_max,
                          by = vis$sec_y[[chart]]$scale * tick_by),

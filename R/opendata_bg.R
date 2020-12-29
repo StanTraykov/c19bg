@@ -2,32 +2,31 @@
 
 #' @importFrom magrittr %>%
 
-process_bg_data <- function(redownload = FALSE) {
+resources_to_csv <- function(redownload = FALSE, sleep_time = 0.3) {
     dot_csv <- function(x) paste0(x, ".csv")
-
-    resources_to_csv <- function(resources, sleep_time = 0.3) {
-        api_url <- 'https://data.egov.bg/api/getResourceData'
-        resources <- list(bg_gen = "e59f95dd-afde-43af-83c8-ea2916badd19",
-                          bg_obl = "cb5d7df0-3066-4d7a-b4a1-ac26525e0f0c",
-                          bg_age = "8f62cfcf-a979-46d4-8317-4e1ab9cbd6a8",
-                          bg_tst = "0ce4e9c3-5dfc-46e2-b4ab-42d840caab92")
-        for (fn in names(resources)) {
-            name <- paste0()
-            if (redownload || !datafile_exists(dot_csv(fn))) {
-                uri <- resources[[fn]]
-                api_data <- list(resource_uri = uri)
-                resp <- httr::POST(api_url, body = api_data, encode = "json")
-                parsed_data <- httr::content(resp, as = "parsed")[["data"]]
-                fields <-  purrr::transpose(parsed_data[-1],
-                                            .names = parsed_data[[1]])
-                tib <- tibble::as_tibble(lapply(fields, unlist))
-                tib_write_csv(tib, dot_csv(fn))
-                Sys.sleep(sleep_time)
-            }
+    api_url <- "https://data.egov.bg/api/getResourceData"
+    resources <- list(bg_gen = "e59f95dd-afde-43af-83c8-ea2916badd19",
+                      bg_obl = "cb5d7df0-3066-4d7a-b4a1-ac26525e0f0c",
+                      bg_age = "8f62cfcf-a979-46d4-8317-4e1ab9cbd6a8",
+                      bg_tst = "0ce4e9c3-5dfc-46e2-b4ab-42d840caab92")
+    for (res_id in names(resources)) {
+        if (redownload || !datafile_exists(dot_csv(res_id))) {
+            uri <- resources[[res_id]]
+            message(paste("Getting data.egov.bg uri:", uri))
+            api_data <- list(resource_uri = uri)
+            resp <- httr::POST(api_url, body = api_data, encode = "json")
+            parsed_data <- httr::content(resp, as = "parsed")[["data"]]
+            fields <-  purrr::transpose(parsed_data[-1],
+                                        .names = parsed_data[[1]])
+            tib <- tibble::as_tibble(lapply(fields, unlist))
+            tib_write_csv(tib, dot_csv(res_id))
+            Sys.sleep(sleep_time)
         }
     }
+}
 
-    resources_to_csv(resources)
+process_bg_data <- function(redownload = FALSE) {
+    resources_to_csv(redownload)
 
     ##### age tab
     age_tab <- tib_read_csv(
@@ -38,7 +37,6 @@ process_bg_data <- function(redownload = FALSE) {
     age_tab[-1, -1] <- age_tab[-1, -1] - age_tab[-nrow(age_tab), -1]
     age_tab <- age_tab[-1, ]
     names(age_tab)[1] <- "date"
-    #names(age_tab)[10] <- "90+"
     names(age_tab) <- gsub(" ", "", names(age_tab))
 
     ##### oblasts tab
@@ -69,7 +67,7 @@ process_bg_data <- function(redownload = FALSE) {
         "new_ag_tests", "cases", "pcr_cases", "ag_cases", "new_cases",
         "new_pcr_cases", "new_ag_cases"
     )
-    begin_ag_tests = as.Date("2020-12-24")
+    begin_ag_tests <- as.Date("2020-12-24")
 
 
     # gen_tst_by <- c("date", "tests", "cases", "new_cases", "new_pcr_cases")
@@ -82,7 +80,7 @@ process_bg_data <- function(redownload = FALSE) {
     # TODO remove the following when open data about daily ag tests gets fixed.
     # We now calculate dialy ag tests because the open data field is cumulative
     # instead of daily (new_ag_tests wrongly matches ag_tests).
-    tst_tab$new_ag_tests[-1] = tst_tab$new_ag_tests[-1] -  #TODO remove
+    tst_tab$new_ag_tests[-1] <- tst_tab$new_ag_tests[-1] -  #TODO remove
         tst_tab$new_ag_tests[-nrow(tst_tab)]               #TODO remove
 
 

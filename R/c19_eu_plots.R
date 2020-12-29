@@ -28,24 +28,24 @@ make_eu_vis <- function(process_data = FALSE) {
         mthick = 0.8,
         wthick = 1.1
     )
-    line_cols = c( # faceted deaths plot
+    line_cols <- c( # faceted deaths plot
         "#AAAAAA", "#BBAA00", "#008800", "#0000BB", "#000000", "#FF0000"
     )
-    col_legend = ggplot2::guide_legend( # faceted deaths plot
+    col_legend <- ggplot2::guide_legend( # faceted deaths plot
         nrow = 1,
         override.aes = list(
             size = c(rep(line_sz$thin, 5), line_sz$thick)
         )
     )
-    ext_ls = c( # for country totals deaths plot
+    ext_ls <- c( # for country totals deaths plot
         "solid", "solid", "dotted", "solid", "solid", "solid",
         "solid", "solid", "solid", "solid", "solid"
     )
-    ext_guide = ggplot2::guide_legend( # for country totals deaths plot
+    ext_guide <- ggplot2::guide_legend( # for country totals deaths plot
         nrow = 1,
         override.aes = list(linetype = ext_ls, shape = c(rep(NA, 10), 19))
     )
-    ext_line_cols = c( # for country totals deaths plot
+    ext_line_cols <- c( # for country totals deaths plot
         "#BBBBBB", "#BBBBBB", "#BBBBBB", "#BBBBBB", "#777777",
         "#88AAAA", "#BBAA00", "#008800", "#0000BB", "#000000",
         "#FF0000"
@@ -218,7 +218,7 @@ c19_eu_weekly <- function(
     eu_data = c19_eu_data()
 ) {
     set.seed(42)
-    cont_regex = paste(continents, collapse = "|")
+    cont_regex <- paste(continents, collapse = "|")
     vy <- indicator
     vis <- eu_vis()
     pdata <- eu_data$factor_tab %>%

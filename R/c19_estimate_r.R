@@ -26,7 +26,7 @@ c19_estimate_r <- function(country_data = c19_bg_data()) {
     hfile <- data_path(".Rhash")
     old_hash <- ""
     if (file.exists(hfile) && datafile_exists(estr_csv)) {
-        old_hash = scan(hfile, what = "")
+        old_hash <- scan(hfile, what = "")
     }
     new_hash <- digest::sha1(nc)
     if (old_hash == new_hash) {

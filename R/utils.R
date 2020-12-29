@@ -26,7 +26,7 @@ export <- function(
 ) {
     out_dir <- file.path(getOption("c19bg.output_dir"), "save")
     if (!file.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
-    file = file.path(out_dir, paste0(file, file_ext))
+    file <- file.path(out_dir, paste0(file, file_ext))
     message(paste("exporting:", file))
     ggplot2::ggsave(file = file,
                     width = scale_w * w,

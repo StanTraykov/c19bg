@@ -2,9 +2,9 @@
 
 .onLoad <- function(libname, pkgname) {
     op <- options()
-    op.c19bg <- c19bg_setup()
-    toset <- !(names(op.c19bg) %in% names(op))
-    if (any(toset)) options(op.c19bg[toset])
+    c19bg_op <- c19bg_setup()
+    toset <- !(names(c19bg_op) %in% names(op))
+    if (any(toset)) options(c19bg_op[toset])
 
     invisible()
 }
@@ -41,10 +41,10 @@ c19bg_setup <- function() {
         cfg$c19bg.output$inkscape <- inkpath
         # ImageMagick folder changes with version but executable often in path,
         # so we try
-        cfg$c19bg.output$magick = "magick"
+        cfg$c19bg.output$magick <- "magick"
     } else { # unix
-        cfg$c19bg.output$inkscape = "inkscape"
-        cfg$c19bg.output$magick = "magick"
+        cfg$c19bg.output$inkscape <- "inkscape"
+        cfg$c19bg.output$magick <- "magick"
     }
     return(cfg)
 }

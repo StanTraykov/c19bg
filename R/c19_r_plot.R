@@ -13,7 +13,7 @@ make_r_plot_vis <- function(process_data = FALSE) {
         return(vis_f)
     }
 
-    line_sz = 0.5
+    line_sz <- 0.5
     lty_norm <- "solid"
     lty_mva <- "dotted"
     clr_leg <- list(linetype = c(lty_norm, lty_norm, lty_mva, lty_norm),

@@ -5,7 +5,7 @@
 process_eu_data <- function(redownload = FALSE) {
     tib_eu <- function(url, file, zip = FALSE, tab_delim = FALSE, ...) {
         if (redownload || !datafile_exists(file)) {
-            r <- download(url, file, zip)
+            download(url, file, zip)
         }
         if (tab_delim)
             t <- tib_read_tsv(file, ...)
