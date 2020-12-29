@@ -1,6 +1,7 @@
 #!/bin/bash
 # publish to web
 git=git
+src_parent="c19bg/plots"
 rdir="/c/Users/Stan/Documents/webc19/C19_BG"
 copy_dir="${rdir}/cur_svg"
 git_push="${git} push"
@@ -12,10 +13,12 @@ git_cur_time="${git} log --date iso-local -n 1 ."
 tday=$(date +%b%d)
 yday=$(date -d "${tday}-1day" +%b%d)
 c_date=$(date "+%b%d %T")
-if [[ -d "output/${tday}" ]]; then
-    src_dir="output/${tday}"
-elif [[ -d "output/${yday}" ]]; then
-    src_dir="output/${yday}"
+tday="${src_parent}/${tday}"
+yday="${src_parent}/${yday}"
+if [[ -d "${tday}" ]]; then
+    src_dir="${tday}"
+elif [[ -d "${yday}" ]]; then
+    src_dir="${yday}"
 else
     echo "can't find suitable source dir (tried ${tday}, ${yday})" >&2
     exit 1

@@ -11,6 +11,11 @@
 
 #' @export
 c19_inkmagick <- function(var = TRUE, eu = TRUE, r = TRUE, d_all = FALSE) {
+    # load fonts on Windows to use the option-supplied font for bitmap output
+    if (.Platform$OS.type == "windows" &&
+        "extrafont" %in% rownames(installed.packages())) {
+        extrafont::loadfonts(device = "win")
+    }
     out_parent <- getOption("c19bg.output_dir")
     out_dir <- file.path(out_parent, format(Sys.time(), "%b%d"))
 

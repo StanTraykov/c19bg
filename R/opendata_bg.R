@@ -2,7 +2,7 @@
 
 #' @importFrom magrittr %>%
 
-process_bg_data <- function() {
+process_bg_data <- function(redownload = FALSE) {
     down_dir <- getOption("c19bg.down_dir")
     data_dir <- getOption("c19bg.data_dir")
     if (!file.exists(down_dir)) dir.create(down_dir, recursive = TRUE)
@@ -19,7 +19,7 @@ process_bg_data <- function() {
                           bg_tst = "0ce4e9c3-5dfc-46e2-b4ab-42d840caab92")
         for (fn in names(resources)) {
             full_name <- csv_name(fn)
-            if (!file.exists(full_name)) {
+            if (redownload || !file.exists(full_name)) {
                 uri <- resources[[fn]]
                 api_data <- list(resource_uri = uri)
                 resp <- httr::POST(api_url, body = api_data, encode = "json")
@@ -132,9 +132,9 @@ process_bg_data <- function() {
 
 c19_make_bg_data <- function() {
     processed_data <- list()
-    get_data <- function(reload = FALSE) {
+    get_data <- function(reload = FALSE, redownload = FALSE) {
         if ((length(processed_data) == 0) || reload)
-            processed_data <<- process_bg_data()
+            processed_data <<- process_bg_data(redownload = redownload)
         return(processed_data)
     }
     return(get_data)

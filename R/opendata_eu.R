@@ -2,7 +2,7 @@
 
 #' @importFrom magrittr %>%
 
-process_eu_data <- function() {
+process_eu_data <- function(redownload = FALSE) {
     read_delim <- getOption("c19bg.rd")
     read_csv <- getOption("c19bg.rc")
     data_dir <- getOption("c19bg.data_dir")
@@ -15,7 +15,7 @@ process_eu_data <- function() {
             down_dest <- paste0(local_fn, ".temp")
         else
             down_dest <- local_fn
-        if (!file.exists(local_fn)) {
+        if (redownload || !file.exists(local_fn)) {
             utils::download.file(url, down_dest)
             if (zip_local) {
                 R.utils::gzip(down_dest,
@@ -238,9 +238,9 @@ process_eu_data <- function() {
 
 c19_make_eu_data <- function() {
     processed_data <- list()
-    get_data <- function(reload = FALSE) {
+    get_data <- function(reload = FALSE, redownload = FALSE) {
         if ((length(processed_data) == 0) || reload)
-            processed_data <<- process_eu_data()
+            processed_data <<- process_eu_data(redownload = redownload)
         return(processed_data)
     }
     return(get_data)
