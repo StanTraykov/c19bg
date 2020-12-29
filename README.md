@@ -17,11 +17,11 @@
 ```R
 devtools::install_github("StanTraykov/c19bg")
 ```
-Ако нямате `devtools`, може да го инсталирате с `install.packages("devtools")`. Повече информация ще намерите на [GitHub страницата на devtools](https://github.com/r-lib/devtools).
+Ако нямате пакет `devtools`, може да го инсталирате в R с `install.packages("devtools")`. Повече информация ще намерите на [GitHub страницата на devtools](https://github.com/r-lib/devtools).
 
-### Опционално: extrafont, импорт на шрифтове
+### Опционално: extrafont
 
-Еднократно и незадължително. Позволява ползването на шрифтове при извеждането на екран и записването в растерни формати (PNG, JPEG). **Не влияе** на векторния SVG изход (вкл. по-нататъшна обработка с външни програми).
+Еднократно и незадължително. Позволява ползването на шрифтове при извеждането на екран и записването в растерни формати (PNG, JPEG). **Не влияе** на векторния SVG изход (вкл. по-нататъшна обработка с външни програми). Единствената засегната графика при нормална употреба (генериране на всички графики) е хийтмапът на заболеваемостта.
 
 ```R
 install.packages("extrafont")
@@ -32,10 +32,6 @@ extrafont::font_import() # отнема време
 
 ```R
 library(c19bg)
-if (.Platform$OS.type == "windows" &&
-    "extrafont" %in% rownames(installed.packages())) {
-  extrafont::loadfonts(device = "win")
-}
 
 # сравнително бързо генериране на SVG
 c19_save_all()
@@ -53,14 +49,10 @@ c19_inkmagick(d_all = TRUE)
 
 *Забележка: Изтрийте файловете* `demo_*.tsv.gz`, `ecdc_*.csv.gz`, `bg_*.csv` *от папка* `c19bg/downloads`*, ако желаете данните да се обновят.*
 
-## Генериране на индивидуални графики
+## Генериране на единични графики
 
 ```R
 library(c19bg)
-if (.Platform$OS.type == "windows" &&
-        "extrafont" %in% rownames(installed.packages())) {
-    extrafont::loadfonts(device = "win")
-}
 
 # слчуаи по възрастови групи
 my_plot <- c19_var_plot("age", roll_func = mean, roll_window = 7, line_legend = "0")
@@ -69,6 +61,10 @@ my_plot <- c19_var_plot("age", roll_func = mean, roll_window = 7, line_legend = 
 my_plot # или print(my_plot) в не-интерактивен режим
 
 # запис във файл
+if (.Platform$OS.type == "windows" &&
+        "extrafont" %in% rownames(installed.packages())) {
+    extrafont::loadfonts(device = "win")
+}
 ggplot2::ggsave(file = "my_plot.png", width = 11, height = 7, plot = my_plot)
 
 # R-графика на екран
