@@ -36,68 +36,15 @@ c19bg_setup <- function() {
     # platform-dependent init / config
     os_type <- .Platform$OS.type
     if (os_type == "windows") {
+        # Inkscape usually to be found here
         inkpath <- "\"C:\\Program Files\\Inkscape\\bin\\inkscape.exe\""
         cfg$c19bg.output$inkscape <- inkpath
+        # ImageMagick folder changes with version but executable often in path,
+        # so we try
         cfg$c19bg.output$magick = "magick"
-
-        # fileEncoding does not work on Windows (w/default codepage settings)
-
-        enc_f <- function(x) { # Windows Unicode hack
-            if (typeof(x) == "character")
-                return(iconv(x, from = "UTF-8", to = "UTF-8"))
-            return(x)
-        }
-
-        read_unicode <- function(frame) {
-            return(frame %>%
-                       dplyr::mutate(dplyr::across(dplyr::everything(), enc_f)))
-        }
-
-        # these read files using native encoding and convert after
-        cfg$c19bg.rt <- function(...) {
-            t <- utils::read.table(...,
-                            na.strings = "",
-                            stringsAsFactors = FALSE)
-            return(read_unicode(t))
-        }
-        cfg$c19bg.rd <- function(...) {
-            t <- utils::read.delim(...,
-                            na.strings = "",
-                            stringsAsFactors = FALSE)
-            return(read_unicode(t))
-        }
-        cfg$c19bg.rc <- function(...) {
-            t <- utils::read.csv(...,
-                          na.strings = "",
-                          stringsAsFactors = FALSE)
-            return(read_unicode(t))
-        }
-    } else if (os_type == "unix") {
+    } else { # unix
         cfg$c19bg.output$inkscape = "inkscape"
         cfg$c19bg.output$magick = "magick"
-
-        # NOT TESTED but this should probably work?
-        cfg$c19bg.rt <- function(...) {
-            t <- utils::read.table(...,
-                            fileEncoding = "UTF-8-BOM",
-                            na.strings = "",
-                            stringsAsFactors = FALSE)
-            return(t)
-        }
-        cfg$c19bg.rd <- function(...) {
-            t <- utils::read.delim(...,
-                            fileEncoding = "UTF-8-BOM",
-                            na.strings = "",
-                            stringsAsFactors = FALSE)
-            return(t)
-        }
-        cfg$c19bg.rc <- function(...) {
-            t <- utils::read.csv(...,
-                          fileEncoding = "UTF-8-BOM",
-                          na.strings = "",
-                          stringsAsFactors = FALSE)
-            return(t)
-        }
     }
     return(cfg)
 }
