@@ -86,11 +86,8 @@ ggplot2::ggsave(file = "my_plot.png", width = 11, height = 7, plot = my_plot)
 c19_r_plot()
 
 # помощ
-?c19_var_plot
 ?c19_eu_weekly
-?c19_oblasts
-?c19_r_plot
-#...
+?c19_save_all #etc
 ```
 
 ## Опции
@@ -117,6 +114,10 @@ options(c19bg.output = list(
 # изобразяване на всички опции за c19bg
 names(options())[grep("c19bg",names(options()))]
 ```
+
+## Документация
+
+[Документация на публичните функции в пакета](https://stantraykov.github.io/c19bg/docs/reference/index.html)
 
 ## Данни
 ```R
