@@ -4,7 +4,7 @@
 
 ## Уеб страница
 
-Графиките са достъпни на https://stantraykov.github.io/c19bg/
+По-голямата част от графиките са достъпни на https://stantraykov.github.io/c19bg/
 
 ## Ако сте един от тях...
 
