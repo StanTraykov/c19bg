@@ -40,9 +40,11 @@ A ggplot
 Weekly plot from ECDC/EUROSTAT data
 }
 \examples{
+\dontrun{
 c19_eu_weekly(indicator = "r14_cases", lower_y = 0)
 c19_eu_weekly(indicator = "positivity",
               top_n = 100,
               label_fun = function(x) sprintf("\%.1f\%\%", 100 * x),
               axis_labels = scales::label_percent())
+}
 }
