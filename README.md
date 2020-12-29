@@ -102,7 +102,6 @@ options(c19bg.font_size = 14) # базов размер (пробвайте пъ
 options(c19bg.output_dir = "c19bg/plots")
 options(c19bg.down_dir = "c19bg/downloads")
 
-# зa c19_inkmagick()
 options(c19bg.output = list(
     inkopts = "-w %d --export-filename",
     mgkopts = "-quality 100",
