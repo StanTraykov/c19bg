@@ -33,7 +33,9 @@ extrafont::font_import() # отнема време
 ```R
 library(c19bg)
 
-# бързо генериране на SVG
+# бързо генериране на SVG (високо качество)
+# отиват в c19bg/plots в текущата папка (обикн. Documents под Windows)
+
 c19_save_all()
 
 # бързо генериране на PNG (понижено качество)
@@ -41,7 +43,7 @@ c19_save_all(file_ext = ".png")
 c19_save_all(file_ext = ".png", dpi = 200, w = 10, h = 10) #2000x2000px
 
 # бързо генериране на JPEG (понижено качество)
-c19_save_all(file_ext =".jpg", quality = 100)
+c19_save_all(file_ext =".jpg", dpi = 125, quality = 100)
 
 # растеризация с Inkscape, JPEG компресия с ImageMagick
 # - високо качество, но по-бавно
