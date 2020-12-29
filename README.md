@@ -12,7 +12,7 @@
 
 ## Инсталация
 
-За инсталация директно от *GitHub*, въведете в [R](https://www.r-project.org/) или [RStudio](https://rstudio.com/):
+За инсталация директно от *GitHub*, въведете в [R](https://www.r-project.org/) или (още по-добре) в [RStudio](https://rstudio.com/):
 
 ```R
 devtools::install_github("StanTraykov/c19bg")
