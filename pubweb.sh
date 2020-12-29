@@ -32,5 +32,5 @@ mdate=$(${git_cur_time} | grep Date: | sed -e 's/Date: *//')
 cd ..
 regpre='s/(<!-- up -->).*?(<!-- date -->)/'
 sed -i -re "${regpre}\1${mdate}\2/" index.md
-${git_stage} && ${git_commit} "auto update time ${src_dir} (${c_date})"
+${git_stage} && ${git_commit} "auto update ${src_dir} (${c_date})"
 ${git_push} "$@"

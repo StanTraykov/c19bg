@@ -277,8 +277,8 @@ c19_eu_weekly <- function(
             segment.size = 0.3,
             segment.alpha	= 0.5,
             bg.colour = "#ebebeb",
-            max.time = 5,
-            max.iter = 1000000,
+            max.time = 1,
+            max.iter = 100000,
             show.legend = FALSE
         ) +
         shadowtext::geom_shadowtext(
@@ -469,21 +469,7 @@ c19_deaths_map <- function(eu_data = c19_eu_data()) {
 
 #' example output                                                               #
 #' @export
-c19_eu_plots_save <- function() {
-    export <- function(
-        plot,
-        file,
-        w = getOption("c19bg.output")$width,
-        h = getOption("c19bg.output")$height
-    ) {
-        out_dir <- file.path(getOption("c19bg.output_dir"), "save")
-        if (!file.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
-        file = file.path(out_dir, paste0(file, ".svg"))
-        ggplot2::ggsave(file = file, width = w, height = h, plot = plot)
-    }
-
-    export(plot = c19_eu_weekly(indicator = "tests_100k", top_n = 100),
-           file = "C14_cmp_tst_eurp")
+c19_eu_plots_save <- function(...) {
     export(
         plot = c19_eu_weekly(
             indicator = "positivity",
@@ -491,23 +477,17 @@ c19_eu_plots_save <- function() {
             label_fun = function(x) sprintf("%.1f%%", 100 * x),
             axis_labels = scales::label_percent()
         ),
-        file = "C15_cmp_pos_eurp"
+        file = "C15_cmp_pos_eurp",
+        ...
     )
-    export(plot = c19_eu_weekly(indicator = "hosp_1m", top_n = 100),
-           file = "C13_cmp_h_eurp")
-    export(plot = c19_eu_weekly(indicator = "em_1m"),
-           file = "C12_exd1m_eurp")
-    export(plot = c19_eu_weekly(indicator = "r14_cases", lower_y = 0),
-           file = "C10_cmp_i_wrld")
-    export(plot = c19_eu_weekly(indicator = "r14_deaths", lower_y = 0),
-           file = "C10_cmp_d_wrld")
     export(
         plot = c19_eu_weekly(
             indicator = "r14_cases",
             continents = "Europe",
             lower_y = 0
         ),
-        file = "C11_cmp_i_eurp"
+        file = "C11_cmp_i_eurp",
+        ...
     )
     export(
         plot = c19_eu_weekly(
@@ -515,19 +495,40 @@ c19_eu_plots_save <- function() {
             continents = "Europe",
             lower_y = 0
         ),
-        file = "C11_cmp_d_eurp"
+        file = "C11_cmp_d_eurp",
+        ...
     )
-    export(file = "D00_BG_t", plot = c19_deaths_total("BG"))
-    export(file = "D00_map", plot = c19_deaths_map())
+    export(plot = c19_eu_weekly(indicator = "tests_100k", top_n = 100),
+           file = "C14_cmp_tst_eurp",
+           ...)
+    export(plot = c19_eu_weekly(indicator = "hosp_1m", top_n = 100),
+           file = "C13_cmp_h_eurp",
+           ...)
+    export(plot = c19_eu_weekly(indicator = "em_1m"),
+           file = "C12_exd1m_eurp",
+           ...)
+    export(plot = c19_eu_weekly(indicator = "r14_cases", lower_y = 0),
+           file = "C10_cmp_i_wrld")
+    export(plot = c19_eu_weekly(indicator = "r14_deaths", lower_y = 0),
+           file = "C10_cmp_d_wrld",
+           ...)
+    export(file = "D00_BG_t",
+           ...,
+           plot = c19_deaths_total("BG"))
+    export(file = "D00_map",
+           ...,
+           plot = c19_deaths_map())
     export(file = "D00_cmp",
-           h = 8,
-           w = 14.4,
+           ...,
+           scale_h = 8 / 7,
+           scale_w = 14.4 / 11,
            plot = c19_deaths_factor())
     eu_codes <- c19_eu_data()$eu_codes
     for (n in seq_along(eu_codes)) {
         pn <- stringr::str_pad(n, 2, pad = "0")
         cd <- eu_codes[n]
         export(file = paste0("D", pn, "_", cd),
+               ...,
                plot = c19_deaths_age(cd))
     }
 }

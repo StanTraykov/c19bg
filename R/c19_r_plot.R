@@ -279,19 +279,7 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
 
 #' output example
 #' @export
-c19_r_plot_save <- function() {
-    export <- function(
-        plot,
-        file,
-        w = getOption("c19bg.output")$width,
-        h = getOption("c19bg.output")$height
-    ) {
-        out_dir <- file.path(getOption("c19bg.output_dir"), "save")
-        if (!file.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
-        file = file.path(out_dir, paste0(file, ".svg"))
-        ggplot2::ggsave(file = file, width = w, height = h, plot = plot)
-    }
-
+c19_r_plot_save <- function(...) {
     c19_estimate_r()
-    export(file = "C00_R", plot = c19_r_plot())
+    export(file = "C00_R", ..., plot = c19_r_plot())
 }

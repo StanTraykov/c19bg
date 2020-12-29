@@ -13,7 +13,7 @@
 c19_inkmagick <- function(var = TRUE, eu = TRUE, r = TRUE, d_all = FALSE) {
     # load fonts on Windows to use the option-supplied font for bitmap output
     if (.Platform$OS.type == "windows" &&
-        "extrafont" %in% rownames(installed.packages())) {
+        "extrafont" %in% rownames(utils::installed.packages())) {
         extrafont::loadfonts(device = "win")
     }
     out_parent <- getOption("c19bg.output_dir")
@@ -38,7 +38,7 @@ c19_inkmagick <- function(var = TRUE, eu = TRUE, r = TRUE, d_all = FALSE) {
         system(cmd)
     }
 
-    export <- function(file,
+    im_exp <- function(file,
                        plot = NULL,
                        make_svg = TRUE,
                        make_png = TRUE,
@@ -71,26 +71,26 @@ c19_inkmagick <- function(var = TRUE, eu = TRUE, r = TRUE, d_all = FALSE) {
             dir.create(d, recursive = TRUE)
 
     if (var) {
-        export(file = "C09_pos", plot = c19_var_plot("positivity"))
-        export(file = "C09_pos_pcr", plot = c19_var_plot("pospcr"))
-        export(file = "C09_pos_ag", plot = c19_var_plot("posag"))
-        export(
+        im_exp(file = "C09_pos", plot = c19_var_plot("positivity"))
+        im_exp(file = "C09_pos_pcr", plot = c19_var_plot("pospcr"))
+        im_exp(file = "C09_pos_ag", plot = c19_var_plot("posag"))
+        im_exp(
             file = "C04_cd",
             plot = c19_var_plot("casesdeaths",
                             roll_func = mean,
                             roll_window = 7)
         )
-        export(file = "C08_cases", plot = c19_var_plot("cases"))
-        export(file = "C07_hospitalized", plot = c19_var_plot("hospitalized"))
-        export(file = "C05_age_7", plot = c19_var_plot("age",
+        im_exp(file = "C08_cases", plot = c19_var_plot("cases"))
+        im_exp(file = "C07_hospitalized", plot = c19_var_plot("hospitalized"))
+        im_exp(file = "C05_age_7", plot = c19_var_plot("age",
                                                    roll_func = mean,
                                                    roll_window = 7,
                                                    line_legend = "0"))
-        export(file = "C05_age_dis", plot = c19_var_plot("dis",
+        im_exp(file = "C05_age_dis", plot = c19_var_plot("dis",
                                                      roll_func = mean,
                                                      roll_window = 7,
                                                      line_legend = "."))
-        export(
+        im_exp(
             file = "C06_age_1",
             plot = c19_var_plot("age", line_legend = "0")
         )
@@ -110,14 +110,14 @@ c19_inkmagick <- function(var = TRUE, eu = TRUE, r = TRUE, d_all = FALSE) {
             list(file = "C03_oblasts_c_cmp", i = FALSE, f = FALSE)
         )
         for (c in charts) {
-            export(file = c$file,
+            im_exp(file = c$file,
                    plot = c19_oblasts(incid_100k = c$i, facet = c$f))
         }
     }
     if (eu) {
-        export(plot = c19_eu_weekly(indicator = "tests_100k", top_n = 100),
+        im_exp(plot = c19_eu_weekly(indicator = "tests_100k", top_n = 100),
                file = "C14_cmp_tst_eurp")
-        export(
+        im_exp(
             plot = c19_eu_weekly(
                 indicator = "positivity",
                 top_n = 100,
@@ -126,15 +126,15 @@ c19_inkmagick <- function(var = TRUE, eu = TRUE, r = TRUE, d_all = FALSE) {
             ),
             file = "C15_cmp_pos_eurp"
         )
-        export(plot = c19_eu_weekly(indicator = "hosp_1m", top_n = 100),
+        im_exp(plot = c19_eu_weekly(indicator = "hosp_1m", top_n = 100),
                file = "C13_cmp_h_eurp")
-        export(plot = c19_eu_weekly(indicator = "em_1m"),
+        im_exp(plot = c19_eu_weekly(indicator = "em_1m"),
                file = "C12_exd1m_eurp")
-        export(plot = c19_eu_weekly(indicator = "r14_cases", lower_y = 0),
+        im_exp(plot = c19_eu_weekly(indicator = "r14_cases", lower_y = 0),
                file = "C10_cmp_i_wrld")
-        export(plot = c19_eu_weekly(indicator = "r14_deaths", lower_y = 0),
+        im_exp(plot = c19_eu_weekly(indicator = "r14_deaths", lower_y = 0),
                file = "C10_cmp_d_wrld")
-        export(
+        im_exp(
             plot = c19_eu_weekly(
                 indicator = "r14_cases",
                 continents = "Europe",
@@ -142,7 +142,7 @@ c19_inkmagick <- function(var = TRUE, eu = TRUE, r = TRUE, d_all = FALSE) {
             ),
             file = "C11_cmp_i_eurp"
         )
-        export(
+        im_exp(
             plot = c19_eu_weekly(
                 indicator = "r14_deaths",
                 continents = "Europe",
@@ -150,9 +150,9 @@ c19_inkmagick <- function(var = TRUE, eu = TRUE, r = TRUE, d_all = FALSE) {
             ),
             file = "C11_cmp_d_eurp"
         )
-        export(file = "D00_BG_t", plot = c19_deaths_total("BG"))
-        export(file = "D00_map", plot = c19_deaths_map())
-        export(file = "D00_cmp",
+        im_exp(file = "D00_BG_t", plot = c19_deaths_total("BG"))
+        im_exp(file = "D00_map", plot = c19_deaths_map())
+        im_exp(file = "D00_cmp",
                height = 8,
                width = 14.4,
                pix_width = 1800,
@@ -162,14 +162,13 @@ c19_inkmagick <- function(var = TRUE, eu = TRUE, r = TRUE, d_all = FALSE) {
             pn <- stringr::str_pad(n, 2, pad = "0")
             cd <- eu_codes[n]
             if (d_all || (cd == "BG"))
-                export(file = paste0("D", pn, "_", cd),
+                im_exp(file = paste0("D", pn, "_", cd),
                        plot = c19_deaths_age(cd))
         }
     }
     if (r) {
             c19_estimate_r()
-            export(file = "C00_R", plot = c19_r_plot())
+            im_exp(file = "C00_R", plot = c19_r_plot())
     }
-
     invisible()
 }

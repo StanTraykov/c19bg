@@ -497,40 +497,44 @@ c19_var_plot <- function(
 
 #' output example
 #' @export
-c19_var_plot_save <- function() {
-    export <- function(
-        plot,
-        file,
-        w = getOption("c19bg.output")$width,
-        h = getOption("c19bg.output")$height
-    ) {
-        out_dir <- file.path(getOption("c19bg.output_dir"), "save")
-        if (!file.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
-        file = file.path(out_dir, paste0(file, ".svg"))
-        ggplot2::ggsave(file = file, width = w, height = h, plot = plot)
-    }
-
-    export(file = "C09_pos", plot = c19_var_plot("positivity"))
-    export(file = "C09_pos_pcr", plot = c19_var_plot("pospcr"))
-    export(file = "C09_pos_ag", plot = c19_var_plot("posag"))
+c19_var_plot_save <- function(...) {
+    export(file = "C09_pos",
+           ...,
+           plot = c19_var_plot("positivity"))
+    export(file = "C09_pos_pcr",
+           ...,
+           plot = c19_var_plot("pospcr"))
+    export(file = "C09_pos_ag",
+           ...,
+           plot = c19_var_plot("posag"))
     export(
         file = "C04_cd",
+        ...,
         plot = c19_var_plot("casesdeaths",
                             roll_func = mean,
                             roll_window = 7)
     )
-    export(file = "C08_cases", plot = c19_var_plot("cases"))
-    export(file = "C07_hospitalized", plot = c19_var_plot("hospitalized"))
-    export(file = "C05_age_7", plot = c19_var_plot("age",
-                                                   roll_func = mean,
-                                                   roll_window = 7,
-                                                   line_legend = "0"))
-    export(file = "C05_age_dis", plot = c19_var_plot("dis",
-                                                     roll_func = mean,
-                                                     roll_window = 7,
-                                                     line_legend = "."))
+    export(file = "C08_cases",
+           ...,
+           plot = c19_var_plot("cases"))
+    export(file = "C07_hospitalized",
+           ...,
+           plot = c19_var_plot("hospitalized"))
+    export(file = "C05_age_7",
+           ...,
+           plot = c19_var_plot("age",
+                               roll_func = mean,
+                               roll_window = 7,
+                               line_legend = "0"))
+    export(file = "C05_age_dis",
+           ...,
+           plot = c19_var_plot("dis",
+                               roll_func = mean,
+                               roll_window = 7,
+                               line_legend = "."))
     export(
         file = "C06_age_1",
+        ...,
         plot = c19_var_plot("age", line_legend = "0")
     )
 }

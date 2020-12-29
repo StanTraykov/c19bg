@@ -4,7 +4,7 @@
 \alias{c19_heat_save}
 \title{example output}
 \usage{
-c19_heat_save()
+c19_heat_save(file_ext = ".png", h = 5.5, ...)
 }
 \description{
 example output

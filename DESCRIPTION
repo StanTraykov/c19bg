@@ -33,13 +33,13 @@ Suggests:
     extrafont
 Collate: 
     'settings.R'
+    'utils.R'
     'c19_estimate_r.R'
     'c19_eu_plots.R'
     'c19_heat.R'
     'c19_inkmagick.R'
     'c19_oblasts.R'
     'c19_r_plot.R'
-    'c19_save_all.R'
     'c19_var_plot.R'
     'opendata_bg.R'
     'opendata_eu.R'

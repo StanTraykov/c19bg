@@ -4,7 +4,7 @@
 \alias{c19_var_plot_save}
 \title{output example}
 \usage{
-c19_var_plot_save()
+c19_var_plot_save(...)
 }
 \description{
 output example

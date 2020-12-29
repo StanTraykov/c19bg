@@ -4,7 +4,7 @@
 \alias{c19_eu_plots_save}
 \title{example output                                                               #}
 \usage{
-c19_eu_plots_save()
+c19_eu_plots_save(...)
 }
 \description{
 example output                                                               #

@@ -17,10 +17,10 @@ c19_estimate_r <- function(country_data = c19_bg_data()) {
     }
     new_hash <- digest::sha1(nc)
     if (old_hash == new_hash) {
-        message("skipping R calc (data unchanged)\n")
+        message("skipping R calc (data unchanged)")
         return()
     }
-    message("calculating R...\n")
+    message("calculating R...")
     # COVID-19 generation times gamma distribution (transformed parameters)
     # per Ferretti et al. https://doi.org/10.1101/2020.09.04.20188516
     mu <- 5.509073

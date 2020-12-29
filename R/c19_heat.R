@@ -77,21 +77,14 @@ c19_heat <- function(country_data = c19_bg_data()) {
 
 #' example output
 #' @export
-c19_heat_save <- function() {
-    export <- function(
-        plot,
-        file,
-        w = getOption("c19bg.output")$width,
-        h = 5.5
-    ) {
-        out_dir <- file.path(getOption("c19bg.output_dir"), "save")
-        if (!file.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
-        file = file.path(out_dir, paste0(file, ".png"))
-        ggplot2::ggsave(file = file,
-                        width = w,
-                        height = h,
-                        dpi = 125,
-                        plot = plot)
+c19_heat_save <- function(file_ext = ".png", h = 5.5, ...) {
+    if (file_ext == ".svg") {
+        message("c19_heat_save: changing .svg output to .png")
+        file_ext = ".png"
     }
-    export(plot = c19_heat(), file = "C01_heat")
+    export(plot = c19_heat(),
+           file = "C01_heat",
+           file_ext = file_ext,
+           h = h,
+           ...)
 }

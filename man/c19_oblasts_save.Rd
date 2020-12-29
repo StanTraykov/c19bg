@@ -4,7 +4,7 @@
 \alias{c19_oblasts_save}
 \title{example output}
 \usage{
-c19_oblasts_save()
+c19_oblasts_save(...)
 }
 \description{
 example output

@@ -211,8 +211,8 @@ c19_oblasts <- function(
                 segment.color	= "dark gray",
                 segment.size = 0.3,
                 segment.alpha	= 0.5,
-                max.time = 5,
-                max.iter = 1000000,
+                max.time = 1,
+                max.iter = 100000,
                 bg.colour = "#ebebeb",
                 show.legend = FALSE
             ) +
@@ -225,27 +225,16 @@ c19_oblasts <- function(
 
 #' example output
 #' @export
-c19_oblasts_save <- function() {
-    export <- function(
-        plot,
-        file,
-        w = getOption("c19bg.output")$width,
-        h = getOption("c19bg.output")$height
-    ) {
-        out_dir <- file.path(getOption("c19bg.output_dir"), "save")
-        if (!file.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
-        file = file.path(out_dir, paste0(file, ".svg"))
-        ggplot2::ggsave(file = file, width = w, height = h, plot = plot)
-    }
-
+c19_oblasts_save <- function(...) {
     charts <- list(
-        list(file = "C02_oblasts_i100", i = TRUE, f = TRUE),
+        list(file = "C02_oblasts_i100k", i = TRUE, f = TRUE),
         list(file = "C03_oblasts_count", i = FALSE, f = TRUE),
         list(file = "C02_oblasts_i_cmp", i = TRUE, f = FALSE),
         list(file = "C03_oblasts_c_cmp", i = FALSE, f = FALSE)
     )
     for (c in charts) {
         export(file = c$file,
+               ...,
                plot = c19_oblasts(incid_100k = c$i, facet = c$f))
     }
 }

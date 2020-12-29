@@ -121,10 +121,3 @@ c19bg_setup <- function() {
 tra <- function(x) {
     getOption("c19bg.tra")(x)
 }
-
-#'@export
-c19_reload <- function(redownload = FALSE) {
-    c19_bg_data(reload = TRUE, redownload = redownload)
-    c19_eu_data(reload = TRUE, redownload = redownload)
-    invisible()
-}
