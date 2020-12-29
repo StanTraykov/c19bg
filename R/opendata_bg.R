@@ -3,11 +3,7 @@
 #' @importFrom magrittr %>%
 
 process_bg_data <- function(redownload = FALSE) {
-    down_dir <- getOption("c19bg.down_dir")
-    if (!file.exists(down_dir)) dir.create(down_dir, recursive = TRUE)
-
-    csv_name <- function(x) file.path(down_dir, paste0(x, ".csv"))
-    read_csv <- getOption("c19bg.rc")
+    dot_csv <- function(x) paste0(x, ".csv")
 
     resources_to_csv <- function(resources, sleep_time = 0.3) {
         api_url <- 'https://data.egov.bg/api/getResourceData'
@@ -16,16 +12,16 @@ process_bg_data <- function(redownload = FALSE) {
                           bg_age = "8f62cfcf-a979-46d4-8317-4e1ab9cbd6a8",
                           bg_tst = "0ce4e9c3-5dfc-46e2-b4ab-42d840caab92")
         for (fn in names(resources)) {
-            full_name <- csv_name(fn)
-            if (redownload || !file.exists(full_name)) {
+            name <- paste0()
+            if (redownload || !datafile_exists(dot_csv(fn))) {
                 uri <- resources[[fn]]
                 api_data <- list(resource_uri = uri)
                 resp <- httr::POST(api_url, body = api_data, encode = "json")
                 parsed_data <- httr::content(resp, as = "parsed")[["data"]]
-                fields <- purrr::transpose(parsed_data[-1])
-                names(fields) <- parsed_data[[1]]
-                df <- data.frame(sapply(fields, unlist))
-                utils::write.csv(df, full_name, row.names = FALSE)
+                fields <-  purrr::transpose(parsed_data[-1],
+                                            .names = parsed_data[[1]])
+                tib <- tibble::as_tibble(lapply(fields, unlist))
+                tib_write_csv(tib, dot_csv(fn))
                 Sys.sleep(sleep_time)
             }
         }
@@ -34,27 +30,35 @@ process_bg_data <- function(redownload = FALSE) {
     resources_to_csv(resources)
 
     ##### age tab
-    age_tab <- read_csv(csv_name("bg_age")) # cases by age band
+    age_tab <- tib_read_csv(
+        file = "bg_age.csv",
+        col_types = paste0("D", strrep("i", 9))
+    )
     # repl. totals with daily incidence (losing one day of data)
     age_tab[-1, -1] <- age_tab[-1, -1] - age_tab[-nrow(age_tab), -1]
     age_tab <- age_tab[-1, ]
-    age_tab[, 1] <- as.Date(age_tab[, 1])
     names(age_tab)[1] <- "date"
-    names(age_tab)[10] <- "90+"
-    names(age_tab) <- sub("X([0-9]+)\\.\\.\\.([0-9]+)", "\\1-\\2",
-                          names(age_tab))
+    #names(age_tab)[10] <- "90+"
+    names(age_tab) <- gsub(" ", "", names(age_tab))
 
     ##### oblasts tab
-    obl_tab <- read_csv(file = csv_name("bg_obl"))
+    obl_tab <- tib_read_csv(
+        file = "bg_obl.csv",
+        col_types = paste0("D", strrep("i", 56)))
     # repl. totals with daily incidence (losing one day of data)
     obl_tab[-1, -1] <- obl_tab[-1, -1] - obl_tab[-nrow(obl_tab), -1]
     obl_tab <- obl_tab[-1, ]
-    obl_tab[, 1] <- as.Date(obl_tab[, 1])
     names(obl_tab)[1] <- "date"
 
     ##### gen tab (+ test tab)
-    gen_tab <- read_csv(file = csv_name("bg_gen"))
-    tst_tab <- read_csv(file = csv_name("bg_tst"))
+    gen_tab <- tib_read_csv(
+        file = "bg_gen.csv",
+        col_types = paste0("D", strrep("i", 11))
+    )
+    tst_tab <- tib_read_csv(
+        file = "bg_tst.csv",
+        col_types = paste0("D", strrep("i", 12))
+    )
     names(gen_tab) <- c(
         "date", "tests", "new_pcr_tests", "cases", "active_cases", "new_cases",
         "hospitalized", "in_icu", "recovered", "newly_recovered", "deaths",
@@ -65,8 +69,6 @@ process_bg_data <- function(redownload = FALSE) {
         "new_ag_tests", "cases", "pcr_cases", "ag_cases", "new_cases",
         "new_pcr_cases", "new_ag_cases"
     )
-    gen_tab[, 1] <- as.Date(gen_tab[, 1])
-    tst_tab[, 1] <- as.Date(tst_tab[, 1])
     begin_ag_tests = as.Date("2020-12-24")
 
 
@@ -131,12 +133,18 @@ process_bg_data <- function(redownload = FALSE) {
 c19_make_bg_data <- function() {
     processed_data <- list()
     get_data <- function(reload = FALSE, redownload = FALSE) {
-        if ((length(processed_data) == 0) || reload)
+        if ((length(processed_data) == 0) || reload || redownload)
             processed_data <<- process_bg_data(redownload = redownload)
-        return(processed_data)
+        invisible(processed_data)
     }
     return(get_data)
 }
 
+#' Provides access to Bulgarian COVID-19 data from data.egov.bg.
+#'
+#' @param reload reload from disk
+#' @param redownload refresh from internet
+#'
 #' @export
+#' @family data funcs
 c19_bg_data <- c19_make_bg_data()

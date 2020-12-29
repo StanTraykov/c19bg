@@ -2,10 +2,33 @@
 % Please edit documentation in R/c19_oblasts.R
 \name{c19_oblasts_save}
 \alias{c19_oblasts_save}
-\title{example output}
+\title{Saves the four oblasts plots (spaghetti / faceted versions of case counts
+and incidence per 100K).}
 \usage{
 c19_oblasts_save(...)
 }
-\description{
-example output
+\arguments{
+\item{...}{Passed export params: w (width), h (height), file_ext (".svg",
+".png", ".jpg"; others may work as well). Rest passed to ggplot2,
+e.g. quality for JPEG output.}
 }
+\description{
+Saves the four oblasts plots (spaghetti / faceted versions of case counts
+and incidence per 100K).
+}
+\examples{
+\dontrun{
+c19_oblasts_save() # default is SVG
+c19_oblasts_save(file_ext = ".png", dpi = 300)
+}
+}
+\seealso{
+Other output funcs: 
+\code{\link{c19_eu_plots_save}()},
+\code{\link{c19_heat_save}()},
+\code{\link{c19_inkmagick}()},
+\code{\link{c19_r_plot_save}()},
+\code{\link{c19_save_all}()},
+\code{\link{c19_var_plot_save}()}
+}
+\concept{output funcs}

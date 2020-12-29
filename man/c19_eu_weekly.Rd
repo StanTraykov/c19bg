@@ -2,7 +2,7 @@
 % Please edit documentation in R/c19_eu_plots.R
 \name{c19_eu_weekly}
 \alias{c19_eu_weekly}
-\title{Weekly plot from ECDC/EUROSTAT data}
+\title{Weekly plot using ECDC/EUROSTAT data.}
 \usage{
 c19_eu_weekly(
   indicator,
@@ -19,25 +19,24 @@ c19_eu_weekly(
 \item{indicator}{one of: "r14_cases", "r14_deaths", "em_1m", hosp_1m",
 "positivity", "tests_100k"}
 
-\item{continents}{def = c("Asia", "Africa", "Europe", "Oceania", "America")}
+\item{continents}{continents to include (only some stats available outside
+Europe/EU+)}
 
-\item{top_n}{number of lines to label (default 20)}
+\item{top_n}{number of lines to label}
 
-\item{lower_x}{week axis limit (default: NA = show all data)}
+\item{lower_x}{week axis limit (default NA = show all data)}
 
-\item{lower_y}{indicator axis limit (default: NA = show all data)}
+\item{lower_y}{indicator axis limit (default NA = show all data)}
 
-\item{label_fun}{function to apply to line labels (default = round)}
+\item{label_fun}{function to apply to line labels (default is to round)}
 
-\item{axis_labels}{how to label axis (default: scales::label_number())}
+\item{axis_labels}{axis labels, e.g. scales::label_number(),
+scales::label_percent()}
 
-\item{eu_data}{eu data (default: c19_eu_data())}
-}
-\value{
-A ggplot
+\item{eu_data}{eu data}
 }
 \description{
-Weekly plot from ECDC/EUROSTAT data
+Weekly plot using ECDC/EUROSTAT data.
 }
 \examples{
 \dontrun{
@@ -48,3 +47,15 @@ c19_eu_weekly(indicator = "positivity",
               axis_labels = scales::label_percent())
 }
 }
+\seealso{
+Other plot funcs: 
+\code{\link{c19_deaths_age}()},
+\code{\link{c19_deaths_factor}()},
+\code{\link{c19_deaths_map}()},
+\code{\link{c19_deaths_total}()},
+\code{\link{c19_heat}()},
+\code{\link{c19_oblasts}()},
+\code{\link{c19_r_plot}()},
+\code{\link{c19_var_plot}()}
+}
+\concept{plot funcs}

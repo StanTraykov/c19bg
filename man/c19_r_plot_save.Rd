@@ -2,10 +2,32 @@
 % Please edit documentation in R/c19_r_plot.R
 \name{c19_r_plot_save}
 \alias{c19_r_plot_save}
-\title{output example}
+\title{Saves the R plot.}
 \usage{
 c19_r_plot_save(...)
 }
-\description{
-output example
+\arguments{
+\item{...}{Passed export params: w (width), h (height), file_ext (".svg",
+".png", ".jpg"; others may work as well). Rest passed to ggplot2,
+e.g. dpi, quality for JPEG output.}
 }
+\description{
+Saves the R plot.
+}
+\examples{
+\dontrun{
+c19_r_plot_save() # default is SVG
+c19_r_plot_save(file_ext = ".png", dpi = 300)
+c19_r_plot_save(file_ext = ".jpg", dpi = 125, quality = 90)
+}
+}
+\seealso{
+Other output funcs: 
+\code{\link{c19_eu_plots_save}()},
+\code{\link{c19_heat_save}()},
+\code{\link{c19_inkmagick}()},
+\code{\link{c19_oblasts_save}()},
+\code{\link{c19_save_all}()},
+\code{\link{c19_var_plot_save}()}
+}
+\concept{output funcs}

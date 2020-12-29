@@ -2,10 +2,31 @@
 % Please edit documentation in R/c19_eu_plots.R
 \name{c19_eu_plots_save}
 \alias{c19_eu_plots_save}
-\title{example output                                                               #}
+\title{Saves various EU plots.}
 \usage{
 c19_eu_plots_save(...)
 }
-\description{
-example output                                                               #
+\arguments{
+\item{...}{Passed export params: w (width), h (height), file_ext (".svg",
+".png", ".jpg"; others may work as well). Rest passed to ggplot2,
+e.g. quality for JPEG output.}
 }
+\description{
+Saves various EU plots.
+}
+\examples{
+\dontrun{
+c19_eu_plots_save() # default is SVG
+c19_eu_plots_save(file_ext = ".jpg", quality = 100)
+}
+}
+\seealso{
+Other output funcs: 
+\code{\link{c19_heat_save}()},
+\code{\link{c19_inkmagick}()},
+\code{\link{c19_oblasts_save}()},
+\code{\link{c19_r_plot_save}()},
+\code{\link{c19_save_all}()},
+\code{\link{c19_var_plot_save}()}
+}
+\concept{output funcs}

@@ -19,7 +19,7 @@ make_eu_vis <- function(process_data = FALSE) {
     }
 
     line_sz <- list(
-        # for facetted plots
+        # for faceted plots
         hthin = 0.2,
         thin = 0.3,
         thick = 0.7,
@@ -28,10 +28,10 @@ make_eu_vis <- function(process_data = FALSE) {
         mthick = 0.8,
         wthick = 1.1
     )
-    line_cols = c( # facetted deaths plot
+    line_cols = c( # faceted deaths plot
         "#AAAAAA", "#BBAA00", "#008800", "#0000BB", "#000000", "#FF0000"
     )
-    col_legend = ggplot2::guide_legend( # facetted deaths plot
+    col_legend = ggplot2::guide_legend( # faceted deaths plot
         nrow = 1,
         override.aes = list(
             size = c(rep(line_sz$thin, 5), line_sz$thick)
@@ -183,19 +183,20 @@ make_eu_vis <- function(process_data = FALSE) {
 
 eu_vis <- make_eu_vis()
 
-#' Weekly plot from ECDC/EUROSTAT data
+#' Weekly plot using ECDC/EUROSTAT data.
 #'
 #' @param indicator one of: "r14_cases", "r14_deaths", "em_1m", hosp_1m",
 #'                  "positivity", "tests_100k"
-#' @param continents def = c("Asia", "Africa", "Europe", "Oceania", "America")
-#' @param top_n number of lines to label (default 20)
-#' @param lower_x week axis limit (default: NA = show all data)
-#' @param lower_y indicator axis limit (default: NA = show all data)
-#' @param label_fun function to apply to line labels (default = round)
-#' @param axis_labels how to label axis (default: scales::label_number())
-#' @param eu_data eu data (default: c19_eu_data())
+#' @param continents continents to include (only some stats available outside
+#'                   Europe/EU+)
+#' @param top_n number of lines to label
+#' @param lower_x week axis limit (default NA = show all data)
+#' @param lower_y indicator axis limit (default NA = show all data)
+#' @param label_fun function to apply to line labels (default is to round)
+#' @param axis_labels axis labels, e.g. scales::label_number(),
+#'                    scales::label_percent()
+#' @param eu_data eu data
 #'
-#' @return A ggplot
 #' @export
 #' @examples
 #' \dontrun{
@@ -205,6 +206,7 @@ eu_vis <- make_eu_vis()
 #'               label_fun = function(x) sprintf("%.1f%%", 100 * x),
 #'               axis_labels = scales::label_percent())
 #' }
+#' @family plot funcs
 c19_eu_weekly <- function(
     indicator,
     continents = c("Asia", "Africa", "Europe", "Oceania", "America"),
@@ -317,11 +319,21 @@ c19_eu_weekly <- function(
     return(plt)
 }
 
+#' Plots excess deaths factors for a selection of countries.
+#'
+#' @return A ggplot
+
+#' @param countries countries to plot; default NULL uses hard-coded selection.
+#' @param eu_data eu data
+#'
 #' @export
-c19_deaths_factor <- function(eu_data = c19_eu_data()) {
+#' @family plot funcs
+c19_deaths_factor <- function(countries = NULL, eu_data = c19_eu_data()) {
     vis <- eu_vis()
+    if (is.null(countries))
+        countries <- vis$comp_f
     pdata <- eu_data$factor_tab %>%
-        dplyr::filter(geo %in% vis$comp_f)
+        dplyr::filter(geo %in% countries)
     labeled_factors <- pdata %>% dplyr::filter(ed_factor > 1.2)
     plt <- ggplot2::ggplot(data = pdata,
                            mapping = ggplot2::aes(x = week)) +
@@ -354,8 +366,13 @@ c19_deaths_factor <- function(eu_data = c19_eu_data()) {
     return(plt)
 }
 
-#' contry by age groups plot (argument: country code, e.g. "BG", "UK", "EL")    #
+#' Plots deaths in a country by age band and week.
+#'
+#' @param country_code two-letter EU code e.g. "BG", "UK", "EL" (=Greece)
+#' @param eu_data eu data
+#'
 #' @export
+#' @family plot funcs
 c19_deaths_age <- function(country_code, eu_data = c19_eu_data()) {
     vis <- eu_vis()
     dtab <- eu_data$eurostat_deaths
@@ -394,8 +411,13 @@ c19_deaths_age <- function(country_code, eu_data = c19_eu_data()) {
     return(plt)
 }
 
-#' contry totals plot (argument: country code, e.g. "BG", "UK", "EL")           #
+#' Plots total weekly deaths for a country.
+#'
+#' @param country_code two-letter EU code e.g. "BG", "UK", "EL" (=Greece)
+#' @param eu_data eu data
+#'
 #' @export
+#' @family plot funcs
 c19_deaths_total <- function(country_code, eu_data = c19_eu_data()) {
     vis <- eu_vis()
     get_geo_names <- eu_data$get_geo_names
@@ -434,8 +456,12 @@ c19_deaths_total <- function(country_code, eu_data = c19_eu_data()) {
     return(plt)
 }
 
-#' map plot                                                                     #
+#' Plots comparative deaths map for EU+ countries.
+#'
+#' @param eu_data eu data
+#'
 #' @export
+#' @family plot funcs
 c19_deaths_map <- function(eu_data = c19_eu_data()) {
     vis <- eu_vis()
     last_bg_wk <- eu_data$last_week("BG")
@@ -469,8 +495,19 @@ c19_deaths_map <- function(eu_data = c19_eu_data()) {
     return(plt)
 }
 
-#' example output                                                               #
+#' Saves various EU plots.
+#'
+#' @param ... Passed export params: w (width), h (height), file_ext (".svg",
+#'            ".png", ".jpg"; others may work as well). Rest passed to ggplot2,
+#'            e.g. quality for JPEG output.
+#'
 #' @export
+#' @examples
+#' \dontrun{
+#' c19_eu_plots_save() # default is SVG
+#' c19_eu_plots_save(file_ext = ".jpg", quality = 100)
+#' }
+#' @family output funcs
 c19_eu_plots_save <- function(...) {
     export(
         plot = c19_eu_weekly(

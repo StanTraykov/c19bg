@@ -1,15 +1,46 @@
-# Production quality output -- using Inkscape for rasterization & ImageMagick
-# for JPEG compression yields slightly better results but is not really
-# necessary.
-#
-# * See the example functions at end of scripts for alternative simple output.
-#   -> You can run them all via save_all_charts() in helper.R
-#
-# * The return value of plot functions can also be used to:
-#   -> save to desired file format (SVG/PNG/JPG) via ggsave()
-#   -> plot to screen via plot() / print()
-
+#' Produces high-quality PNG & JPEG
+#'
+#' Production quality output using Inkscape for rasterization & ImageMagick
+#' for JPEG compression. (SVG output is the same quality as other functions.)
+#'
+#' Using these programs yields slightly better results but is not really
+#' necessary. c19_save_all() saves SVG at the same quality but produces
+#' lower-quality PNG/JPEG. You can also save individual plots using
+#' ggplot2::ggsave() or plot to screen (e.g. [c19_heat()] or [print(c19_heat())]
+#' in non-interactive mode).
+#'
+#' Output files will be stored in folders c19bg/plots/MMMDD (month-day).
+#' Downloaded and calculated data will be stored in c19bg/data.
+#'
+#' Paths to Inkscape and ImageMagick can be set via options.
+#'
+#' @param var whether to output various data.egov.bg-sourced plots
+#' @param eu whether to output EUROSTAT/ECDC-sourced plots
+#' @param r whether to plot r (incl. time-consuming calculation)
+#' @param d_all whether to plot age band death plots for countries other than BG
+#'
 #' @export
+#' @examples
+#' \dontrun{
+#' # set options
+#' options(c19bg.output = list(
+#'   inkscape = "\"C:\\Program Files\\Inkscape\\bin\\inkscape.exe\"",
+#'   inkopts = "-w %d --export-filename",
+#'   magick = "magick"  # works, if it's in PATH
+#'   imgkopts = "-quality 100",
+#'   pixwidth = 1375,
+#'   width = 11,
+#'   height = 7,
+#' ))
+#' options(c19bg.output_dir = "c19bg/plots")
+#'
+#' # standard run
+#' c19_inkmagick()
+#'
+#' # include country-level age band plots from EUROSTAT demo mortality database
+#' c19_inkmagick(d_all = TRUE)
+#' }
+#' @family output funcs
 c19_inkmagick <- function(var = TRUE, eu = TRUE, r = TRUE, d_all = FALSE) {
     # load fonts on Windows to use the option-supplied font for bitmap output
     if (.Platform$OS.type == "windows" &&

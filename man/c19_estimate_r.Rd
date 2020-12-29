@@ -2,13 +2,29 @@
 % Please edit documentation in R/c19_estimate_r.R
 \name{c19_estimate_r}
 \alias{c19_estimate_r}
-\title{Estimate R values.}
+\title{Estimate reproductive number for Bulgaria.}
 \usage{
 c19_estimate_r(country_data = c19_bg_data())
 }
 \arguments{
-\item{country_data}{test country data (default: c19_bg_data())}
+\item{country_data}{country data}
 }
 \description{
-Estimate R values.
+Uses package EpiEstim by Cori et al. https://doi.org/10.1093/aje/kwt133
+Gen. times per Ferretti et al. https://doi.org/10.1101/2020.09.04.20188516
+Explores a range of gen time distributions that are likely for Bulgaria.
+See longer explanation in repo wiki: https://github.com/StanTraykov/c19bg
+}
+\details{
+Also stores a hash of the input data (.Rhash in data dir) and skips
+calculation if hash matches and estR.csv is already present.
+}
+\examples{
+\dontrun{
+c19_estimate_r() # save to csv file
+result <- c19_estimate_r() # also save to variable
+}
+}
+\seealso{
+[c19_r_plot()]
 }

@@ -2,10 +2,27 @@
 % Please edit documentation in R/c19_eu_plots.R
 \name{c19_deaths_age}
 \alias{c19_deaths_age}
-\title{contry by age groups plot (argument: country code, e.g. "BG", "UK", "EL")    #}
+\title{Plots deaths in a country by age band and week.}
 \usage{
 c19_deaths_age(country_code, eu_data = c19_eu_data())
 }
-\description{
-contry by age groups plot (argument: country code, e.g. "BG", "UK", "EL")    #
+\arguments{
+\item{country_code}{two-letter EU code e.g. "BG", "UK", "EL" (=Greece)}
+
+\item{eu_data}{eu data}
 }
+\description{
+Plots deaths in a country by age band and week.
+}
+\seealso{
+Other plot funcs: 
+\code{\link{c19_deaths_factor}()},
+\code{\link{c19_deaths_map}()},
+\code{\link{c19_deaths_total}()},
+\code{\link{c19_eu_weekly}()},
+\code{\link{c19_heat}()},
+\code{\link{c19_oblasts}()},
+\code{\link{c19_r_plot}()},
+\code{\link{c19_var_plot}()}
+}
+\concept{plot funcs}

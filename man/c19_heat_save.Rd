@@ -2,10 +2,36 @@
 % Please edit documentation in R/c19_heat.R
 \name{c19_heat_save}
 \alias{c19_heat_save}
-\title{example output}
+\title{Saves the incidence heat map.}
 \usage{
 c19_heat_save(file_ext = ".png", h = 5.5, ...)
 }
-\description{
-example output
+\arguments{
+\item{file_ext}{file extension (e.g. ".png", ".jpg"). ".svg" gets changed
+to ".png" currently as the SVG output is unsatisfactory.}
+
+\item{h}{height in inches}
+
+\item{...}{Passed export params, incl. w (width). Rest passed to ggplot2,
+e.g. dpi, quality for JPEG output.}
 }
+\description{
+Saves the incidence heat map.
+}
+\examples{
+\dontrun{
+c19_heat_save() # default is png for screen reading
+c19_heat_save(dpi = 300) # e.g. for print
+c19_heat_save(file_ext = ".jpg", w = 12, h = 4.5, dpi = 125, quality = 100)
+}
+}
+\seealso{
+Other output funcs: 
+\code{\link{c19_eu_plots_save}()},
+\code{\link{c19_inkmagick}()},
+\code{\link{c19_oblasts_save}()},
+\code{\link{c19_r_plot_save}()},
+\code{\link{c19_save_all}()},
+\code{\link{c19_var_plot_save}()}
+}
+\concept{output funcs}

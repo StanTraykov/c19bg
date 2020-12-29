@@ -104,12 +104,14 @@ oblasts_tidy <- function(country_data) {
 }
 
 
-#' Oblasts incidence plot
-#' @param incid_100k whether to plot raw incidence or per 100K
-#' @param facet whether to facet plot
-#' @param country_data country data (defaults to BG data)
+#' Oblasts incidence plot.
+#'
+#' @param incid_100k whether to plot raw incidence (case counts) or per 100K
+#' @param facet whether to facet plot (individual plots on map)
+#' @param country_data country data
 #'
 #' @export
+#' @family plot funcs
 c19_oblasts <- function(
     incid_100k,
     facet = TRUE,
@@ -225,8 +227,20 @@ c19_oblasts <- function(
     return(plt)
 }
 
-#' example output
+#' Saves the four oblasts plots (spaghetti / faceted versions of case counts
+#' and incidence per 100K).
+#'
+#' @param ... Passed export params: w (width), h (height), file_ext (".svg",
+#'            ".png", ".jpg"; others may work as well). Rest passed to ggplot2,
+#'            e.g. quality for JPEG output.
+#'
 #' @export
+#' @examples
+#' \dontrun{
+#' c19_oblasts_save() # default is SVG
+#' c19_oblasts_save(file_ext = ".png", dpi = 300)
+#' }
+#' @family output funcs
 c19_oblasts_save <- function(...) {
     charts <- list(
         list(file = "C02_oblasts_i100k", i = TRUE, f = TRUE),

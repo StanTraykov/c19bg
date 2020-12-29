@@ -291,18 +291,20 @@ var_plot_tidy <- function(country_data) {
     return(ftab)
 }
 
-#' Various plots
+#' Various plots from data.gov.bg data.
 #'
 #' @param chart one of: "casesdeaths" | "age" | "dis" | "cases" |
 #' "hospitalized" | "positivity" | "pospcr" | "posag"
-#' @param roll_func function to roll, e.g. mean (default: NULL)
-#' @param roll_window window for rull func (default: 7)
+#' @param roll_func function to roll, e.g. mean (default NULL = raw daily)
+#' @param roll_window window for roll func in days (e.g. 7, 14)
 #' @param roll_align rolling alignment (default: "right")
 #' @param roll_fill fill missing values for rolling function (default: NA)
-#' @param line_legend regex specifying lines that should be labelled in-plot
-#' @param country_data data
+#' @param line_legend regular expression specifying lines that should be
+#'                    labelled in-plot
+#' @param country_data country data
 #'
 #' @export
+#' @family plot funcs
 c19_var_plot <- function(
     chart,
     roll_func = NULL,
@@ -495,8 +497,20 @@ c19_var_plot <- function(
     return(plt)
 }
 
-#' output example
+#' Saves various BG plots based on data.gov.bg.
+#'
+#' @param ... Passed export params: w (width), h (height), file_ext (".svg",
+#'            ".png", ".jpg"; others may work as well). Rest passed to ggplot2,
+#'            e.g. quality for JPEG output.
+#'
 #' @export
+#' @examples
+#' \dontrun{
+#' c19_var_plot_save() # default is SVG
+#' c19_var_plot_save(file_ext = ".png", dpi = 300)
+#' c19_var_plot_save(file_ext = ".jpg", dpi = 125, quality = 100)
+#' }
+#' @family output funcs
 c19_var_plot_save <- function(...) {
     export(file = "C09_pos",
            ...,

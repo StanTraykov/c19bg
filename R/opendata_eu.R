@@ -3,66 +3,52 @@
 #' @importFrom magrittr %>%
 
 process_eu_data <- function(redownload = FALSE) {
-    read_delim <- getOption("c19bg.rd")
-    read_csv <- getOption("c19bg.rc")
-
-    dl_missing <- function(url, filename, zip_local = FALSE) {
-        down_dir <- getOption("c19bg.down_dir")
-        if (!file.exists(down_dir)) dir.create(down_dir, recursive = TRUE)
-        local_fn <- file.path(down_dir, filename)
-        if (zip_local)
-            down_dest <- paste0(local_fn, ".temp")
-        else
-            down_dest <- local_fn
-        if (redownload || !file.exists(local_fn)) {
-            utils::download.file(url, down_dest)
-            if (zip_local) {
-                R.utils::gzip(down_dest,
-                              destname = local_fn,
-                              overwrite = TRUE,
-                              remove = TRUE)
-            }
+    tib_eu <- function(url, file, zip = FALSE, tab_delim = FALSE, ...) {
+        if (redownload || !datafile_exists(file)) {
+            r <- download(url, file, zip)
         }
-        return(local_fn)
+        if (tab_delim)
+            t <- tib_read_tsv(file, ...)
+        else
+            t <- tib_read_csv(file, ...)
+        return(t)
     }
 
     # ECDC nat'l case death
-    local_ncd_file <- dl_missing(
+    ncd_tab <- tib_eu(
         url = "https://opendata.ecdc.europa.eu/covid19/nationalcasedeath/csv",
-        filename = "ecdc_ncd.csv.gz",
-        zip_local = TRUE
+        file = "ecdc_ncd.csv.gz",
+        zip = TRUE,
+        col_types = "cccdcdcddc"
     )
-
     # ECDC hosp
-    local_hosp_file <- dl_missing(
+    hosp_tab <- tib_eu(
         url = paste0("https://opendata.ecdc.europa.eu/covid19/",
                      "hospitalicuadmissionrates/csv/data.csv"),
-        filename = "ecdc_hosp.csv.gz",
-        zip_local = TRUE
+        file = "ecdc_hosp.csv.gz",
+        zip = TRUE,
+        col_types = "ccDcd__"
     )
-
     # EUROSTAT deaths 10yr bands
-    deaths_file <- "demo_r_mwk_10.tsv.gz"
-    local_deaths_file <- dl_missing(
-        url = paste0("https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/",
-                     "BulkDownloadListing?file=data/",
-                     deaths_file),
-        filename = deaths_file
+    dtab <- tib_eu(
+        url = paste0("https://ec.europa.eu/eurostat/estat-navtree-portlet-prod",
+                     "/BulkDownloadListing?file=data/demo_r_mwk_10.tsv.gz"),
+        file = "eurostat_dmwk10.tsv.gz",
+        tab_delim = TRUE,
+        col_types = readr::cols()
     )
-
     # ECDC testing
-    local_tstg_file <- dl_missing(
+    tstg_tab <- tib_eu(
         url = "https://opendata.ecdc.europa.eu/covid19/testing/csv",
-        filename = "ecdc_tstg.csv.gz",
-        zip_local = TRUE
+        file = "ecdc_tstg.csv.gz",
+        zip = TRUE,
+        col_types = "cccddddd_"
     )
 
     # country names
-    bg_names <- intern_data$bg_cnames
-    bg_names <- bg_names %>%
+    bg_names <- intern_data$bg_cnames %>%
         dplyr::rename(geo_name = bg_name)
-    codes_tab <- intern_data$ccodes
-    codes_tab <- codes_tab %>%
+    codes_tab <- intern_data$ccodes %>%
         dplyr::left_join(bg_names, by = "tl_code") # use Bulgarian names
 
     # return geo names in target language from EU 2-letter or ISO 3-letter codes
@@ -106,14 +92,13 @@ process_eu_data <- function(redownload = FALSE) {
         return(x)
     }
 
-    dtab <- read_delim(gzfile(local_deaths_file))
     dtab <- cbind(stringr::str_split_fixed(dtab[[1]], ",", 4), dtab[, -1])
     names(dtab) <- c("age", "sex", "unit", "geo", names(dtab)[-(1:4)])
     dtab <- dtab %>%
         dplyr::select(dplyr::matches("(201[0-9]|2020)W[0-5]|age|geo|sex")) %>%
         tidyr::pivot_longer(cols = tidyr::matches("20..W"),
                             names_to = c("year", "week"),
-                            names_pattern = "X(....)W(..)",
+                            names_pattern = "(....)W(..)",
                             names_transform = list(year = as.integer,
                                                    week = as.integer),
                             values_to = "deaths") %>%
@@ -141,8 +126,6 @@ process_eu_data <- function(redownload = FALSE) {
         dplyr::ungroup()
 
     ## ECDC nat'l cases / deaths
-    ncd_tab <- read_csv(gzfile(local_ncd_file))
-    names(ncd_tab)[1] = "country" # BOM removal (fileEncoding broken on Win)
     ncd_tab <- ncd_tab %>%
         dplyr::rename(tl_code = country_code) %>%
         dplyr::right_join(
@@ -172,14 +155,11 @@ process_eu_data <- function(redownload = FALSE) {
         dplyr::mutate(em_1m = 1000000 * excess_deaths_star / population)
 
     # add hospit. per ECDC
-    hosp_tab <- read_csv(gzfile(local_hosp_file))
-    names(hosp_tab)[1] = "country"
     hosp_tab <- hosp_tab %>%
         dplyr::filter(indicator == "Daily hospital occupancy") %>%
         dplyr::rename(hosp_count = value) %>%
         dplyr::select("country", "date", "year_week", "hosp_count") %>%
         dplyr::mutate(
-            date = as.Date(date),
             year = as.integer(substr(year_week, 1, 4)),
             week = as.integer(substr(year_week, 7, 8))
         ) %>%
@@ -192,8 +172,6 @@ process_eu_data <- function(redownload = FALSE) {
         dplyr::mutate(hosp_1m = 1000000 * hosp_count / population)
 
     # add testing per ECDC
-    tstg_tab <- read_csv(gzfile(local_tstg_file))
-    names(tstg_tab)[1] = "country"
     tstg_tab <- tstg_tab %>%
         dplyr::mutate(
             year = as.integer(substr(year_week, 1, 4)),
@@ -238,12 +216,18 @@ process_eu_data <- function(redownload = FALSE) {
 c19_make_eu_data <- function() {
     processed_data <- list()
     get_data <- function(reload = FALSE, redownload = FALSE) {
-        if ((length(processed_data) == 0) || reload)
+        if ((length(processed_data) == 0) || reload || redownload)
             processed_data <<- process_eu_data(redownload = redownload)
-        return(processed_data)
+        invisible(processed_data)
     }
     return(get_data)
 }
 
+#' Provides access to ECDC/EUROSTAT COVID-19 data.
+#'
+#' @param reload reload from disk
+#' @param redownload refresh from internet
+#'
 #' @export
+#' @family data funcs
 c19_eu_data <- c19_make_eu_data()

@@ -2,17 +2,29 @@
 % Please edit documentation in R/c19_oblasts.R
 \name{c19_oblasts}
 \alias{c19_oblasts}
-\title{Oblasts incidence plot}
+\title{Oblasts incidence plot.}
 \usage{
 c19_oblasts(incid_100k, facet = TRUE, country_data = c19_bg_data())
 }
 \arguments{
-\item{incid_100k}{whether to plot raw incidence or per 100K}
+\item{incid_100k}{whether to plot raw incidence (case counts) or per 100K}
 
-\item{facet}{whether to facet plot}
+\item{facet}{whether to facet plot (individual plots on map)}
 
-\item{country_data}{country data (defaults to BG data)}
+\item{country_data}{country data}
 }
 \description{
-Oblasts incidence plot
+Oblasts incidence plot.
 }
+\seealso{
+Other plot funcs: 
+\code{\link{c19_deaths_age}()},
+\code{\link{c19_deaths_factor}()},
+\code{\link{c19_deaths_map}()},
+\code{\link{c19_deaths_total}()},
+\code{\link{c19_eu_weekly}()},
+\code{\link{c19_heat}()},
+\code{\link{c19_r_plot}()},
+\code{\link{c19_var_plot}()}
+}
+\concept{plot funcs}

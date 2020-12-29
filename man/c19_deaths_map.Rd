@@ -2,10 +2,25 @@
 % Please edit documentation in R/c19_eu_plots.R
 \name{c19_deaths_map}
 \alias{c19_deaths_map}
-\title{map plot                                                                     #}
+\title{Plots comparative deaths map for EU+ countries.}
 \usage{
 c19_deaths_map(eu_data = c19_eu_data())
 }
-\description{
-map plot                                                                     #
+\arguments{
+\item{eu_data}{eu data}
 }
+\description{
+Plots comparative deaths map for EU+ countries.
+}
+\seealso{
+Other plot funcs: 
+\code{\link{c19_deaths_age}()},
+\code{\link{c19_deaths_factor}()},
+\code{\link{c19_deaths_total}()},
+\code{\link{c19_eu_weekly}()},
+\code{\link{c19_heat}()},
+\code{\link{c19_oblasts}()},
+\code{\link{c19_r_plot}()},
+\code{\link{c19_var_plot}()}
+}
+\concept{plot funcs}

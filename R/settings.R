@@ -17,7 +17,7 @@ c19bg_setup <- function() {
     parent_dir <- "c19bg" # for plots and downloads
     # general config
     cfg <- list(
-        c19bg.down_dir = file.path(parent_dir, "downloads"),
+        c19bg.data_dir = file.path(parent_dir, "data"),
         c19bg.output_dir = file.path(parent_dir, "plots"),
         c19bg.font_family = "Calibri", # font; uses default, if not found
         c19bg.font_size = 14, # base size (prefer changing font_scale below)

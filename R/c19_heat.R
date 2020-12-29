@@ -33,8 +33,12 @@ heat_tidy <- function(atab) {
     return(atab)
 }
 
-# Plot incidence age bands heat map
+#' Plot incidence/100K heat map along age bands.
+#'
+#' @param country_data country data
+#'
 #' @export
+#' @family plot funcs
 c19_heat <- function(country_data = c19_bg_data()) {
     atab <- heat_tidy(country_data$age)
     plt <- ggplot2::ggplot(data = atab,
@@ -75,8 +79,23 @@ c19_heat <- function(country_data = c19_bg_data()) {
     return(plt)
 }
 
-#' example output
+#' Saves the incidence heat map.
+#'
+#' @param ... Passed export params, incl. w (width). Rest passed to ggplot2,
+#'            e.g. dpi, quality for JPEG output.
+#' @param file_ext file extension (e.g. ".png", ".jpg"). ".svg" gets changed
+#'                 to ".png" currently as the SVG output is unsatisfactory.
+#' @param h height in inches
+#'
 #' @export
+#' @examples
+#' \dontrun{
+#' c19_heat_save() # default is png for screen reading
+#' c19_heat_save(dpi = 300) # e.g. for print
+#' c19_heat_save(file_ext = ".jpg", w = 12, h = 4.5, dpi = 125, quality = 100)
+#' }
+#' @family output funcs
+
 c19_heat_save <- function(file_ext = ".png", h = 5.5, ...) {
     if (file_ext == ".svg") {
         message("c19_heat_save: changing .svg output to .png")

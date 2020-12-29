@@ -93,12 +93,13 @@ make_r_plot_vis <- function(process_data = FALSE) {
 r_plot_vis <- make_r_plot_vis()
 
 r_plot_tidy <- function(country_data) {
-    read_csv <- getOption("c19bg.rc")
-    down_dir <- getOption("c19bg.down_dir")
-    estr_csv <- file.path(down_dir, "estR.csv")
-    if (!file.exists(estr_csv))
+    estr_csv <- "estR.csv"
+    if (!datafile_exists(estr_csv))
         stop("can't plot R without R estimate; run c19_estimate_r() first")
-    rtab <- read_csv(file = estr_csv)
+    rtab <- tib_read_csv(
+        file = estr_csv,
+        col_types = paste0("ii", strrep("d", 9))
+    )
     rtab <- rbind(NA, NA, NA, NA, NA, NA, rtab, NA)
     ftab <- country_data$gen_inc_hist %>%
         dplyr::mutate(s7_nc = zoo::rollsum(new_cases,
@@ -118,8 +119,15 @@ r_plot_tidy <- function(country_data) {
     return(dplyr::bind_cols(ftab, rtab))
 }
 
-#' R plot
+#' R plot, incl. case numbers, testing and positivity.
+#'
+#' R needs to be estimated first using [c19_estimate_r()].
+#'
+#' @param country_data country data
+#'
 #' @export
+#' @family plot funcs
+#' @seealso [c19_estimate_r()]
 c19_r_plot <- function(country_data = c19_bg_data()) {
     ftab <- r_plot_tidy(country_data)
     vis <- r_plot_vis()
@@ -137,7 +145,7 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
     ttab <- ftab %>% dplyr::filter(date >= ftab$date[1] + vis$skip_to)
     cmx <- max(ttab %>% dplyr::pull(new_cases),
                na.rm = TRUE)
-    rmx <- max(ttab %>% dplyr::pull(R.Quantile.0.975.R.),
+    rmx <- max(ttab %>% dplyr::pull(`Quantile.0.975(R)`),
                na.rm = TRUE)
     pmx <- max(ttab %>% dplyr::pull(s7_nt),
                na.rm = TRUE)
@@ -155,7 +163,7 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
                                                   color = "C_mva"),
                            linetype = vis$lty_mva,
                            size = vis$line_sz) +
-        ggplot2::geom_line(mapping = ggplot2::aes(y = R.Median.R. * r_scale,
+        ggplot2::geom_line(mapping = ggplot2::aes(y = `Median(R)` * r_scale,
                                                   color = "D_med"),
                            linetype = vis$lty_norm,
                            size = vis$line_sz) +
@@ -168,8 +176,8 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
                            linetype = vis$lty_norm,
                            size = vis$line_sz) +
         ggplot2::geom_ribbon(
-            mapping = ggplot2::aes(ymin = R.Quantile.0.025.R. * r_scale,
-                                   ymax = R.Quantile.0.975.R. * r_scale,
+            mapping = ggplot2::aes(ymin = `Quantile.0.025(R)` * r_scale,
+                                   ymax = `Quantile.0.975(R)` * r_scale,
                                    fill = "A_ribbon")
         ) +
         # % positivity labels
@@ -205,9 +213,9 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
                 dplyr::filter(date == plot_end_date - 1),
             mapping = ggplot2::aes(
                 x = date,
-                y = R.Median.R. * r_scale,
+                y = `Median(R)` * r_scale,
                 color = "D_med",
-                label = format(round(R.Median.R., 2), nsmall = 2)
+                label = format(round(`Median(R)`, 2), nsmall = 2)
             ),
             family = vis$font_family,
             size = vis$font_size_R,
@@ -220,8 +228,8 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
                 dplyr::filter(date == plot_end_date - 1),
             mapping = ggplot2::aes(
                 x = date,
-                y =  r_scale * min(R.Quantile.0.025.R., R.Median.R. - 0.1),
-                label = format(round(R.Quantile.0.025.R., 2), nsmall = 2)
+                y =  r_scale * min(`Quantile.0.025(R)`, `Median(R)` - 0.1),
+                label = format(round(`Quantile.0.025(R)`, 2), nsmall = 2)
             ),
             color = vis$clr$cri_txt,
             family = vis$font_family,
@@ -235,8 +243,8 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
                 dplyr::filter(date == plot_end_date - 1),
             mapping = ggplot2::aes(
                 x = date,
-                y = r_scale * max(R.Quantile.0.975.R., R.Median.R. + 0.1),
-                label = format(round(R.Quantile.0.975.R., 2), nsmall = 2)
+                y = r_scale * max(`Quantile.0.975(R)`, `Median(R)` + 0.1),
+                label = format(round(`Quantile.0.975(R)`, 2), nsmall = 2)
             ),
             color = vis$clr$cri_txt,
             family = vis$font_family,
@@ -277,8 +285,20 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
     return(plt)
 }
 
-#' output example
+#' Saves the R plot.
+#'
+#' @param ... Passed export params: w (width), h (height), file_ext (".svg",
+#'            ".png", ".jpg"; others may work as well). Rest passed to ggplot2,
+#'            e.g. dpi, quality for JPEG output.
+#'
 #' @export
+#' @examples
+#' \dontrun{
+#' c19_r_plot_save() # default is SVG
+#' c19_r_plot_save(file_ext = ".png", dpi = 300)
+#' c19_r_plot_save(file_ext = ".jpg", dpi = 125, quality = 90)
+#' }
+#' @family output funcs
 c19_r_plot_save <- function(...) {
     c19_estimate_r()
     export(file = "C00_R", ..., plot = c19_r_plot())

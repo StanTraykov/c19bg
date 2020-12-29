@@ -2,10 +2,32 @@
 % Please edit documentation in R/c19_var_plot.R
 \name{c19_var_plot_save}
 \alias{c19_var_plot_save}
-\title{output example}
+\title{Saves various BG plots based on data.gov.bg.}
 \usage{
 c19_var_plot_save(...)
 }
-\description{
-output example
+\arguments{
+\item{...}{Passed export params: w (width), h (height), file_ext (".svg",
+".png", ".jpg"; others may work as well). Rest passed to ggplot2,
+e.g. quality for JPEG output.}
 }
+\description{
+Saves various BG plots based on data.gov.bg.
+}
+\examples{
+\dontrun{
+c19_var_plot_save() # default is SVG
+c19_var_plot_save(file_ext = ".png", dpi = 300)
+c19_var_plot_save(file_ext = ".jpg", dpi = 125, quality = 100)
+}
+}
+\seealso{
+Other output funcs: 
+\code{\link{c19_eu_plots_save}()},
+\code{\link{c19_heat_save}()},
+\code{\link{c19_inkmagick}()},
+\code{\link{c19_oblasts_save}()},
+\code{\link{c19_r_plot_save}()},
+\code{\link{c19_save_all}()}
+}
+\concept{output funcs}
