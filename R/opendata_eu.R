@@ -5,7 +5,6 @@
 process_eu_data <- function(redownload = FALSE) {
     read_delim <- getOption("c19bg.rd")
     read_csv <- getOption("c19bg.rc")
-    data_dir <- getOption("c19bg.data_dir")
 
     dl_missing <- function(url, filename, zip_local = FALSE) {
         down_dir <- getOption("c19bg.down_dir")
@@ -59,10 +58,10 @@ process_eu_data <- function(redownload = FALSE) {
     )
 
     # country names
-    bg_names <- read_csv(file.path(data_dir, "bg_cnames.csv"))
+    bg_names <- intern_data$bg_cnames
     bg_names <- bg_names %>%
         dplyr::rename(geo_name = bg_name)
-    codes_tab <- read_csv(file.path(data_dir, "ccodes.csv"))
+    codes_tab <- intern_data$ccodes
     codes_tab <- codes_tab %>%
         dplyr::left_join(bg_names, by = "tl_code") # use Bulgarian names
 

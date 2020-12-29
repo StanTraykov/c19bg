@@ -21,6 +21,7 @@ Imports:
     lubridate,
     magrittr,
     purrr,
+    readr,
     R.utils,
     scales,
     shadowtext,
@@ -43,3 +44,5 @@ Collate:
     'c19_var_plot.R'
     'opendata_bg.R'
     'opendata_eu.R'
+Depends: 
+    R (>= 2.10)

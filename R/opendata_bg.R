@@ -4,11 +4,9 @@
 
 process_bg_data <- function(redownload = FALSE) {
     down_dir <- getOption("c19bg.down_dir")
-    data_dir <- getOption("c19bg.data_dir")
     if (!file.exists(down_dir)) dir.create(down_dir, recursive = TRUE)
 
     csv_name <- function(x) file.path(down_dir, paste0(x, ".csv"))
-    read_tab <- getOption("c19bg.rt")
     read_csv <- getOption("c19bg.rc")
 
     resources_to_csv <- function(resources, sleep_time = 0.3) {
@@ -107,7 +105,7 @@ process_bg_data <- function(redownload = FALSE) {
         stop("failed sanity check: new case counts != summed age brackets")
 
     ##### gen tab incl. historical data
-    hist_tab <- read_csv(file.path(data_dir, "pre_opendata.csv")) %>%
+    hist_tab <- intern_data$pre_opendata %>%
         dplyr::mutate(
             date = as.Date(date),
             new_pcr_tests = new_tests,
@@ -117,7 +115,7 @@ process_bg_data <- function(redownload = FALSE) {
     hgn_tab <- dplyr::bind_rows(hist_tab, gen_tab)
 
     ##### oblasts grid
-    ggrid <- read_csv(file.path(data_dir, "oblasts.csv"))
+    ggrid <- intern_data$oblasts
 
     ##### bg_data
     bg_data <- list(

@@ -17,9 +17,6 @@ c19bg_setup <- function() {
     parent_dir <- "c19bg" # for plots and downloads
     # general config
     cfg <- list(
-        c19bg.data_dir = file.path(system.file(package = "c19bg",
-                                               mustWork = TRUE),
-                                   "data"),
         c19bg.down_dir = file.path(parent_dir, "downloads"),
         c19bg.output_dir = file.path(parent_dir, "plots"),
         c19bg.font_family = "Calibri", # font; uses default, if not found
@@ -102,22 +99,16 @@ c19bg_setup <- function() {
             return(t)
         }
     }
-
-    data_dir <- getOption("c19bg.data_dir", default = cfg$c19bg.data_dir)
-    trans <- cfg$c19bg.rc(file.path(data_dir, "trans_bg.csv"))
-    tra_f <- function(x) {
-        ret <- trans %>% dplyr::filter(id == x) %>% dplyr::pull(translation)
-        if (length(ret) == 0) {
-            warning("MISSING TRANSLATION FOR:\n\t", x)
-            return(x)
-        }
-        return(ret)
-    }
-
-    cfg$c19bg.tra <- tra_f
     return(cfg)
 }
 
 tra <- function(x) {
-    getOption("c19bg.tra")(x)
+    tr <- intern_data$trans_bg %>%
+        dplyr::filter(id == x) %>%
+        dplyr::pull(translation)
+    if (length(tr) == 0) {
+        warning("MISSING TRANSLATION FOR:\n\t", x)
+        return(x)
+    }
+    return(tr)
 }
