@@ -115,6 +115,7 @@
     <pre class="usage"><span class='fu'>c19_eu_weekly</span><span class='op'>(</span>
   <span class='va'>indicator</span>,
   continents <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Asia"</span>, <span class='st'>"Africa"</span>, <span class='st'>"Europe"</span>, <span class='st'>"Oceania"</span>, <span class='st'>"America"</span><span class='op'>)</span>,
+  highlight <span class='op'>=</span> <span class='st'>"BG"</span>,
   top_n <span class='op'>=</span> <span class='fl'>20</span>,
   lower_x <span class='op'>=</span> <span class='fl'>10</span>,
   lower_y <span class='op'>=</span> <span class='cn'>NA</span>,
@@ -135,6 +136,10 @@
       <th>continents</th>
       <td><p>continents to include (only some stats available outside
 Europe/EU+)</p></td>
+    </tr>
+    <tr>
+      <th>highlight</th>
+      <td><p>country to highlight (EU 2-ltr code, e.g. "EL" for Greece)</p></td>
     </tr>
     <tr>
       <th>top_n</th>
