@@ -2,7 +2,7 @@
 % Please edit documentation in R/c19_r_plot.R
 \name{c19_r_plot}
 \alias{c19_r_plot}
-\title{R plot, incl. case numbers, testing and positivity.}
+\title{Plot R, incl. daily cases and 7d-rolling mean, 7d testing and positivity.}
 \usage{
 c19_r_plot(country_data = c19_bg_data())
 }
@@ -10,10 +10,10 @@ c19_r_plot(country_data = c19_bg_data())
 \item{country_data}{country data}
 }
 \description{
-R needs to be estimated first using [c19_estimate_r()].
+R needs to be estimated first using \code{\link{c19_estimate_r}()}.
 }
 \seealso{
-[c19_estimate_r()]
+\code{\link{c19_estimate_r}()}
 
 Other plot funcs: 
 \code{\link{c19_deaths_age}()},

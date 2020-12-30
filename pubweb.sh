@@ -8,6 +8,7 @@ git_push="${git} push"
 git_fetch="${git} fetch"
 git_pull="${git} pull"
 git_stage="${git} add ."
+git_stage_docs="${git} add ../docs"
 git_commit="${git} commit -m"
 git_cur_time="${git} log --date iso-local -n 1 ."
 tday=$(date +%b%d)
@@ -26,6 +27,7 @@ fi
 pub_files="${src_dir}/svg/C*.svg ${src_dir}/svg/D00*.svg ${src_dir}/svg/D*BG.svg ${src_dir}/png/C*heat.png"
 cp -a ${pub_files} "${copy_dir}"
 cd "${copy_dir}" || exit 1
+${git_stage_docs}
 ${git_fetch} && ${git_pull} && ${git_stage} && ${git_commit} "auto upload ${src_dir} (${c_date})"
 # also update index.md with the last update time
 mdate=$(${git_cur_time} | grep Date: | sed -e 's/Date: *//')

@@ -2,7 +2,7 @@
 % Please edit documentation in R/c19_eu_plots.R
 \name{c19_deaths_age}
 \alias{c19_deaths_age}
-\title{Plots deaths in a country by age band and week.}
+\title{Plot deaths in a country by age band and week.}
 \usage{
 c19_deaths_age(country_code, eu_data = c19_eu_data())
 }
@@ -12,7 +12,7 @@ c19_deaths_age(country_code, eu_data = c19_eu_data())
 \item{eu_data}{eu data}
 }
 \description{
-Plots deaths in a country by age band and week.
+Plot deaths in a country by age band and week.
 }
 \seealso{
 Other plot funcs: 

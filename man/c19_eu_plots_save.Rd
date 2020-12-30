@@ -2,7 +2,7 @@
 % Please edit documentation in R/c19_eu_plots.R
 \name{c19_eu_plots_save}
 \alias{c19_eu_plots_save}
-\title{Saves various EU plots.}
+\title{Save various EU plots.}
 \usage{
 c19_eu_plots_save(...)
 }
@@ -12,7 +12,7 @@ c19_eu_plots_save(...)
 e.g. quality for JPEG output.}
 }
 \description{
-Saves various EU plots.
+Save various EU plots.
 }
 \examples{
 \dontrun{

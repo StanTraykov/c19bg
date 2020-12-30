@@ -1,13 +1,13 @@
-#' Produces high-quality PNG & JPEG
+#' Produce high-quality PNG & JPEG (along with SVG).
 #'
 #' Production quality output using Inkscape for rasterization & ImageMagick
 #' for JPEG compression. (SVG output is the same quality as other functions.)
 #'
 #' Using these programs yields slightly better results but is not really
-#' necessary. c19_save_all() saves SVG at the same quality but produces
+#' necessary. c19_save_all() saves SVG of the same quality but produces
 #' lower-quality PNG/JPEG. You can also save individual plots using
-#' ggplot2::ggsave() or plot to screen (e.g. [c19_heat()] or [print(c19_heat())]
-#' in non-interactive mode).
+#' ggplot2::ggsave() or plot to screen (e.g. \code{\link{c19_heat}()} or
+#' \code{print(\link{c19_heat}())} in non-interactive mode).
 #'
 #' Output files will be stored in folders c19bg/plots/MMMDD (month-day).
 #' Downloaded and calculated data will be stored in c19bg/data.

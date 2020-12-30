@@ -1,5 +1,3 @@
-# plot BG oblast data in a map: incidence (new cases) & incidence per 100K
-
 #' @importFrom magrittr %>%
 
 make_oblasts_vis <- function(process_data = FALSE) {
@@ -104,10 +102,11 @@ oblasts_tidy <- function(country_data) {
 }
 
 
-#' Oblasts incidence plot.
+#' Plot oblast incidence (per 100K or raw), faceted (map) or lumped ("spaghetti
+#' plot").
 #'
 #' @param incid_100k whether to plot raw incidence (case counts) or per 100K
-#' @param facet whether to facet plot (individual plots on map)
+#' @param facet whether to facet plot (individual plots on BG map)
 #' @param country_data country data
 #'
 #' @export

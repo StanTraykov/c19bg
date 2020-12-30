@@ -2,7 +2,7 @@
 % Please edit documentation in R/c19_eu_plots.R
 \name{c19_deaths_map}
 \alias{c19_deaths_map}
-\title{Plots comparative deaths map for EU+ countries.}
+\title{Plot comparative deaths map for EU+ countries.}
 \usage{
 c19_deaths_map(eu_data = c19_eu_data())
 }
@@ -10,7 +10,7 @@ c19_deaths_map(eu_data = c19_eu_data())
 \item{eu_data}{eu data}
 }
 \description{
-Plots comparative deaths map for EU+ countries.
+Plot comparative deaths map for EU+ countries.
 }
 \seealso{
 Other plot funcs: 

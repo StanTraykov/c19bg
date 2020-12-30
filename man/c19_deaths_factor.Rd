@@ -2,7 +2,7 @@
 % Please edit documentation in R/c19_eu_plots.R
 \name{c19_deaths_factor}
 \alias{c19_deaths_factor}
-\title{Plots excess deaths factors for a selection of countries.}
+\title{Plot excess deaths factors for a selection of countries.}
 \usage{
 c19_deaths_factor(countries = NULL, eu_data = c19_eu_data())
 }
@@ -15,7 +15,7 @@ c19_deaths_factor(countries = NULL, eu_data = c19_eu_data())
 A ggplot
 }
 \description{
-Plots excess deaths factors for a selection of countries.
+Plot excess deaths factors for a selection of countries.
 }
 \seealso{
 Other plot funcs: 

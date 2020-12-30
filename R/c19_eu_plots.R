@@ -319,7 +319,7 @@ c19_eu_weekly <- function(
     return(plt)
 }
 
-#' Plots excess deaths factors for a selection of countries.
+#' Plot excess deaths factors for a selection of countries.
 #'
 #' @return A ggplot
 
@@ -366,7 +366,7 @@ c19_deaths_factor <- function(countries = NULL, eu_data = c19_eu_data()) {
     return(plt)
 }
 
-#' Plots deaths in a country by age band and week.
+#' Plot deaths in a country by age band and week.
 #'
 #' @param country_code two-letter EU code e.g. "BG", "UK", "EL" (=Greece)
 #' @param eu_data eu data
@@ -411,7 +411,7 @@ c19_deaths_age <- function(country_code, eu_data = c19_eu_data()) {
     return(plt)
 }
 
-#' Plots total weekly deaths for a country.
+#' Plot total weekly deaths for a country.
 #'
 #' @param country_code two-letter EU code e.g. "BG", "UK", "EL" (=Greece)
 #' @param eu_data eu data
@@ -456,7 +456,7 @@ c19_deaths_total <- function(country_code, eu_data = c19_eu_data()) {
     return(plt)
 }
 
-#' Plots comparative deaths map for EU+ countries.
+#' Plot comparative deaths map for EU+ countries.
 #'
 #' @param eu_data eu data
 #'
@@ -495,7 +495,7 @@ c19_deaths_map <- function(eu_data = c19_eu_data()) {
     return(plt)
 }
 
-#' Saves various EU plots.
+#' Save various EU plots.
 #'
 #' @param ... Passed export params: w (width), h (height), file_ext (".svg",
 #'            ".png", ".jpg"; others may work as well). Rest passed to ggplot2,

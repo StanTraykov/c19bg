@@ -19,7 +19,7 @@
 #' c19_estimate_r() # save to csv file
 #' result <- c19_estimate_r() # also save to variable
 #' }
-#' @seealso [c19_r_plot()]
+#' @seealso \code{\link{c19_r_plot}()}
 c19_estimate_r <- function(country_data = c19_bg_data()) {
     nc <- country_data$gen_inc_hist$new_cases
     estr_csv <- "estR.csv"

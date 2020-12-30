@@ -2,7 +2,7 @@
 % Please edit documentation in R/c19_eu_plots.R
 \name{c19_deaths_total}
 \alias{c19_deaths_total}
-\title{Plots total weekly deaths for a country.}
+\title{Plot total weekly deaths for a country.}
 \usage{
 c19_deaths_total(country_code, eu_data = c19_eu_data())
 }
@@ -12,7 +12,7 @@ c19_deaths_total(country_code, eu_data = c19_eu_data())
 \item{eu_data}{eu data}
 }
 \description{
-Plots total weekly deaths for a country.
+Plot total weekly deaths for a country.
 }
 \seealso{
 Other plot funcs: 

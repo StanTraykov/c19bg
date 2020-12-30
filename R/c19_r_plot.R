@@ -1,5 +1,3 @@
-# R plot from estR.csv and gen data
-
 #' @importFrom magrittr %>%
 
 make_r_plot_vis <- function(process_data = FALSE) {
@@ -119,15 +117,15 @@ r_plot_tidy <- function(country_data) {
     return(dplyr::bind_cols(ftab, rtab))
 }
 
-#' R plot, incl. case numbers, testing and positivity.
+#' Plot R, incl. daily cases and 7d-rolling mean, 7d testing and positivity.
 #'
-#' R needs to be estimated first using [c19_estimate_r()].
+#' R needs to be estimated first using \code{\link{c19_estimate_r}()}.
 #'
 #' @param country_data country data
 #'
 #' @export
 #' @family plot funcs
-#' @seealso [c19_estimate_r()]
+#' @seealso \code{\link{c19_estimate_r}()}
 c19_r_plot <- function(country_data = c19_bg_data()) {
     ftab <- r_plot_tidy(country_data)
     vis <- r_plot_vis()

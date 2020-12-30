@@ -26,5 +26,5 @@ result <- c19_estimate_r() # also save to variable
 }
 }
 \seealso{
-[c19_r_plot()]
+\code{\link{c19_r_plot}()}
 }
