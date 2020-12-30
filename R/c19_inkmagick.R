@@ -18,6 +18,8 @@
 #' @param eu whether to output EUROSTAT/ECDC-sourced plots
 #' @param r whether to plot r (incl. time-consuming calculation)
 #' @param d_all whether to plot age band death plots for countries other than BG
+#' @param dl whether to refresh all data sets from the Internet
+#' @param rl whether to refresh all data sets from disk
 #'
 #' @export
 #' @examples
@@ -37,26 +39,38 @@
 #' # standard run
 #' c19_inkmagick()
 #'
+#' # redownload all data sets before running
+#' c19_inkmagick(dl = T)
+#'
 #' # include country-level age band plots from EUROSTAT demo mortality database
-#' c19_inkmagick(d_all = TRUE)
+#' c19_inkmagick(d_all = T)
 #' }
 #' @family output funcs
-c19_inkmagick <- function(var = TRUE, eu = TRUE, r = TRUE, d_all = FALSE) {
+c19_inkmagick <- function(var = TRUE,
+                          eu = TRUE,
+                          r = TRUE,
+                          d_all = FALSE,
+                          dl = FALSE,
+                          rl = FALSE) {
     # load fonts on Windows to use the option-supplied font for bitmap output
     if (.Platform$OS.type == "windows" &&
         "extrafont" %in% rownames(utils::installed.packages())) {
         extrafont::loadfonts(device = "win")
     }
+    if (dl || rl) {
+        message(paste("Reloading from",
+                      ifelse(dl, "the Internet.", "disk.")))
+        c19_reload(redownload = dl)
+    }
     out_parent <- getOption("c19bg.output_dir")
     out_dir <- file.path(out_parent, format(Sys.time(), "%b%d"))
-
-    ##### helper funcs
     dirs <- list(output = out_parent,
                  main = out_dir,
                  svg = file.path(out_dir, "svg"),
                  png = file.path(out_dir, "png"),
                  jpg = file.path(out_dir, "jpg"))
 
+    ##### helper funcs
     filenames <- function(fname) {
         fn <- list(svg = paste0(file.path(dirs$svg, fname), ".svg"),
                    png = paste0(file.path(dirs$png, fname), ".png"),

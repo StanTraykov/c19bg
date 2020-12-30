@@ -42,6 +42,8 @@ export <- function(
 #' @param file_ext extension (e.g. ".svg", ".png", ".jpg")
 #' @param dpi dots per inch
 #' @param funs functions to call (default: all)
+#' @param dl whether to refresh all data sets from the Internet
+#' @param rl whether to refresh all data sets from disk
 #' @param ... passed to individual save functions
 #'
 #' @export
@@ -64,12 +66,21 @@ c19_save_all <- function(file_ext = ".svg",
                              "c19_eu_plots_save",
                              "c19_r_plot_save"
                          ),
+                         dl = FALSE,
+                         rl = FALSE,
                          ...) {
     # load fonts on Windows to use the option-supplied font for bitmap output
     if (.Platform$OS.type == "windows" &&
         "extrafont" %in% rownames(utils::installed.packages())) {
         extrafont::loadfonts(device = "win")
     }
+
+    if (dl || rl) {
+        message(paste("Reloading from",
+                      ifelse(dl, "the Internet.", "disk.")))
+        c19_reload(redownload = dl)
+    }
+
     for (f in funs)
         do.call(f, args = list(file_ext = file_ext, dpi = dpi, ...))
     invisible()

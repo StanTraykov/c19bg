@@ -4,7 +4,14 @@
 \alias{c19_inkmagick}
 \title{Produces high-quality PNG & JPEG}
 \usage{
-c19_inkmagick(var = TRUE, eu = TRUE, r = TRUE, d_all = FALSE)
+c19_inkmagick(
+  var = TRUE,
+  eu = TRUE,
+  r = TRUE,
+  d_all = FALSE,
+  dl = FALSE,
+  rl = FALSE
+)
 }
 \arguments{
 \item{var}{whether to output various data.egov.bg-sourced plots}
@@ -14,6 +21,10 @@ c19_inkmagick(var = TRUE, eu = TRUE, r = TRUE, d_all = FALSE)
 \item{r}{whether to plot r (incl. time-consuming calculation)}
 
 \item{d_all}{whether to plot age band death plots for countries other than BG}
+
+\item{dl}{whether to refresh all data sets from the Internet}
+
+\item{rl}{whether to refresh all data sets from disk}
 }
 \description{
 Production quality output using Inkscape for rasterization & ImageMagick
@@ -48,8 +59,11 @@ options(c19bg.output_dir = "c19bg/plots")
 # standard run
 c19_inkmagick()
 
+# redownload all data sets before running
+c19_inkmagick(dl = T)
+
 # include country-level age band plots from EUROSTAT demo mortality database
-c19_inkmagick(d_all = TRUE)
+c19_inkmagick(d_all = T)
 }
 }
 \seealso{

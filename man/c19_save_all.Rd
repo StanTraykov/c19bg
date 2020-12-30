@@ -9,6 +9,8 @@ c19_save_all(
   dpi = 125,
   funs = c("c19_var_plot_save", "c19_heat_save", "c19_oblasts_save",
     "c19_eu_plots_save", "c19_r_plot_save"),
+  dl = FALSE,
+  rl = FALSE,
   ...
 )
 }
@@ -18,6 +20,10 @@ c19_save_all(
 \item{dpi}{dots per inch}
 
 \item{funs}{functions to call (default: all)}
+
+\item{dl}{whether to refresh all data sets from the Internet}
+
+\item{rl}{whether to refresh all data sets from disk}
 
 \item{...}{passed to individual save functions}
 }
