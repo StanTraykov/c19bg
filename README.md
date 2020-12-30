@@ -103,6 +103,12 @@ names(options())[grep("c19bg",names(options()))]
 ```R
 library(c19bg)
 
+# зареждане на шрифтове за екран/растерен запис (ако са инсталирани)
+if (.Platform$OS.type == "windows" &&
+        "extrafont" %in% rownames(installed.packages())) {
+    extrafont::loadfonts(device = "win")
+}
+
 # слчуаи по възрастови групи
 my_plot <- c19_var_plot("age",
                         roll_func = mean,
@@ -122,10 +128,6 @@ my_plot2
 c19_oblasts(incid_100k = TRUE) # извеждане директно на екран
 
 # запис във файл
-if (.Platform$OS.type == "windows" &&
-        "extrafont" %in% rownames(installed.packages())) {
-    extrafont::loadfonts(device = "win")
-}
 ggplot2::ggsave(file = "my_plot.png", width = 11, height = 7, plot = my_plot)
 
 # R-графика на екран
