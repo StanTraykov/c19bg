@@ -63,6 +63,35 @@ c19_reload(redownload = TRUE) # от Интернет
 
 *Забележка: Изчисляването на репродуктивното число R трае няколко минути, може и над 10 на по-стари компютри. Резултатите се запазват (вкл. при затваряне на R) до промяна в изходните данни.*
 
+## Опции
+
+Опциите могат да се зададат директно в R конзолата или в [.Rprofile или сроден файл](https://support.rstudio.com/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf) за автоматично изпълнение при стартирано на R.
+
+```R
+# промяна на шрифт
+options(c19bg.font_family = "Calibri")
+options(c19bg.font_scale = 1) # скалиране на всички текстове (напр. 0.8, 1.1)
+options(c19bg.font_size = 14) # базов размер (пробвайте първо font_scale)
+# Забележка: за промяна на размер/резолюция, използвайте аргумент dpi
+# във функциите за изход.
+
+options(c19bg.output_dir = "c19bg/plots") # ще бъдат създадени, ако ги няма
+options(c19bg.data_dir = "c19bg/data")
+
+options(c19bg.output = list(
+    inkopts = "-w %d --export-filename",
+    mgkopts = "-quality 100",
+    pixwidth = 1375,
+    width = 11,
+    height = 7,
+    inkscape = "\"C:\\Program Files\\Inkscape\\bin\\inkscape.exe\"",
+    magick = "magick"  # работи, ако е в PATH
+))
+
+# изобразяване на всички опции за c19bg
+names(options())[grep("c19bg",names(options()))]
+```
+
 ## Генериране на единични графики
 
 ```R
@@ -88,31 +117,6 @@ c19_r_plot()
 # помощ
 ?c19_eu_weekly
 ?c19_save_all #etc
-```
-
-## Опции
-
-```R
-# промяна на шрифт
-options(c19bg.font_family = "Calibri")
-options(c19bg.font_scale = 1) # скалиране на всички текстове (напр. 0.8, 1.1)
-options(c19bg.font_size = 14) # базов размер (пробвайте първо font_scale)
-
-options(c19bg.output_dir = "c19bg/plots")
-options(c19bg.data_dir = "c19bg/data")
-
-options(c19bg.output = list(
-    inkopts = "-w %d --export-filename",
-    mgkopts = "-quality 100",
-    pixwidth = 1375,
-    width = 11,
-    height = 7,
-    inkscape = "\"C:\\Program Files\\Inkscape\\bin\\inkscape.exe\"",
-    magick = "magick"  # работи, ако е в PATH
-))
-
-# изобразяване на всички опции за c19bg
-names(options())[grep("c19bg",names(options()))]
 ```
 
 ## Данни
