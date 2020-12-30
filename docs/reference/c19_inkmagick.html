@@ -73,7 +73,7 @@ for JPEG compression. (SVG output is the same quality as other functions.)" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">c19bg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -155,7 +155,7 @@ for JPEG compression. (SVG output is the same quality as other functions.)</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Using these programs yields slightly better results but is not really
-necessary. c19_save_all() saves SVG at the same quality but produces
+necessary. c19_save_all() saves SVG of the same quality but produces
 lower-quality PNG/JPEG. You can also save individual plots using
 ggplot2::ggsave() or plot to screen (e.g. [c19_heat()] or [print(c19_heat())]
 in non-interactive mode).</p>
@@ -179,7 +179,7 @@ Downloaded and calculated data will be stored in c19bg/data.</p>
   inkscape <span class='op'>=</span> <span class='st'>"\"C:\\Program Files\\Inkscape\\bin\\inkscape.exe\""</span>,
   inkopts <span class='op'>=</span> <span class='st'>"-w %d --export-filename"</span>,
   magick <span class='op'>=</span> <span class='st'>"magick"</span>,  <span class='co'># works, if it's in PATH</span>
-  imgkopts <span class='op'>=</span> <span class='st'>"-quality 100"</span>,
+  mgkopts <span class='op'>=</span> <span class='st'>"-quality 100"</span>,
   pixwidth <span class='op'>=</span> <span class='fl'>1375</span>,
   width <span class='op'>=</span> <span class='fl'>11</span>,
   height <span class='op'>=</span> <span class='fl'>7</span>,
