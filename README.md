@@ -104,10 +104,22 @@ names(options())[grep("c19bg",names(options()))]
 library(c19bg)
 
 # слчуаи по възрастови групи
-my_plot <- c19_var_plot("age", roll_func = mean, roll_window = 7, line_legend = "0")
+my_plot <- c19_var_plot("age",
+                        roll_func = mean,
+                        roll_window = 7,
+                        line_legend = "0")
+
+# 14-дневно плаващо средно за Европа, Америка с
+# изпъкване на Германия
+my_plot2 <-c19_eu_weekly("r14_cases",
+                         continents = c("Europe", "America"),
+                         lower_y = 0,
+                         highlight = "DE")
 
 # извеждане на екран
 my_plot # или print(my_plot) в неинтерактивен режим
+my_plot2
+c19_oblasts(incid_100k = TRUE) # извеждане директно на екран
 
 # запис във файл
 if (.Platform$OS.type == "windows" &&
