@@ -72,7 +72,7 @@ process_bg_data <- function(redownload = FALSE) {
 
     # gen_tst_by <- c("date", "tests", "cases", "new_cases", "new_pcr_cases")
     # TODO remove the following and uncomment above when the open data about
-    # new_pcr_tess gets fixed.
+    # new_pcr_tests gets fixed.
     gen_tst_by <- c("date", "tests", "cases", "new_cases") #TODO remove
     tst_tab <- tst_tab %>% dplyr::select(-"new_pcr_tests") #TODO remove
 
@@ -81,7 +81,7 @@ process_bg_data <- function(redownload = FALSE) {
     # We now calculate dialy ag tests because the open data field is cumulative
     # instead of daily (new_ag_tests wrongly matches ag_tests).
     if (identical(tst_tab$ag_tests, tst_tab$new_ag_tests)) {    #TODO remove
-        warning("Field new_ag_tests bogus at source; correctling locally.")
+        warning("Field new_ag_tests bogus at source; correcting locally.")
         tst_tab$new_ag_tests[-1] <- tst_tab$new_ag_tests[-1] -  #TODO remove
             tst_tab$new_ag_tests[-nrow(tst_tab)]                #TODO remove
     }                                                           #TODO remove
