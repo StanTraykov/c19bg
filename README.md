@@ -154,7 +154,10 @@ View(bg_data$age)          # по възраст (днвени)
 View(bg_data$subdivs)      # по области (дневни)
 ```
 
-Примерна заявка и графика (плаващо средно 7 дни по области)
+### Примерна заявка и графика
+
+Плаващо средно 7 дни по области.
+
 ```R
 library(dplyr)
 library(tidyr)
@@ -175,8 +178,12 @@ oblasts_table <- bg_data$subdivs %>%
                                  align = "right",
                                  fill = NA))
 
-ggplot(data = oblasts_table,
-       mapping = aes(x = date, y = mva7, color = oblast)) +
+# графика
+my_plot <- ggplot(data = oblasts_table,
+           mapping = aes(x = date, y = mva7, color = oblast)) +
     geom_line()
+    
+my_plot # изобразяване на екран
+ggsave(file = "my_plot.svg", plot = my_plot, width = 13, height = 8)
 ```
 
