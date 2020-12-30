@@ -204,7 +204,7 @@ oblasts_table <- bg_data$subdivs %>%
 
 # графика
 my_plot <- ggplot(data = oblasts_table,
-           mapping = aes(x = date, y = mva7, color = oblast)) +
+                  mapping = aes(x = date, y = mva7, color = oblast)) +
     geom_line()
     
 my_plot # изобразяване на екран
