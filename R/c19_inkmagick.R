@@ -29,7 +29,7 @@
 #'   inkscape = "\"C:\\Program Files\\Inkscape\\bin\\inkscape.exe\"",
 #'   inkopts = "-w %d --export-filename",
 #'   magick = "magick",  # works, if it's in PATH
-#'   imgkopts = "-quality 100",
+#'   mgkopts = "-quality 100",
 #'   pixwidth = 1375,
 #'   width = 11,
 #'   height = 7,
