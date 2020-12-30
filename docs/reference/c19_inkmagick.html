@@ -114,7 +114,14 @@ for JPEG compression. (SVG output is the same quality as other functions.)" />
 for JPEG compression. (SVG output is the same quality as other functions.)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>c19_inkmagick</span><span class='op'>(</span>var <span class='op'>=</span> <span class='cn'>TRUE</span>, eu <span class='op'>=</span> <span class='cn'>TRUE</span>, r <span class='op'>=</span> <span class='cn'>TRUE</span>, d_all <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>c19_inkmagick</span><span class='op'>(</span>
+  var <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  eu <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  r <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  d_all <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  dl <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  rl <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,6 +141,14 @@ for JPEG compression. (SVG output is the same quality as other functions.)</p>
     <tr>
       <th>d_all</th>
       <td><p>whether to plot age band death plots for countries other than BG</p></td>
+    </tr>
+    <tr>
+      <th>dl</th>
+      <td><p>whether to refresh all data sets from the Internet</p></td>
+    </tr>
+    <tr>
+      <th>rl</th>
+      <td><p>whether to refresh all data sets from disk</p></td>
     </tr>
     </table>
 
@@ -174,8 +189,11 @@ Downloaded and calculated data will be stored in c19bg/data.</p>
 <span class='co'># standard run</span>
 <span class='fu'>c19_inkmagick</span><span class='op'>(</span><span class='op'>)</span>
 
+<span class='co'># redownload all data sets before running</span>
+<span class='fu'>c19_inkmagick</span><span class='op'>(</span>dl <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span>
+
 <span class='co'># include country-level age band plots from EUROSTAT demo mortality database</span>
-<span class='fu'>c19_inkmagick</span><span class='op'>(</span>d_all <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'>c19_inkmagick</span><span class='op'>(</span>d_all <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div></pre>
   </div>

@@ -119,6 +119,8 @@ directory. Downloaded and calculated data will be stored in c19bg/data.</p>
   dpi <span class='op'>=</span> <span class='fl'>125</span>,
   funs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"c19_var_plot_save"</span>, <span class='st'>"c19_heat_save"</span>, <span class='st'>"c19_oblasts_save"</span>,
     <span class='st'>"c19_eu_plots_save"</span>, <span class='st'>"c19_r_plot_save"</span><span class='op'>)</span>,
+  dl <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  rl <span class='op'>=</span> <span class='cn'>FALSE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -136,6 +138,14 @@ directory. Downloaded and calculated data will be stored in c19bg/data.</p>
     <tr>
       <th>funs</th>
       <td><p>functions to call (default: all)</p></td>
+    </tr>
+    <tr>
+      <th>dl</th>
+      <td><p>whether to refresh all data sets from the Internet</p></td>
+    </tr>
+    <tr>
+      <th>rl</th>
+      <td><p>whether to refresh all data sets from disk</p></td>
     </tr>
     <tr>
       <th>...</th>
