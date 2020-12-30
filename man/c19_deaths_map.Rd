@@ -4,9 +4,12 @@
 \alias{c19_deaths_map}
 \title{Plot comparative deaths map for EU+ countries.}
 \usage{
-c19_deaths_map(eu_data = c19_eu_data())
+c19_deaths_map(vline_last_wk = "BG", eu_data = c19_eu_data())
 }
 \arguments{
+\item{vline_last_wk}{draw vertical line on each plot at the last weekly data
+point for this country (to facilitate easier comparison).}
+
 \item{eu_data}{eu data}
 }
 \description{

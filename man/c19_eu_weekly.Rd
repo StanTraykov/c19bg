@@ -7,6 +7,7 @@
 c19_eu_weekly(
   indicator,
   continents = c("Asia", "Africa", "Europe", "Oceania", "America"),
+  highlight = "BG",
   top_n = 20,
   lower_x = 10,
   lower_y = NA,
@@ -21,6 +22,8 @@ c19_eu_weekly(
 
 \item{continents}{continents to include (only some stats available outside
 Europe/EU+)}
+
+\item{highlight}{country to highlight (EU 2-ltr code, e.g. "EL" for Greece)}
 
 \item{top_n}{number of lines to label}
 

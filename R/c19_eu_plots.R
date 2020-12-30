@@ -189,6 +189,7 @@ eu_vis <- make_eu_vis()
 #'                  "positivity", "tests_100k"
 #' @param continents continents to include (only some stats available outside
 #'                   Europe/EU+)
+#' @param highlight country to highlight (EU 2-ltr code, e.g. "EL" for Greece)
 #' @param top_n number of lines to label
 #' @param lower_x week axis limit (default NA = show all data)
 #' @param lower_y indicator axis limit (default NA = show all data)
@@ -210,6 +211,7 @@ eu_vis <- make_eu_vis()
 c19_eu_weekly <- function(
     indicator,
     continents = c("Asia", "Africa", "Europe", "Oceania", "America"),
+    highlight = "BG",
     top_n = 20,
     lower_x = 10,
     lower_y = NA,
@@ -225,7 +227,7 @@ c19_eu_weekly <- function(
         dplyr::filter(stringr::str_detect(continent, cont_regex),
                       !is.na(.data[[vy]])) %>%
         dplyr::mutate(
-            geo = forcats::fct_relevel(factor(geo), "BG", after = Inf)
+            geo = forcats::fct_relevel(factor(geo), highlight, after = Inf)
         )
     distinct_geo <- pdata %>% dplyr::select("geo") %>% dplyr::distinct()
     distinct_cont <- pdata %>% dplyr::select("continent") %>% dplyr::distinct()
@@ -256,9 +258,9 @@ c19_eu_weekly <- function(
             x = week,
             y = .data[[vy]],
             color = geo,
-            fontface = ifelse(geo == "BG", "bold", "plain"),
+            fontface = ifelse(geo == highlight, "bold", "plain"),
             label = paste0(geo_name, " (", label_fun(.data[[vy]]), ")"),
-            size = ifelse(geo == "BG", "A", "B")
+            size = ifelse(geo == highlight, "A", "B")
         )
     )
     plt <- plt +
@@ -266,7 +268,7 @@ c19_eu_weekly <- function(
         ggplot2::geom_point(data = last_data_pt, size = 0.7) +
         ggrepel::geom_text_repel(
             data = last_data_pt %>%
-                dplyr::arrange(geo == "BG", .data[[vy]]) %>%
+                dplyr::arrange(geo == highlight, .data[[vy]]) %>%
                 dplyr::slice_tail(n = top_n),
             mapping = ggplot2::aes(x = max_week),
             family = vis$font_family,
@@ -287,7 +289,7 @@ c19_eu_weekly <- function(
         ) +
         shadowtext::geom_shadowtext(
             data = max_pt %>%
-                dplyr::filter(geo != "BG") %>%
+                dplyr::filter(geo != highlight) %>%
                 dplyr::arrange(.data[[vy]]) %>%
                 dplyr::slice_tail(n = 25),
             mapping = ggplot2::aes(label = geo),
@@ -459,12 +461,14 @@ c19_deaths_total <- function(country_code, eu_data = c19_eu_data()) {
 #' Plot comparative deaths map for EU+ countries.
 #'
 #' @param eu_data eu data
+#' @param vline_last_wk draw vertical line on each plot at the last weekly data
+#' point for this country (to facilitate easier comparison).
 #'
 #' @export
 #' @family plot funcs
-c19_deaths_map <- function(eu_data = c19_eu_data()) {
+c19_deaths_map <- function(vline_last_wk = "BG", eu_data = c19_eu_data()) {
     vis <- eu_vis()
-    last_bg_wk <- eu_data$last_week("BG")
+    last_bg_wk <- eu_data$last_week(vline_last_wk)
     pdata <- eu_data$eurostat_deaths %>%
         dplyr::filter(geo %in% eu_data$eu_codes,
                       sex == "T",
