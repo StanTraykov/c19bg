@@ -122,9 +122,9 @@
 <span class="fu"><a href="reference/c19_reload.html">c19_reload</a></span><span class="op">(</span>redownload <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># презареждане от Интернет</span>
 
 <span class="co"># презареждане от Интернет и изход с една команда</span>
-<span class="fu"><a href="reference/c19_save_all.html">c19_save_all</a></span><span class="op">(</span>dl <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="reference/c19_inkmagick.html">c19_inkmagick</a></span><span class="op">(</span>dl <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p>Пакетът ще се свърже с data.egov.bg, ECDC, EUROSTAT, за да вземе необходимите данни. Данните и графиките ще се запишат в подпапка <code>c19bg</code> на текущата (обикновено <code>Documents</code> при отваряне на R под Windows). За да използвате актуални данни при повторно стартиране, първо трябва да изпълните <code><a href="reference/c19_reload.html">c19_reload(redownload = TRUE)</a></code> или да изтриете свалените файлове, които искате да се обновят (от <code>c19bg/data</code>).</p>
+<span class="fu"><a href="reference/c19_save_all.html">c19_save_all</a></span><span class="op">(</span>dl <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
+<span class="fu"><a href="reference/c19_inkmagick.html">c19_inkmagick</a></span><span class="op">(</span>dl <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<p>Пакетът ще се свърже с data.egov.bg, ECDC, EUROSTAT, за да вземе необходимите данни. Данните и графиките ще се запишат в подпапка <code>c19bg</code> на текущата (обикновено <code>Documents</code> при отваряне на R под Windows). За да използвате актуални данни при повторно стартиране, добавете <code>dl = T</code> (вж. примера по-горе) или изтрийте свалените файлове, които искате да се обновят (от <code>c19bg/data</code>).</p>
 <p><em>Забележка: Изчисляването на репродуктивното число R трае няколко минути, може и над 10 на по-стари компютри. Резултатите се запазват (вкл. при затваряне на R) до промяна в изходните данни.</em></p>
 </div>
 <div id="опции" class="section level2">
