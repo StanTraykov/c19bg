@@ -80,9 +80,11 @@ process_bg_data <- function(redownload = FALSE) {
     # TODO remove the following when open data about daily ag tests gets fixed.
     # We now calculate dialy ag tests because the open data field is cumulative
     # instead of daily (new_ag_tests wrongly matches ag_tests).
-    tst_tab$new_ag_tests[-1] <- tst_tab$new_ag_tests[-1] -  #TODO remove
-        tst_tab$new_ag_tests[-nrow(tst_tab)]               #TODO remove
-
+    if (identical(tst_tab$ag_tests, tst_tab$new_ag_tests)) {    #TODO remove
+        warning("Field new_ag_tests bogus at source; correctling locally.")
+        tst_tab$new_ag_tests[-1] <- tst_tab$new_ag_tests[-1] -  #TODO remove
+            tst_tab$new_ag_tests[-nrow(tst_tab)]                #TODO remove
+    }                                                           #TODO remove
 
     gen_tab <- gen_tab %>%
         dplyr::left_join(
