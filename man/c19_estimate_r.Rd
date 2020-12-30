@@ -10,10 +10,12 @@ c19_estimate_r(country_data = c19_bg_data())
 \item{country_data}{country data}
 }
 \description{
-Uses package EpiEstim by Cori et al. https://doi.org/10.1093/aje/kwt133
-Gen. times per Ferretti et al. https://doi.org/10.1101/2020.09.04.20188516
-Explores a range of gen time distributions that are likely for Bulgaria.
-See longer explanation in repo wiki: https://github.com/StanTraykov/c19bg
+Uses package EpiEstim <\url{https://github.com/mrc-ide/EpiEstim}> by Cori et
+al. <\url{https://doi.org/10.1093/aje/kwt133}> and generation times per
+Ferretti et al. <\url{https://doi.org/10.1101/2020.09.04.20188516}>. Explores
+a range of generation time distributions that are likely for Bulgaria. See
+longer explanation in repo wiki:
+<\url{https://github.com/StanTraykov/c19bg/wiki}>.
 }
 \details{
 Also stores a hash of the input data (.Rhash in data dir) and skips
