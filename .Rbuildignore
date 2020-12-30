@@ -4,3 +4,6 @@
 ^c19bg$
 ^pubweb.sh$
 ^data-raw$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
