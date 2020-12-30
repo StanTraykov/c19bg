@@ -118,15 +118,47 @@
 <span class="fu"><a href="reference/c19_inkmagick.html">c19_inkmagick</a></span><span class="op">(</span>d_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="co"># презареждане на данните</span>
-<span class="fu"><a href="reference/c19_reload.html">c19_reload</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># ако има налични, се ползват (c19bg/data)</span>
-<span class="fu"><a href="reference/c19_reload.html">c19_reload</a></span><span class="op">(</span>redownload <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># от Интернет</span></code></pre></div>
+<span class="fu"><a href="reference/c19_reload.html">c19_reload</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># презареждане от диск (c19bg/data)</span>
+<span class="fu"><a href="reference/c19_reload.html">c19_reload</a></span><span class="op">(</span>redownload <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># презареждане от Интернет</span>
+
+<span class="co"># презареждане от Интернет и изход с една команда</span>
+<span class="fu"><a href="reference/c19_save_all.html">c19_save_all</a></span><span class="op">(</span>dl <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="reference/c19_inkmagick.html">c19_inkmagick</a></span><span class="op">(</span>dl <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>Пакетът ще се свърже с data.egov.bg, ECDC, EUROSTAT, за да вземе необходимите данни. Данните и графиките ще се запишат в подпапка <code>c19bg</code> на текущата (обикновено <code>Documents</code> при отваряне на R под Windows). За да използвате актуални данни при повторно стартиране, първо трябва да изпълните <code><a href="reference/c19_reload.html">c19_reload(redownload = TRUE)</a></code> или да изтриете свалените файлове, които искате да се обновят (от <code>c19bg/data</code>).</p>
 <p><em>Забележка: Изчисляването на репродуктивното число R трае няколко минути, може и над 10 на по-стари компютри. Резултатите се запазват (вкл. при затваряне на R) до промяна в изходните данни.</em></p>
+</div>
+<div id="опции" class="section level2">
+<h2 class="hasAnchor">
+<a href="#%D0%BE%D0%BF%D1%86%D0%B8%D0%B8" class="anchor"></a>Опции</h2>
+<p>Опциите могат да се зададат директно в R конзолата или в <a href="https://support.rstudio.com/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf">.Rprofile или сроден файл</a> за автоматично изпълнение при стартирано на R.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># промяна на шрифт</span>
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>c19bg.font_family <span class="op">=</span> <span class="st">"Calibri"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>c19bg.font_scale <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># скалиране на всички текстове (напр. 0.8, 1.1)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>c19bg.font_size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span> <span class="co"># базов размер (пробвайте първо font_scale)</span>
+<span class="co"># Забележка: за промяна на размер/резолюция, използвайте аргумент dpi</span>
+<span class="co"># във функциите за изход.</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>c19bg.output_dir <span class="op">=</span> <span class="st">"c19bg/plots"</span><span class="op">)</span> <span class="co"># ще бъдат създадени, ако ги няма</span>
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>c19bg.data_dir <span class="op">=</span> <span class="st">"c19bg/data"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>c19bg.output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+    inkopts <span class="op">=</span> <span class="st">"-w %d --export-filename"</span>,
+    mgkopts <span class="op">=</span> <span class="st">"-quality 100"</span>,
+    pixwidth <span class="op">=</span> <span class="fl">1375</span>,
+    width <span class="op">=</span> <span class="fl">11</span>,
+    height <span class="op">=</span> <span class="fl">7</span>,
+    inkscape <span class="op">=</span> <span class="st">"\"C:\\Program Files\\Inkscape\\bin\\inkscape.exe\""</span>,
+    magick <span class="op">=</span> <span class="st">"magick"</span>  <span class="co"># работи, ако е в PATH</span>
+<span class="op">)</span><span class="op">)</span>
+
+<span class="co"># изобразяване на всички опции за c19bg</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"c19bg"</span>,<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></code></pre></div>
 </div>
 <div id="генериране-на-единични-графики" class="section level2">
 <h2 class="hasAnchor">
 <a href="#%D0%B3%D0%B5%D0%BD%D0%B5%D1%80%D0%B8%D1%80%D0%B0%D0%BD%D0%B5-%D0%BD%D0%B0-%D0%B5%D0%B4%D0%B8%D0%BD%D0%B8%D1%87%D0%BD%D0%B8-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B8" class="anchor"></a>Генериране на единични графики</h2>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">c19bg</span><span class="op">)</span>
 
 <span class="co"># слчуаи по възрастови групи</span>
@@ -149,31 +181,6 @@
 <span class="co"># помощ</span>
 <span class="op">?</span><span class="va">c19_eu_weekly</span>
 <span class="op">?</span><span class="va">c19_save_all</span> <span class="co">#etc</span></code></pre></div>
-</div>
-<div id="опции" class="section level2">
-<h2 class="hasAnchor">
-<a href="#%D0%BE%D0%BF%D1%86%D0%B8%D0%B8" class="anchor"></a>Опции</h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># промяна на шрифт</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>c19bg.font_family <span class="op">=</span> <span class="st">"Calibri"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>c19bg.font_scale <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># скалиране на всички текстове (напр. 0.8, 1.1)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>c19bg.font_size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span> <span class="co"># базов размер (пробвайте първо font_scale)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>c19bg.output_dir <span class="op">=</span> <span class="st">"c19bg/plots"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>c19bg.data_dir <span class="op">=</span> <span class="st">"c19bg/data"</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>c19bg.output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-    inkopts <span class="op">=</span> <span class="st">"-w %d --export-filename"</span>,
-    mgkopts <span class="op">=</span> <span class="st">"-quality 100"</span>,
-    pixwidth <span class="op">=</span> <span class="fl">1375</span>,
-    width <span class="op">=</span> <span class="fl">11</span>,
-    height <span class="op">=</span> <span class="fl">7</span>,
-    inkscape <span class="op">=</span> <span class="st">"\"C:\\Program Files\\Inkscape\\bin\\inkscape.exe\""</span>,
-    magick <span class="op">=</span> <span class="st">"magick"</span>  <span class="co"># работи, ако е в PATH</span>
-<span class="op">)</span><span class="op">)</span>
-
-<span class="co"># изобразяване на всички опции за c19bg</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"c19bg"</span>,<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></code></pre></div>
 </div>
 <div id="данни" class="section level2">
 <h2 class="hasAnchor">
@@ -214,10 +221,14 @@
                            <span class="co"># от преди да отворят данните</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/View.html">View</a></span><span class="op">(</span><span class="va">bg_data</span><span class="op">$</span><span class="va">age</span><span class="op">)</span>          <span class="co"># по възраст (днвени)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/View.html">View</a></span><span class="op">(</span><span class="va">bg_data</span><span class="op">$</span><span class="va">subdivs</span><span class="op">)</span>      <span class="co"># по области (дневни)</span></code></pre></div>
-<p>Примерна заявка (плаващо средно 7 дни по области)</p>
+<div id="примерна-заявка-и-графика" class="section level3">
+<h3 class="hasAnchor">
+<a href="#%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%BD%D0%B0-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B0-%D0%B8-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B0" class="anchor"></a>Примерна заявка и графика</h3>
+<p>Плаващо средно 7 дни по области.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">c19bg</span><span class="op">)</span>
 
 <span class="va">bg_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/c19_bg_data.html">c19_bg_data</a></span><span class="op">(</span><span class="op">)</span>
@@ -232,7 +243,16 @@
                                  <span class="fl">7</span>,
                                  <span class="va">mean</span>,
                                  align <span class="op">=</span> <span class="st">"right"</span>,
-                                 fill <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+                                 fill <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># графика</span>
+<span class="va">my_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">oblasts_table</span>,
+           mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">mva7</span>, color <span class="op">=</span> <span class="va">oblast</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span>
+    
+<span class="va">my_plot</span> <span class="co"># изобразяване на екран</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"my_plot.svg"</span>, plot <span class="op">=</span> <span class="va">my_plot</span>, width <span class="op">=</span> <span class="fl">13</span>, height <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></code></pre></div>
+</div>
 </div>
 </div>
   </div>
