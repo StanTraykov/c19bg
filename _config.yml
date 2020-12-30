@@ -1,3 +1,4 @@
 theme: jekyll-theme-cayman
 title: COVID-19 графики за България
 description: по данните на data.egov.bg, ECDC, EUROSTAT, НСИ
+show_downloads: true
