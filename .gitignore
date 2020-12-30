@@ -7,3 +7,5 @@ plots
 downloads
 c19bg
 docs
+*.log
+*.tex
