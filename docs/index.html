@@ -163,10 +163,22 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">c19bg</span><span class="op">)</span>
 
 <span class="co"># слчуаи по възрастови групи</span>
-<span class="va">my_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/c19_var_plot.html">c19_var_plot</a></span><span class="op">(</span><span class="st">"age"</span>, roll_func <span class="op">=</span> <span class="va">mean</span>, roll_window <span class="op">=</span> <span class="fl">7</span>, line_legend <span class="op">=</span> <span class="st">"0"</span><span class="op">)</span>
+<span class="va">my_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/c19_var_plot.html">c19_var_plot</a></span><span class="op">(</span><span class="st">"age"</span>,
+                        roll_func <span class="op">=</span> <span class="va">mean</span>,
+                        roll_window <span class="op">=</span> <span class="fl">7</span>,
+                        line_legend <span class="op">=</span> <span class="st">"0"</span><span class="op">)</span>
+
+<span class="co"># 14-дневно плаващо средно за Европа, Америка с</span>
+<span class="co"># изпъкване на Германия</span>
+<span class="va">my_plot2</span> <span class="op">&lt;-</span><span class="fu"><a href="reference/c19_eu_weekly.html">c19_eu_weekly</a></span><span class="op">(</span><span class="st">"r14_cases"</span>,
+                         continents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Europe"</span>, <span class="st">"America"</span><span class="op">)</span>,
+                         lower_y <span class="op">=</span> <span class="fl">0</span>,
+                         highlight <span class="op">=</span> <span class="st">"DE"</span><span class="op">)</span>
 
 <span class="co"># извеждане на екран</span>
 <span class="va">my_plot</span> <span class="co"># или print(my_plot) в неинтерактивен режим</span>
+<span class="va">my_plot2</span>
+<span class="fu"><a href="reference/c19_oblasts.html">c19_oblasts</a></span><span class="op">(</span>incid_100k <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># извеждане директно на екран</span>
 
 <span class="co"># запис във файл</span>
 <span class="kw">if</span> <span class="op">(</span><span class="va">.Platform</span><span class="op">$</span><span class="va">OS.type</span> <span class="op">==</span> <span class="st">"windows"</span> <span class="op">&amp;&amp;</span>
