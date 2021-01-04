@@ -23,10 +23,11 @@
 <polyline points='49.73,293.90 739.65,293.90 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' clip-path='url(#cpNDkuNzN8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
 <polyline points='49.73,206.05 739.65,206.05 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' clip-path='url(#cpNDkuNzN8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
 <polyline points='49.73,118.20 739.65,118.20 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' clip-path='url(#cpNDkuNzN8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
-<polyline points='200.30,423.87 200.30,63.77 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' clip-path='url(#cpNDkuNzN8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
-<polyline points='514.92,423.87 514.92,63.77 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' clip-path='url(#cpNDkuNzN8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
-<polyline points='65.46,320.00 110.41,358.74 155.35,380.70 200.30,362.96 245.24,390.19 290.19,350.57 335.13,84.82 380.08,129.71 425.03,280.99 469.97,415.49 514.92,406.53 ' style='stroke-width: 1.07; stroke: #00CD00; stroke-linecap: butt;' clip-path='url(#cpNDkuNzN8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
-<polyline points='65.46,218.90 110.41,267.73 155.35,289.04 200.30,248.17 245.24,195.56 290.19,277.70 335.13,214.48 380.08,183.05 425.03,222.46 469.97,144.44 514.92,80.51 ' style='stroke-width: 1.07; stroke: #CD0000; stroke-linecap: butt;' clip-path='url(#cpNDkuNzN8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
+<polyline points='157.70,423.87 157.70,63.77 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' clip-path='url(#cpNDkuNzN8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
+<polyline points='372.10,423.87 372.10,63.77 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' clip-path='url(#cpNDkuNzN8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
+<polyline points='586.50,423.87 586.50,63.77 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' clip-path='url(#cpNDkuNzN8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
+<polyline points='65.81,320.00 96.44,358.74 127.07,380.70 157.70,362.96 188.33,390.19 218.95,350.57 249.58,84.82 280.21,129.71 310.84,280.99 341.47,415.49 372.10,406.53 402.73,395.46 ' style='stroke-width: 1.07; stroke: #00CD00; stroke-linecap: butt;' clip-path='url(#cpNDkuNzN8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
+<polyline points='65.81,218.90 96.44,267.73 127.07,289.04 157.70,248.17 188.33,195.56 218.95,277.70 249.58,214.48 280.21,183.05 310.84,222.46 341.47,144.44 372.10,80.51 402.73,263.51 ' style='stroke-width: 1.07; stroke: #CD0000; stroke-linecap: butt;' clip-path='url(#cpNDkuNzN8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
 <defs>
   <clipPath id='cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA='>
     <rect x='0.00' y='0.00' width='792.00' height='504.00' />
@@ -48,10 +49,12 @@
 <g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text x='744.58' y='297.28' style='font-size: 11.20px; fill: #4D4D4D; font-family: Calibri;' textLength='27.86px' lengthAdjust='spacingAndGlyphs'>10.0%</text></g>
 <g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text x='744.58' y='209.69' style='font-size: 11.20px; fill: #4D4D4D; font-family: Calibri;' textLength='27.86px' lengthAdjust='spacingAndGlyphs'>15.0%</text></g>
 <g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text x='744.58' y='121.73' style='font-size: 11.20px; fill: #4D4D4D; font-family: Calibri;' textLength='27.86px' lengthAdjust='spacingAndGlyphs'>20.0%</text></g>
-<polyline points='200.30,426.61 200.30,423.87 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)' />
-<polyline points='514.92,426.61 514.92,423.87 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)' />
-<g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text transform='translate(170.63,468.48) rotate(-45)' style='font-size: 11.20px; fill: #4D4D4D; font-family: Calibri;' textLength='49.04px' lengthAdjust='spacingAndGlyphs'>27.12. (52)</text></g>
-<g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text transform='translate(485.25,468.48) rotate(-45)' style='font-size: 11.20px; fill: #4D4D4D; font-family: Calibri;' textLength='49.04px' lengthAdjust='spacingAndGlyphs'>03.01. (01)</text></g>
+<polyline points='157.70,426.61 157.70,423.87 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)' />
+<polyline points='372.10,426.61 372.10,423.87 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)' />
+<polyline points='586.50,426.61 586.50,423.87 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)' />
+<g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text transform='translate(128.03,468.48) rotate(-45)' style='font-size: 11.20px; fill: #4D4D4D; font-family: Calibri;' textLength='49.04px' lengthAdjust='spacingAndGlyphs'>27.12. (52)</text></g>
+<g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text transform='translate(342.43,468.48) rotate(-45)' style='font-size: 11.20px; fill: #4D4D4D; font-family: Calibri;' textLength='49.04px' lengthAdjust='spacingAndGlyphs'>03.01. (53)</text></g>
+<g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text transform='translate(556.83,468.48) rotate(-45)' style='font-size: 11.20px; fill: #4D4D4D; font-family: Calibri;' textLength='49.04px' lengthAdjust='spacingAndGlyphs'>10.01. (01)</text></g>
 <g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text x='303.66' y='481.47' style='font-size: 14.00px; font-family: Calibri;' textLength='182.06px' lengthAdjust='spacingAndGlyphs'>дата на докладване (седмица)</text></g>
 <g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text transform='translate(14.33,282.67) rotate(-90)' style='font-size: 14.00px; font-family: Calibri;' textLength='77.71px' lengthAdjust='spacingAndGlyphs'>брой тестове</text></g>
 <g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text transform='translate(775.18,179.60) rotate(90)' style='font-size: 14.00px; font-family: Calibri;' textLength='128.43px' lengthAdjust='spacingAndGlyphs'>новодоказани случаи</text></g>
