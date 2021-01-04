@@ -29,7 +29,7 @@ heat_tidy <- function(atab) {
         tidyr::pivot_longer(cols = tidyr::matches(paste0("0|", str_all)),
                             names_to = "group",
                             values_to = "incidence") %>%
-        dplyr::mutate(week = lubridate::isoweek(date) - 1)
+        dplyr::mutate(week = format(date - 1, "%G-%V")) #week-based yr; ISO week
     return(atab)
 }
 
@@ -62,9 +62,9 @@ c19_heat <- function(country_data = c19_bg_data()) {
             ),
             panel.grid = ggplot2::element_blank(),
             plot.title = ggplot2::element_text(hjust = 0.5,
-                                               face = "bold")
+                                               face = "bold"),
+            axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
         ) +
-        ggplot2::scale_x_continuous(breaks = min(atab[, 4]):max(atab[, 4])) +
         ggplot2::labs(
             title = paste(tra("Sedmicna zabolevaemost na COVID-19"),
                           tra("(registrirani novi slucai na 100 hil.)")),

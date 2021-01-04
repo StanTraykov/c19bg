@@ -197,7 +197,7 @@ c19_oblasts <- function(
                                                last_sunday_inc,
                                                by = "7 days"),
                                   limits = c(first_mva7, last_sunday_inc + 4),
-                                  date_labels = "%d.%m. (%U)",
+                                  date_labels = "%d.%m. (%V)",
                                   expand = ggplot2::expansion(mult = c(0.02,
                                                                        0.19))) +
             ggrepel::geom_text_repel(

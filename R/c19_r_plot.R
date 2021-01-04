@@ -274,7 +274,7 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
                          last_sunday_inc,
                          by = "7 days"),
             limits = c(ftab$date[1], last_sunday_inc + 4),
-            date_labels = "%d.%m. (%U)",
+            date_labels = "%d.%m. (%V)",
             expand = ggplot2::expansion(mult = c(0.025, 0), add = c(-1, 4))
         ) +
         vis$labels +

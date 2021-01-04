@@ -486,7 +486,7 @@ c19_var_plot <- function(
                          by = "7 days"),
             limits = c(min(plot_start_date, first_sunday),
                        last_sunday_inc + 4),
-            date_labels = "%d.%m. (%U)",
+            date_labels = "%d.%m. (%V)",
             expand = ggplot2::expansion(mult = c(0.025, 0),
                                         add = c(0, 1 + exp_fix))
         ) +
