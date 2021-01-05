@@ -57,8 +57,10 @@ process_bg_data <- function(redownload = FALSE) {
         file = "bg_tst.csv",
         col_types = paste0("D", strrep("i", 12))
     )
+    # new_tests_GEN is an inconsistent field containing PCR tests until Jan 5
+    # (=all tests until Dec 24) and then all tests from Jan 6, 2021.
     names(gen_tab) <- c(
-        "date", "tests", "new_pcr_tests", "cases", "active_cases", "new_cases",
+        "date", "tests", "new_tests_GEN", "cases", "active_cases", "new_cases",
         "hospitalized", "in_icu", "recovered", "newly_recovered", "deaths",
         "new_deaths"
     )
@@ -69,22 +71,13 @@ process_bg_data <- function(redownload = FALSE) {
     )
     begin_ag_tests <- as.Date("2020-12-24")
 
-
     # gen_tst_by <- c("date", "tests", "cases", "new_cases", "new_pcr_cases")
-    # TODO remove the following and uncomment above when the open data about
-    # new_pcr_tests gets fixed.
-    gen_tst_by <- c("date", "tests", "cases", "new_cases") #TODO remove
-    tst_tab <- tst_tab %>% dplyr::select(-"new_pcr_tests") #TODO remove
+    # ideally, above should work, but open data is inconsistent.
+    gen_tst_by <- c("date", "tests", "cases", "new_cases")
 
-
-    # TODO remove the following when open data about daily ag tests gets fixed.
-    # We now calculate dialy ag tests because the open data field is cumulative
-    # instead of daily (new_ag_tests wrongly matches ag_tests).
-    if (identical(tst_tab$ag_tests, tst_tab$new_ag_tests)) {    #TODO remove
-        warning("Field new_ag_tests bogus at source; correcting locally.")
-        tst_tab$new_ag_tests[-1] <- tst_tab$new_ag_tests[-1] -  #TODO remove
-            tst_tab$new_ag_tests[-nrow(tst_tab)]                #TODO remove
-    }                                                           #TODO remove
+    # override new_ag_tests. open data is bogus.
+    tst_tab$new_ag_tests[-1] <- tst_tab$ag_tests[-1] -  #TODO remove
+        tst_tab$ag_tests[-nrow(tst_tab)]                #TODO remove
 
     gen_tab <- gen_tab %>%
         dplyr::left_join(
@@ -92,6 +85,9 @@ process_bg_data <- function(redownload = FALSE) {
             by = gen_tst_by
         ) %>%
         dplyr::mutate(
+            new_pcr_tests = ifelse(date >= begin_ag_tests,
+                                   new_pcr_tests,
+                                   new_tests_GEN),
             new_tests = new_pcr_tests + ifelse(date >= begin_ag_tests,
                                                new_ag_tests,
                                                0),
