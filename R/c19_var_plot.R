@@ -32,8 +32,7 @@ make_var_plot_vis <- function(process_data = FALSE) {
                         hospitalized = "active_cases",
                         positivity = "date|s7_nt$|posit7$|s7_nt_pcr|posit7_pcr",
                         pospcr = "date|posit7_pcr|s7_nt_pcr",
-                        #posag = "date|posit7_ag|s7_nt_ag"
-                        posag = "date|posit_ag|new_ag_tests")
+                        posag = "date|posit7_ag|s7_nt_ag")
     area_fields <- list(cases = "^cases$|active_cases",
                         hospitalized = "hospitalized|in_icu")
     tick_choice <- c(10, 20, 25, 50) * rep(c(1, 10, 100, 1000), each = 4)
@@ -42,7 +41,7 @@ make_var_plot_vis <- function(process_data = FALSE) {
         dis = "0-19",
         positivity = "posit7",
         pospcr = "posit7_pcr",
-        posag = "posit_ag"
+        posag = "posit7_ag"
     )
     thin <- 0.5   # } lines
     thick <- 1    # }
@@ -189,7 +188,7 @@ make_var_plot_vis <- function(process_data = FALSE) {
         posag = ggplot2::labs(
             title = tra("Pozitivnost Ag (novi slucai . broj testove)"),
             caption = tra("danni: data.egov.bg"),
-            color = tra("dnevno"),
+            color = tra("za poslednite 7 dni"),
             x = x_label,
             y = tra("broj testove")
         )
@@ -199,7 +198,7 @@ make_var_plot_vis <- function(process_data = FALSE) {
         hospitalized = c("hospitalized", "in_icu", "active_cases"),
         positivity = c("s7_nt", "posit7", "s7_nt_pcr", "posit7_pcr"),
         pospcr = c("s7_nt_pcr", "posit7_pcr"),
-        posag = c("new_ag_tests", "posit_ag")
+        posag = c("s7_nt_ag", "posit7_ag")
     )
     plot_sec_y <- list(
         casesdeaths = list(label = tra("smartni slucai"),
@@ -220,7 +219,7 @@ make_var_plot_vis <- function(process_data = FALSE) {
                       scale = 0.000005,
                       type = "percent"),
         posag = list(label = tra("novodokazani slucai"),
-                     vars = "posit_ag",
+                     vars = "posit7_ag",
                      scale = 0.00005,
                      type = "percent")
     )
