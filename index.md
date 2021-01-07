@@ -46,8 +46,6 @@
 
 [![Сравнение Европа свръхсмъртност](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C12_exd1m_eurp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C12_exd1m_eurp.svg)
 
-*Забележка: Отворените данни за брой хоспитализирани на ECDC не включват България за последната седмица. Вероятно е грешка, която ще се коригира.*
-
 [![Сравнение Европа хоспитализирани](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C13_cmp_h_eurp.svg)](https://raw.githubusercontent.com/StanTraykov/C19_BG/gh-pages/cur_svg/C13_cmp_h_eurp.svg)
 
 |Смъртност Европа|Смъртност свят|
