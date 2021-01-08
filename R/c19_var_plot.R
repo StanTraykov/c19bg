@@ -220,7 +220,7 @@ make_var_plot_vis <- function(process_data = FALSE) {
                       type = "percent"),
         posag = list(label = tra("novodokazani slucai"),
                      vars = "posit7_ag",
-                     scale = 0.00005,
+                     scale = 0.000005,
                      type = "percent")
     )
     plot_x_min <- list(
@@ -475,6 +475,7 @@ c19_var_plot <- function(
         vis$colors$area[chart] +
         ggplot2::scale_y_continuous(
             breaks = seq(0, tick_max, by = tick_by),
+            limits = c(0, NA),
             expand = ggplot2::expansion(mult = c(0.025, 0.05)),
             labels = scales::label_number(),
             sec.axis = secondary
