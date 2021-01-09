@@ -9,8 +9,8 @@ c19_save_all(
   dpi = 125,
   funs = c("c19_var_plot_save", "c19_heat_save", "c19_oblasts_save",
     "c19_eu_plots_save", "c19_r_plot_save"),
-  dl = FALSE,
-  rl = FALSE,
+  dl = TRUE,
+  rl = TRUE,
   ...
 )
 }

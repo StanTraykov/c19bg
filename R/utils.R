@@ -66,8 +66,8 @@ c19_save_all <- function(file_ext = ".svg",
                              "c19_eu_plots_save",
                              "c19_r_plot_save"
                          ),
-                         dl = FALSE,
-                         rl = FALSE,
+                         dl = TRUE,
+                         rl = TRUE,
                          ...) {
     # load fonts on Windows to use the option-supplied font for bitmap output
     if (.Platform$OS.type == "windows" &&

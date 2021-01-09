@@ -9,8 +9,8 @@ c19_inkmagick(
   eu = TRUE,
   r = TRUE,
   d_all = FALSE,
-  dl = FALSE,
-  rl = FALSE
+  dl = TRUE,
+  rl = TRUE
 )
 }
 \arguments{
@@ -56,14 +56,14 @@ options(c19bg.output = list(
 ))
 options(c19bg.output_dir = "c19bg/plots")
 
-# standard run
+# standard run (download from Internet)
 c19_inkmagick()
-
-# redownload all data sets before running
-c19_inkmagick(dl = T)
 
 # include country-level age band plots from EUROSTAT demo mortality database
 c19_inkmagick(d_all = T)
+
+# don't download datasets already present in data dir
+c19_inkmagick(dl = F)
 }
 }
 \seealso{
