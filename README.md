@@ -37,32 +37,26 @@ library(c19bg)
 
 # бързо генериране на SVG (високо качество)
 # отиват в c19bg/plots в текущата папка (обикн. Documents под Windows)
-
 c19_save_all()
 
-# бързо генериране на PNG (понижено качество)
-c19_save_all(file_ext = ".png")
-c19_save_all(file_ext = ".png", dpi = 200, w = 10, h = 10) #2000x2000px
+# бързо генериране на PNG, без презареждане от Интернет (dl = F)
+c19_save_all(file_ext = ".png", dl = F)
 
-# бързо генериране на JPEG (понижено качество)
+# PNG 2000x2000px
+c19_save_all(file_ext = ".png", dpi = 200, w = 10, h = 10)
+
+# JPEG
 c19_save_all(file_ext =".jpg", dpi = 125, quality = 100)
 
 # растеризация с Inkscape, JPEG компресия с ImageMagick
-# - високо качество, но по-бавно
+# - по-високо качество на PNG и JPEG, но по-бавно
 # - вижте раздел Опции за указване на пътища към програмите
-
 c19_inkmagick()  # генерира SVG, PNG и JPEG файлове
+# или
+c19_inkmagick(dl = F)  # без презареждане от Интернет
 
 # вкл. графики за умирания в други страни (ЕС+)
 c19_inkmagick(d_all = TRUE)
-
-# презареждане на данните
-c19_reload() # презареждане от диск (c19bg/data)
-c19_reload(redownload = TRUE) # презареждане от Интернет
-
-# презареждане от Интернет и изход с една команда
-c19_save_all(dl = T)
-c19_inkmagick(dl = T)
 ```
 
 Пакетът ще се свърже с data.egov.bg, ECDC, EUROSTAT, за да вземе необходимите данни. Данните и графиките ще се запишат в подпапка `c19bg` на текущата (обикновено `Documents` при отваряне на R под Windows). За да използвате актуални данни при повторно стартиране, добавете `dl = T` (вж. примера по-горе) или изтрийте свалените файлове, които искате да се обновят (от `c19bg/data`).
@@ -71,7 +65,7 @@ c19_inkmagick(dl = T)
 
 ## Опции
 
-Опциите могат да се зададат директно в R конзолата или в [.Rprofile или сроден файл](https://support.rstudio.com/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf) за автоматично изпълнение при стартирано на R.
+Опциите могат да се зададат директно в R конзолата или в [.Rprofile или сроден файл](https://support.rstudio.com/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf) за автоматично изпълнение при стартиране на R.
 
 ```R
 # промяна на шрифт
@@ -94,7 +88,8 @@ options(c19bg.output = list(
     magick = "magick"  # работи, ако е в PATH
 ))
 
-# изобразяване на всички опции за c19bg
+# изобразяване на всички опции за пакета
+library(c19bg)
 names(options())[grep("c19bg",names(options()))]
 ```
 
@@ -134,6 +129,10 @@ ggplot2::ggsave(file = "my_plot.png", width = 11, height = 7, plot = my_plot)
 # (отнема време, освен ако R вече не е изчислен)
 c19_r_plot()
 
+# презареждане на данните
+c19_reload() # презареждане от диск (c19bg/data)
+c19_reload(redownload = TRUE) # презареждане от Интернет
+
 # помощ
 ?c19_eu_weekly
 ?c19_save_all #etc
@@ -145,7 +144,6 @@ library(c19bg)
 
 # Данните могат да се достъпят с тези две функции
 # (те се използват и от графичните фукнции)
-
 eu_data <- c19_eu_data()
 bg_data <- c19_bg_data()
 
@@ -153,9 +151,10 @@ bg_data <- c19_bg_data()
 # data.egov.bg, ECDC, и EUROSTAT. Това трае известно време.
 # Последващи повиквания са евтини, освен ако не се изиска
 # презареждане.
-
-c19_eu_data(reload = TRUE)
+c19_eu_data(reload = TRUE) # от диск
 c19_bg_data(reload = TRUE)
+c19_eu_data(redownload = TRUE) # от Интернет
+c19_bg_data(redownload = TRUE)
 
 # Съдържанието може да се разглежда/задълбава в браузера
 # на данни на RStudio.
@@ -163,17 +162,14 @@ c19_bg_data(reload = TRUE)
 # ECDC/EUROSTAT седмични случаи, смъртни случаи от COVID-19,
 # свръхсмъртност, фактори на надвишаване, брой хоспитализирани,
 # тестове, позитивност
-
 View(eu_data$factor_tab)
 
 # Умирания по седмици от EUROSTAT
-
 View(eu_data$eurostat_deaths)
 
 # За България
-
-View(bg_data$gen_inc_hist) # обща, вкл. ограничен набор данни
-                           # от преди да отворят данните
+View(bg_data$gen_inc_hist) # обща статистика, вкл. ограничен набор
+                           # данни от преди да отворят данните
 View(bg_data$age)          # по възраст (днвени)
 View(bg_data$subdivs)      # по области (дневни)
 ```
