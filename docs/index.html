@@ -112,39 +112,33 @@
 
 <span class="co"># бързо генериране на SVG (високо качество)</span>
 <span class="co"># отиват в c19bg/plots в текущата папка (обикн. Documents под Windows)</span>
-
 <span class="fu"><a href="reference/c19_save_all.html">c19_save_all</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="co"># бързо генериране на PNG (понижено качество)</span>
-<span class="fu"><a href="reference/c19_save_all.html">c19_save_all</a></span><span class="op">(</span>file_ext <span class="op">=</span> <span class="st">".png"</span><span class="op">)</span>
-<span class="fu"><a href="reference/c19_save_all.html">c19_save_all</a></span><span class="op">(</span>file_ext <span class="op">=</span> <span class="st">".png"</span>, dpi <span class="op">=</span> <span class="fl">200</span>, w <span class="op">=</span> <span class="fl">10</span>, h <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="co">#2000x2000px</span>
+<span class="co"># бързо генериране на PNG, без презареждане от Интернет (dl = F)</span>
+<span class="fu"><a href="reference/c19_save_all.html">c19_save_all</a></span><span class="op">(</span>file_ext <span class="op">=</span> <span class="st">".png"</span>, dl <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
 
-<span class="co"># бързо генериране на JPEG (понижено качество)</span>
+<span class="co"># PNG 2000x2000px</span>
+<span class="fu"><a href="reference/c19_save_all.html">c19_save_all</a></span><span class="op">(</span>file_ext <span class="op">=</span> <span class="st">".png"</span>, dpi <span class="op">=</span> <span class="fl">200</span>, w <span class="op">=</span> <span class="fl">10</span>, h <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
+
+<span class="co"># JPEG</span>
 <span class="fu"><a href="reference/c19_save_all.html">c19_save_all</a></span><span class="op">(</span>file_ext <span class="op">=</span><span class="st">".jpg"</span>, dpi <span class="op">=</span> <span class="fl">125</span>, quality <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 
 <span class="co"># растеризация с Inkscape, JPEG компресия с ImageMagick</span>
-<span class="co"># - високо качество, но по-бавно</span>
+<span class="co"># - по-високо качество на PNG и JPEG, но по-бавно</span>
 <span class="co"># - вижте раздел Опции за указване на пътища към програмите</span>
-
 <span class="fu"><a href="reference/c19_inkmagick.html">c19_inkmagick</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># генерира SVG, PNG и JPEG файлове</span>
+<span class="co"># или</span>
+<span class="fu"><a href="reference/c19_inkmagick.html">c19_inkmagick</a></span><span class="op">(</span>dl <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>  <span class="co"># без презареждане от Интернет</span>
 
 <span class="co"># вкл. графики за умирания в други страни (ЕС+)</span>
-<span class="fu"><a href="reference/c19_inkmagick.html">c19_inkmagick</a></span><span class="op">(</span>d_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co"># презареждане на данните</span>
-<span class="fu"><a href="reference/c19_reload.html">c19_reload</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># презареждане от диск (c19bg/data)</span>
-<span class="fu"><a href="reference/c19_reload.html">c19_reload</a></span><span class="op">(</span>redownload <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># презареждане от Интернет</span>
-
-<span class="co"># презареждане от Интернет и изход с една команда</span>
-<span class="fu"><a href="reference/c19_save_all.html">c19_save_all</a></span><span class="op">(</span>dl <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
-<span class="fu"><a href="reference/c19_inkmagick.html">c19_inkmagick</a></span><span class="op">(</span>dl <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="reference/c19_inkmagick.html">c19_inkmagick</a></span><span class="op">(</span>d_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>Пакетът ще се свърже с data.egov.bg, ECDC, EUROSTAT, за да вземе необходимите данни. Данните и графиките ще се запишат в подпапка <code>c19bg</code> на текущата (обикновено <code>Documents</code> при отваряне на R под Windows). За да използвате актуални данни при повторно стартиране, добавете <code>dl = T</code> (вж. примера по-горе) или изтрийте свалените файлове, които искате да се обновят (от <code>c19bg/data</code>).</p>
 <p><em>Забележка: Изчисляването на репродуктивното число R трае няколко минути, може и над 10 на по-стари компютри. Резултатите се запазват (вкл. при затваряне на R) до промяна в изходните данни.</em></p>
 </div>
 <div id="опции" class="section level2">
 <h2 class="hasAnchor">
 <a href="#%D0%BE%D0%BF%D1%86%D0%B8%D0%B8" class="anchor"></a>Опции</h2>
-<p>Опциите могат да се зададат директно в R конзолата или в <a href="https://support.rstudio.com/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf">.Rprofile или сроден файл</a> за автоматично изпълнение при стартирано на R.</p>
+<p>Опциите могат да се зададат директно в R конзолата или в <a href="https://support.rstudio.com/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf">.Rprofile или сроден файл</a> за автоматично изпълнение при стартиране на R.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># промяна на шрифт</span>
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>c19bg.font_family <span class="op">=</span> <span class="st">"Calibri"</span><span class="op">)</span>
@@ -166,7 +160,8 @@
     magick <span class="op">=</span> <span class="st">"magick"</span>  <span class="co"># работи, ако е в PATH</span>
 <span class="op">)</span><span class="op">)</span>
 
-<span class="co"># изобразяване на всички опции за c19bg</span>
+<span class="co"># изобразяване на всички опции за пакета</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stantraykov.github.io/c19bg">c19bg</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"c19bg"</span>,<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></code></pre></div>
 </div>
 <div id="генериране-на-единични-графики" class="section level2">
@@ -206,6 +201,10 @@
 <span class="co"># (отнема време, освен ако R вече не е изчислен)</span>
 <span class="fu"><a href="reference/c19_r_plot.html">c19_r_plot</a></span><span class="op">(</span><span class="op">)</span>
 
+<span class="co"># презареждане на данните</span>
+<span class="fu"><a href="reference/c19_reload.html">c19_reload</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># презареждане от диск (c19bg/data)</span>
+<span class="fu"><a href="reference/c19_reload.html">c19_reload</a></span><span class="op">(</span>redownload <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># презареждане от Интернет</span>
+
 <span class="co"># помощ</span>
 <span class="op">?</span><span class="va">c19_eu_weekly</span>
 <span class="op">?</span><span class="va">c19_save_all</span> <span class="co">#etc</span></code></pre></div>
@@ -218,7 +217,6 @@
 
 <span class="co"># Данните могат да се достъпят с тези две функции</span>
 <span class="co"># (те се използват и от графичните фукнции)</span>
-
 <span class="va">eu_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/c19_eu_data.html">c19_eu_data</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">bg_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/c19_bg_data.html">c19_bg_data</a></span><span class="op">(</span><span class="op">)</span>
 
@@ -226,9 +224,10 @@
 <span class="co"># data.egov.bg, ECDC, и EUROSTAT. Това трае известно време.</span>
 <span class="co"># Последващи повиквания са евтини, освен ако не се изиска</span>
 <span class="co"># презареждане.</span>
-
-<span class="fu"><a href="reference/c19_eu_data.html">c19_eu_data</a></span><span class="op">(</span>reload <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="reference/c19_eu_data.html">c19_eu_data</a></span><span class="op">(</span>reload <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># от диск</span>
 <span class="fu"><a href="reference/c19_bg_data.html">c19_bg_data</a></span><span class="op">(</span>reload <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="reference/c19_eu_data.html">c19_eu_data</a></span><span class="op">(</span>redownload <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># от Интернет</span>
+<span class="fu"><a href="reference/c19_bg_data.html">c19_bg_data</a></span><span class="op">(</span>redownload <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="co"># Съдържанието може да се разглежда/задълбава в браузера</span>
 <span class="co"># на данни на RStudio.</span>
@@ -236,17 +235,14 @@
 <span class="co"># ECDC/EUROSTAT седмични случаи, смъртни случаи от COVID-19,</span>
 <span class="co"># свръхсмъртност, фактори на надвишаване, брой хоспитализирани,</span>
 <span class="co"># тестове, позитивност</span>
-
 <span class="fu"><a href="https://rdrr.io/r/utils/View.html">View</a></span><span class="op">(</span><span class="va">eu_data</span><span class="op">$</span><span class="va">factor_tab</span><span class="op">)</span>
 
 <span class="co"># Умирания по седмици от EUROSTAT</span>
-
 <span class="fu"><a href="https://rdrr.io/r/utils/View.html">View</a></span><span class="op">(</span><span class="va">eu_data</span><span class="op">$</span><span class="va">eurostat_deaths</span><span class="op">)</span>
 
 <span class="co"># За България</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/View.html">View</a></span><span class="op">(</span><span class="va">bg_data</span><span class="op">$</span><span class="va">gen_inc_hist</span><span class="op">)</span> <span class="co"># обща, вкл. ограничен набор данни</span>
-                           <span class="co"># от преди да отворят данните</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/View.html">View</a></span><span class="op">(</span><span class="va">bg_data</span><span class="op">$</span><span class="va">gen_inc_hist</span><span class="op">)</span> <span class="co"># обща статистика, вкл. ограничен набор</span>
+                           <span class="co"># данни от преди да отворят данните</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/View.html">View</a></span><span class="op">(</span><span class="va">bg_data</span><span class="op">$</span><span class="va">age</span><span class="op">)</span>          <span class="co"># по възраст (днвени)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/View.html">View</a></span><span class="op">(</span><span class="va">bg_data</span><span class="op">$</span><span class="va">subdivs</span><span class="op">)</span>      <span class="co"># по области (дневни)</span></code></pre></div>
 <div id="примерна-заявка-и-графика" class="section level3">
