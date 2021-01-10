@@ -138,6 +138,7 @@ c19_reload(redownload = TRUE) # презареждане от Интернет
 ?c19_var_plot
 ?c19_eu_weekly #etc
 ```
+*[Документация на публичните функции в пакета](https://stantraykov.github.io/c19bg/docs/reference/index.html)*
 
 ## Данни
 ```R
