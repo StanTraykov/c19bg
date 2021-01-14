@@ -116,8 +116,6 @@ make_eu_vis <- function(process_data = FALSE) {
         v_labs = v_labs,
         gtheme1 = gtheme1,
         gtheme2 = gtheme2,
-        # excess deaths factor comparison
-        comp_f = c("BG", "UK", "BE", "NL", "FR", "ES", "IT", "RO"),
         txt_title1 = tra("Umirania v"),
         txt_v = tra("av"),
         txt_title2 = tra("po sedmici i vazrastovi grupi"),
@@ -191,7 +189,7 @@ eu_vis <- make_eu_vis()
 #'                   Europe/EU+)
 #' @param highlight country to highlight (EU 2-ltr code, e.g. "EL" for Greece)
 #' @param top_n number of lines to label
-#' @param lower_x week axis limit (default NA = show all data)
+#' @param first_wk first week in 2020 to plot
 #' @param lower_y indicator axis limit (default NA = show all data)
 #' @param label_fun function to apply to line labels (default is to round)
 #' @param axis_labels axis labels, e.g. scales::label_number(),
@@ -213,7 +211,7 @@ c19_eu_weekly <- function(
     continents = c("Asia", "Africa", "Europe", "Oceania", "America"),
     highlight = "BG",
     top_n = 20,
-    lower_x = 10,
+    first_wk = 10,
     lower_y = NA,
     label_fun = round,
     axis_labels = scales::label_number(),
@@ -225,12 +223,13 @@ c19_eu_weekly <- function(
     vis <- eu_vis()
     pdata <- eu_data$factor_tab %>%
         dplyr::filter(stringr::str_detect(continent, cont_regex),
-                      !is.na(.data[[vy]])) %>%
+                      !is.na(.data[[vy]]),
+                      year > 2020 | week >= first_wk) %>%
         dplyr::mutate(
             geo = forcats::fct_relevel(factor(geo), highlight, after = Inf)
         )
-    distinct_geo <- pdata %>% dplyr::select("geo") %>% dplyr::distinct()
-    distinct_cont <- pdata %>% dplyr::select("continent") %>% dplyr::distinct()
+    distinct_geo <- pdata %>% dplyr::distinct(geo)
+    distinct_cont <- pdata %>% dplyr::distinct(continent)
     cont_str <- paste(distinct_cont %>%
                           dplyr::mutate(continent = sapply(continent, tra)) %>%
                           dplyr::pull(),
@@ -244,18 +243,20 @@ c19_eu_weekly <- function(
         dplyr::arrange(year, week) %>%
         dplyr::slice_tail() %>%
         dplyr::ungroup()
-    max_week <- last_data_pt %>%
-        dplyr::pull(week) %>%
-        max()
+    max_yr_wk <- last_data_pt %>%
+        dplyr::arrange(year, week) %>%
+        dplyr::slice_tail() %>%
+        dplyr::pull(yr_wk)
     max_pt <- pdata %>%
         dplyr::filter(!is.na(.data[[vy]])) %>%
         dplyr::group_by(geo) %>%
-        dplyr::filter(.data[[vy]] == max(.data[[vy]]), week != max_week) %>%
+        dplyr::filter(.data[[vy]] == max(.data[[vy]]), yr_wk != max_yr_wk) %>%
         dplyr::ungroup()
     plt <- ggplot2::ggplot(
         data = pdata,
         mapping = ggplot2::aes(
-            x = week,
+            x = yr_wk,
+            group = geo,
             y = .data[[vy]],
             color = geo,
             fontface = ifelse(geo == highlight, "bold", "plain"),
@@ -270,10 +271,10 @@ c19_eu_weekly <- function(
             data = last_data_pt %>%
                 dplyr::arrange(geo == highlight, .data[[vy]]) %>%
                 dplyr::slice_tail(n = top_n),
-            mapping = ggplot2::aes(x = max_week),
+            mapping = ggplot2::aes(x = max_yr_wk),
             family = vis$font_family,
             size = ifelse(top_n > 20, vis$font_xsmall, vis$font_small),
-            nudge_x = ifelse(top_n > 20, 4.3, 3.8),
+            nudge_x = ifelse(top_n > 20, 3.3, 2.8),
             hjust = 0,
             direction = "y",
             point.padding = NA,
@@ -299,10 +300,8 @@ c19_eu_weekly <- function(
             bg.color = "#ebebeb",
             show.legend = FALSE
         ) +
-        ggplot2::scale_x_continuous(
-            breaks = seq(1, 53, by = 2),
-            limits = c(lower_x, NA),
-            expand = ggplot2::expansion(mult = c(0.02, 0.3))
+        ggplot2::scale_x_discrete(
+            expand = ggplot2::expansion(mult = c(0.02, 0.25))
         ) +
         ggplot2::scale_y_continuous(
             limits = c(lower_y, NA),
@@ -317,7 +316,10 @@ c19_eu_weekly <- function(
         ggplot2::labs(
             title = sprintf("%s (%s)", vis$v_labs[[indicator]]$title, cont_str)
         ) +
-        vis$gtheme1
+        vis$gtheme1 +
+        ggplot2::theme(
+            axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
+        )
     return(plt)
 }
 
@@ -325,35 +327,36 @@ c19_eu_weekly <- function(
 #'
 #' @return A ggplot
 
-#' @param countries countries to plot; default NULL uses hard-coded selection.
+#' @param countries countries to plot
 #' @param eu_data eu data
 #'
 #' @export
 #' @family plot funcs
-c19_deaths_factor <- function(countries = NULL, eu_data = c19_eu_data()) {
+c19_deaths_factor <- function(
+    countries = c("BG", "UK", "BE", "NL", "FR", "ES", "IT", "RO"),
+    eu_data = c19_eu_data()
+) {
     vis <- eu_vis()
-    if (is.null(countries))
-        countries <- vis$comp_f
     pdata <- eu_data$factor_tab %>%
         dplyr::filter(geo %in% countries)
     labeled_factors <- pdata %>% dplyr::filter(ed_factor > 1.2)
     plt <- ggplot2::ggplot(data = pdata,
-                           mapping = ggplot2::aes(x = week)) +
+                           mapping = ggplot2::aes(x = yr_wk, group = 1)) +
         ggplot2::geom_ribbon(
             mapping = ggplot2::aes(ymin = mean_deaths,
-                                   ymax = d_2020 - covid_deaths),
+                                   ymax = d_tt - covid_deaths),
             fill = "#99000044"
         ) +
         ggplot2::geom_line(mapping = ggplot2::aes(y = mean_deaths,
                                                   color = vis$f_col[1])) +
-        ggplot2::geom_line(mapping = ggplot2::aes(y = d_2020 - covid_deaths,
+        ggplot2::geom_line(mapping = ggplot2::aes(y = d_tt - covid_deaths,
                                                   color = vis$f_col[2])) +
-        ggplot2::geom_line(mapping = ggplot2::aes(y = d_2020,
+        ggplot2::geom_line(mapping = ggplot2::aes(y = d_tt,
                                                   color = "2020")) +
         shadowtext::geom_shadowtext(
             data = labeled_factors,
             mapping = ggplot2::aes(label = round(ed_covid_factor, 2),
-                                   y = d_2020 - covid_deaths),
+                                   y = d_tt - covid_deaths),
             angle = 90,
             size = vis$font_size_faclabs,
             family = vis$font_family,
@@ -361,10 +364,14 @@ c19_deaths_factor <- function(countries = NULL, eu_data = c19_eu_data()) {
             bg.color = "white"
         ) +
         vis$f_color_scale +
-        vis$common_xweek_scale +
         ggplot2::facet_wrap(~ geo_name, ncol = 2, scales = "free_y") +
         vis$f_labs +
-        vis$gtheme1
+        vis$gtheme1 +
+        ggplot2::theme(
+            axis.text.x = ggplot2::element_text(angle = 90,
+                                                vjust = 0.5,
+                                                hjust = 1)
+        )
     return(plt)
 }
 

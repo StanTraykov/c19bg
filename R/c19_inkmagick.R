@@ -173,7 +173,7 @@ c19_inkmagick <- function(var = TRUE,
         )
         im_exp(plot = c19_eu_weekly(indicator = "hosp_1m", top_n = 100),
                file = "C13_cmp_h_eurp")
-        im_exp(plot = c19_eu_weekly(indicator = "em_1m"),
+        im_exp(plot = c19_eu_weekly(indicator = "em_1m", first_wk = 1),
                file = "C12_exd1m_eurp")
         im_exp(plot = c19_eu_weekly(indicator = "r14_cases", lower_y = 0),
                file = "C10_cmp_i_wrld")
