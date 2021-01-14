@@ -2,7 +2,7 @@
 % Please edit documentation in R/c19_heat.R
 \name{c19_heat_save}
 \alias{c19_heat_save}
-\title{Saves the incidence heat map.}
+\title{Save the incidence heat map.}
 \usage{
 c19_heat_save(file_ext = ".png", h = 5.5, ...)
 }
@@ -16,7 +16,7 @@ to ".png" currently as the SVG output is unsatisfactory.}
 e.g. dpi, quality for JPEG output.}
 }
 \description{
-Saves the incidence heat map.
+Save the incidence heat map.
 }
 \examples{
 \dontrun{

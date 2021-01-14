@@ -2,7 +2,7 @@
 % Please edit documentation in R/c19_var_plot.R
 \name{c19_var_plot_save}
 \alias{c19_var_plot_save}
-\title{Saves various BG plots based on data.gov.bg.}
+\title{Save various BG plots based on data.gov.bg.}
 \usage{
 c19_var_plot_save(...)
 }
@@ -12,7 +12,7 @@ c19_var_plot_save(...)
 e.g. quality for JPEG output.}
 }
 \description{
-Saves various BG plots based on data.gov.bg.
+Save various BG plots based on data.gov.bg.
 }
 \examples{
 \dontrun{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/opendata_bg.R
 \name{c19_bg_data}
 \alias{c19_bg_data}
-\title{Provides access to Bulgarian COVID-19 data from data.egov.bg.}
+\title{Provide access to Bulgarian COVID-19 data from data.egov.bg.}
 \usage{
 c19_bg_data(reload = FALSE, redownload = FALSE)
 }
@@ -12,7 +12,7 @@ c19_bg_data(reload = FALSE, redownload = FALSE)
 \item{redownload}{refresh from internet}
 }
 \description{
-Provides access to Bulgarian COVID-19 data from data.egov.bg.
+Provide access to Bulgarian COVID-19 data from data.egov.bg.
 }
 \seealso{
 Other data funcs: 

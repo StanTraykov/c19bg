@@ -5,6 +5,8 @@
 \title{Provides access to ECDC/EUROSTAT COVID-19 data.}
 \usage{
 c19_eu_data(reload = FALSE, redownload = FALSE)
+
+c19_eu_data(reload = FALSE, redownload = FALSE)
 }
 \arguments{
 \item{reload}{reload from disk}
@@ -13,8 +15,14 @@ c19_eu_data(reload = FALSE, redownload = FALSE)
 }
 \description{
 Provides access to ECDC/EUROSTAT COVID-19 data.
+
+Provide access to ECDC/EUROSTAT COVID-19 data.
 }
 \seealso{
+Other data funcs: 
+\code{\link{c19_bg_data}()},
+\code{\link{c19_reload}()}
+
 Other data funcs: 
 \code{\link{c19_bg_data}()},
 \code{\link{c19_reload}()}

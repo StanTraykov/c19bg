@@ -497,7 +497,7 @@ c19_var_plot <- function(
     return(plt)
 }
 
-#' Saves various BG plots based on data.gov.bg.
+#' Save various BG plots based on data.gov.bg.
 #'
 #' @param ... Passed export params: w (width), h (height), file_ext (".svg",
 #'            ".png", ".jpg"; others may work as well). Rest passed to ggplot2,

@@ -9,7 +9,7 @@ c19_eu_weekly(
   continents = c("Asia", "Africa", "Europe", "Oceania", "America"),
   highlight = "BG",
   top_n = 20,
-  lower_x = 10,
+  first_wk = 10,
   lower_y = NA,
   label_fun = round,
   axis_labels = scales::label_number(),
@@ -27,7 +27,7 @@ Europe/EU+)}
 
 \item{top_n}{number of lines to label}
 
-\item{lower_x}{week axis limit (default NA = show all data)}
+\item{first_wk}{first week in 2020 to plot}
 
 \item{lower_y}{indicator axis limit (default NA = show all data)}
 

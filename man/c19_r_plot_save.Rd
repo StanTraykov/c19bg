@@ -2,7 +2,7 @@
 % Please edit documentation in R/c19_r_plot.R
 \name{c19_r_plot_save}
 \alias{c19_r_plot_save}
-\title{Saves the R plot.}
+\title{Save the R plot.}
 \usage{
 c19_r_plot_save(...)
 }
@@ -12,7 +12,7 @@ c19_r_plot_save(...)
 e.g. dpi, quality for JPEG output.}
 }
 \description{
-Saves the R plot.
+Save the R plot.
 }
 \examples{
 \dontrun{

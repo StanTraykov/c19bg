@@ -4,15 +4,15 @@
 \alias{c19_deaths_factor}
 \title{Plot excess deaths factors for a selection of countries.}
 \usage{
-c19_deaths_factor(countries = NULL, eu_data = c19_eu_data())
+c19_deaths_factor(
+  countries = c("BG", "UK", "BE", "NL", "FR", "ES", "IT", "RO"),
+  eu_data = c19_eu_data()
+)
 }
 \arguments{
-\item{countries}{countries to plot; default NULL uses hard-coded selection.}
+\item{countries}{countries to plot}
 
 \item{eu_data}{eu data}
-}
-\value{
-A ggplot
 }
 \description{
 Plot excess deaths factors for a selection of countries.

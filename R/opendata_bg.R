@@ -136,7 +136,7 @@ c19_make_bg_data <- function() {
     return(get_data)
 }
 
-#' Provides access to Bulgarian COVID-19 data from data.egov.bg.
+#' Provide access to Bulgarian COVID-19 data from data.egov.bg.
 #'
 #' @param reload reload from disk
 #' @param redownload refresh from internet

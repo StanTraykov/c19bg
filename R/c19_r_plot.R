@@ -283,7 +283,7 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
     return(plt)
 }
 
-#' Saves the R plot.
+#' Save the R plot.
 #'
 #' @param ... Passed export params: w (width), h (height), file_ext (".svg",
 #'            ".png", ".jpg"; others may work as well). Rest passed to ggplot2,

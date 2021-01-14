@@ -325,8 +325,6 @@ c19_eu_weekly <- function(
 
 #' Plot excess deaths factors for a selection of countries.
 #'
-#' @return A ggplot
-
 #' @param countries countries to plot
 #' @param eu_data eu data
 #'

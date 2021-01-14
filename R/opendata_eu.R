@@ -544,7 +544,7 @@ c19_make_eu_data <- function() {
     return(get_data)
 }
 
-#' Provides access to ECDC/EUROSTAT COVID-19 data.
+#' Provide access to ECDC/EUROSTAT COVID-19 data.
 #'
 #' @param reload reload from disk
 #' @param redownload refresh from internet

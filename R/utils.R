@@ -1,5 +1,9 @@
 #' Reload all data from disk (or from the Internet).
 #'
+#' Equivalent to calling
+#' \code{\link{c19_bg_data}(reload = TRUE, redownload = redownload)}
+#' and
+#' \code{\link{c19_eu_data}(reload = TRUE, redownload = redownload)}
 #' @param redownload whether to refresh all datasets from the Internet.
 #'
 #'@export

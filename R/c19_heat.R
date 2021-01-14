@@ -79,7 +79,7 @@ c19_heat <- function(country_data = c19_bg_data()) {
     return(plt)
 }
 
-#' Saves the incidence heat map.
+#' Save the incidence heat map.
 #'
 #' @param ... Passed export params, incl. w (width). Rest passed to ggplot2,
 #'            e.g. dpi, quality for JPEG output.
