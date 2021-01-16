@@ -5,7 +5,6 @@ rd_in <- function(file) {
 }
 
 intern_data = list(
-    test = c(1,2,4),
     bg_cnames = rd_in("bg_cnames"),
     ccodes = rd_in("ccodes"),
     pre_opendata = rd_in("pre_opendata"),

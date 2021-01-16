@@ -116,24 +116,28 @@ c19_inkmagick <- function(var = TRUE,
             dir.create(d, recursive = TRUE)
 
     if (var) {
-        im_exp(file = "C09_pos", plot = c19_var_plot("positivity"))
-        im_exp(file = "C09_pos_pcr", plot = c19_var_plot("pospcr"))
-        im_exp(file = "C09_pos_ag", plot = c19_var_plot("posag"))
+        win = 7
+        im_exp(file = "C09_pos", plot = c19_var_plot("positivity",
+                                                     roll_window = win))
+        im_exp(file = "C09_pos_pcr", plot = c19_var_plot("pospcr",
+                                                         roll_window = win))
+        im_exp(file = "C09_pos_ag", plot = c19_var_plot("posag",
+                                                        roll_window = win))
         im_exp(
             file = "C04_cd",
             plot = c19_var_plot("casesdeaths",
                             roll_func = mean,
-                            roll_window = 7)
+                            roll_window = win)
         )
         im_exp(file = "C08_cases", plot = c19_var_plot("cases"))
         im_exp(file = "C07_hospitalized", plot = c19_var_plot("hospitalized"))
         im_exp(file = "C05_age_7", plot = c19_var_plot("age",
                                                    roll_func = mean,
-                                                   roll_window = 7,
+                                                   roll_window = win,
                                                    line_legend = "0"))
         im_exp(file = "C05_age_dis", plot = c19_var_plot("dis",
                                                      roll_func = mean,
-                                                     roll_window = 7,
+                                                     roll_window = win,
                                                      line_legend = "."))
         im_exp(
             file = "C06_age_1",

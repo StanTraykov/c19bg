@@ -26,22 +26,24 @@ make_var_plot_vis <- function(process_data = FALSE) {
         if (!is.null(res)) return(res)
         return(paste(tra("-dn. prozorec: "), x))
     }
-    line_fields <- list(casesdeaths = "new_cases|new_deaths",
-                        age = "([2-8]|^)0\\+|new_deaths",
-                        dis = "0-|90\\+",
-                        hospitalized = "active_cases",
-                        positivity = "date|s7_nt$|posit7$|s7_nt_pcr|posit7_pcr",
-                        pospcr = "date|posit7_pcr|s7_nt_pcr",
-                        posag = "date|posit7_ag|s7_nt_ag")
+    line_fields <- list(
+        casesdeaths = "new_cases|new_deaths",
+        age = "([2-8]|^)0\\+|new_deaths",
+        dis = "0-|90\\+",
+        hospitalized = "active_cases",
+        positivity = "date|rolled_nt$|posit_roll$|rolled_nt_pcr|posit_roll_pcr",
+        pospcr = "date|posit_roll_pcr|rolled_nt_pcr",
+        posag = "date|posit_roll_ag|rolled_nt_ag"
+    )
     area_fields <- list(cases = "^cases$|active_cases",
                         hospitalized = "hospitalized|in_icu")
     tick_choice <- c(10, 20, 25, 50) * rep(c(1, 10, 100, 1000), each = 4)
     no_na <- c( # don't draw rows if these fields are NA
         age = "0+",
         dis = "0-19",
-        positivity = "posit7",
-        pospcr = "posit7_pcr",
-        posag = "posit7_ag"
+        positivity = "posit_roll",
+        pospcr = "posit_roll_pcr",
+        posag = "posit_roll_ag"
     )
     thin <- 0.5   # } lines
     thick <- 1    # }
@@ -196,9 +198,12 @@ make_var_plot_vis <- function(process_data = FALSE) {
     plot_order <- list(
         cases = c("cases", "active_cases"),
         hospitalized = c("hospitalized", "in_icu", "active_cases"),
-        positivity = c("s7_nt", "posit7", "s7_nt_pcr", "posit7_pcr"),
-        pospcr = c("s7_nt_pcr", "posit7_pcr"),
-        posag = c("s7_nt_ag", "posit7_ag")
+        positivity = c("rolled_nt",
+                       "posit_roll",
+                       "rolled_nt_pcr",
+                       "posit_roll_pcr"),
+        pospcr = c("rolled_nt_pcr", "posit_roll_pcr"),
+        posag = c("rolled_nt_ag", "posit_roll_ag")
     )
     plot_sec_y <- list(
         casesdeaths = list(label = tra("smartni slucai"),
@@ -211,21 +216,21 @@ make_var_plot_vis <- function(process_data = FALSE) {
                             vars = "active_cases",
                             scale = 10),
         positivity = list(label = tra("novodokazani slucai"),
-                          vars = c("posit7", "posit7_pcr"),
+                          vars = c("posit_roll", "posit_roll_pcr"),
                           scale = 0.000005,
                           type = "percent"),
         pospcr = list(label = tra("novodokazani slucai"),
-                      vars = "posit7_pcr",
+                      vars = "posit_roll_pcr",
                       scale = 0.000005,
                       type = "percent"),
         posag = list(label = tra("novodokazani slucai"),
-                     vars = "posit7_ag",
+                     vars = "posit_roll_ag",
                      scale = 0.000005,
                      type = "percent")
     )
     plot_x_min <- list(
-        positivity = list(posit7_pcr = as.Date("2020-12-23"),
-                          s7_nt_pcr = as.Date("2020-12-23"))
+        positivity = list(posit_roll_pcr = as.Date("2020-12-23"),
+                          rolled_nt_pcr = as.Date("2020-12-23"))
     )
     font_size <- getOption("c19bg.font_size") * getOption("c19bg.font_scale")
     font_family <- getOption("c19bg.font_family")
@@ -262,7 +267,7 @@ make_var_plot_vis <- function(process_data = FALSE) {
 
 var_plot_vis <- make_var_plot_vis()
 
-var_plot_tidy <- function(country_data) {
+var_plot_tidy <- function(country_data, tests_sum_days) {
     # age table
     atab <- country_data$age
     for (s in c(8:1)) {
@@ -272,19 +277,22 @@ var_plot_tidy <- function(country_data) {
     }
     # history + age data, clean wide table
     ftab <- dplyr::left_join(country_data$gen_inc_hist, atab, by = "date")
-    roll7 <- function(x) zoo::rollsum(x, 7, align = "right", fill = NA)
+    roll <- function(x) zoo::rollsum(x,
+                                     tests_sum_days,
+                                     align = "right",
+                                     fill = NA)
     ftab <- ftab %>%
         # all tests
         dplyr::mutate(
-            s7_nc = roll7(new_cases),
-            s7_nt = roll7(new_tests),
-            posit7 = s7_nc / s7_nt,
-            s7_nc_pcr = roll7(new_pcr_cases),
-            s7_nt_pcr = roll7(new_pcr_tests),
-            posit7_pcr = s7_nc_pcr / s7_nt_pcr,
-            s7_nc_ag = roll7(new_ag_cases),
-            s7_nt_ag = roll7(new_ag_tests),
-            posit7_ag = s7_nc_ag / s7_nt_ag,
+            rolled_nc = roll(new_cases),
+            rolled_nt = roll(new_tests),
+            posit_roll = rolled_nc / rolled_nt,
+            rolled_nc_pcr = roll(new_pcr_cases),
+            rolled_nt_pcr = roll(new_pcr_tests),
+            posit_roll_pcr = rolled_nc_pcr / rolled_nt_pcr,
+            rolled_nc_ag = roll(new_ag_cases),
+            rolled_nt_ag = roll(new_ag_tests),
+            posit_roll_ag = rolled_nc_ag / rolled_nt_ag,
             posit_ag = new_ag_cases / new_ag_tests
         )
     return(ftab)
@@ -318,7 +326,7 @@ c19_var_plot <- function(
     line_fields <- vis$fields$line[[chart]]
     area_fields <- vis$fields$area[[chart]]
     all_fields <- paste(c("date", line_fields, area_fields), collapse = "|")
-    ptab <- var_plot_tidy(country_data) %>%
+    ptab <- var_plot_tidy(country_data, tests_sum_days = roll_window) %>%
         dplyr::select(dplyr::matches(all_fields))
     # scale secondary axis values
     if (chart %in% names(vis$sec_y)) {
@@ -349,6 +357,8 @@ c19_var_plot <- function(
             ))
         legend_main <- paste0(roll_window,
                               vis$translate(deparse(substitute(roll_func))))
+    } else if (chart %in% c("positivity", "posag", "pospcr")) {
+        legend_main <- paste0(roll_window, vis$translate("sum"))
     } else {
         legend_main <- NULL
     }

@@ -29,26 +29,25 @@ make_eu_vis <- function(process_data = FALSE) {
         wthick = 1.1
     )
     line_cols <- c( # faceted deaths plot
-        "#AAAAAA", "#BBAA00", "#008800", "#0000BB", "#000000", "#FF0000"
+        "#AAAAAA", "#BBAA00", "#008800", "#0000BB", "#000000", "#D000D0",
+        "#FF0000"
     )
     col_legend <- ggplot2::guide_legend( # faceted deaths plot
         nrow = 1,
         override.aes = list(
-            size = c(rep(line_sz$thin, 5), line_sz$thick)
+            size = c(rep(line_sz$thin, 6), line_sz$thick)
         )
     )
     ext_ls <- c( # for country totals deaths plot
-        "solid", "solid", "dotted", "solid", "solid", "solid",
-        "solid", "solid", "solid", "solid", "solid"
+        rep("solid",2), "dotted", rep("solid", 9)
     )
     ext_guide <- ggplot2::guide_legend( # for country totals deaths plot
         nrow = 1,
-        override.aes = list(linetype = ext_ls, shape = c(rep(NA, 10), 19))
+        override.aes = list(linetype = ext_ls, shape = c(rep(NA, 11), 19))
     )
     ext_line_cols <- c( # for country totals deaths plot
-        "#BBBBBB", "#BBBBBB", "#BBBBBB", "#BBBBBB", "#777777",
-        "#88AAAA", "#BBAA00", "#008800", "#0000BB", "#000000",
-        "#FF0000"
+        "#BBBBBB", "#BBBBBB", "#BBBBBB", "#BBBBBB", "#777777", "#88AAAA",
+        "#BBAA00", "#008800", "#0000BB", "#000000", "#D000D0", "#FF0000"
     )
     v_labs <- list( # labels for ECDC/EUROSTAT weekly comparison charts
         r14_cases = ggplot2::labs(
@@ -122,9 +121,13 @@ make_eu_vis <- function(process_data = FALSE) {
         txt_title3 = tra("po sedmici"),
         txt_titlei = tra("Umirania po strani i sedmici"),
         f_col = c(tra("sredno 2015-2019 g."),
-                  tra("2020 g. bez dokazani smartni slucai"),
-                  tra("2020 g.")),
+                  tra("umirania bez dokazani smartni slucai"),
+                  tra("umirania")),
         line_sz = line_sz,
+        pt_sz = c(
+            0.8,  # faceted plots: week points for current year (only if 1 obs)
+            2.7   # whole-page plots: week points for current year
+        ),
         f_color_scale = ggplot2::scale_color_manual(
             values = c("dark gray", "red", "dark magenta")
         ),
@@ -274,7 +277,7 @@ c19_eu_weekly <- function(
             mapping = ggplot2::aes(x = max_yr_wk),
             family = vis$font_family,
             size = ifelse(top_n > 20, vis$font_xsmall, vis$font_small),
-            nudge_x = ifelse(top_n > 20, 3.3, 2.8),
+            nudge_x = ifelse(top_n > 20, 4.0, 2.5),
             hjust = 0,
             direction = "y",
             point.padding = NA,
@@ -350,7 +353,7 @@ c19_deaths_factor <- function(
         ggplot2::geom_line(mapping = ggplot2::aes(y = d_tt - covid_deaths,
                                                   color = vis$f_col[2])) +
         ggplot2::geom_line(mapping = ggplot2::aes(y = d_tt,
-                                                  color = "2020")) +
+                                                  color = vis$f_col[3])) +
         shadowtext::geom_shadowtext(
             data = labeled_factors,
             mapping = ggplot2::aes(label = round(ed_covid_factor, 2),
@@ -394,16 +397,28 @@ c19_deaths_age <- function(country_code, eu_data = c19_eu_data()) {
         year >= 2015,
         stringr::str_detect(age, "([1234567]|80-89|90|00)")
     )
+    max_yr <- pdata %>% dplyr::filter(!is.na(deaths)) %>%
+        dplyr::pull(year) %>%
+        max()
+    num_obs_max_yr <- pdata %>%
+        dplyr::filter(year == max_yr, age == "00-09") %>%
+        dplyr::count() %>%
+        dplyr::pull()
     plt <- ggplot2::ggplot(
         data = pdata,
         mapping = ggplot2::aes(
             x = week,
             y = deaths,
             color = as.factor(year),
-            size = ifelse(year == 2020, "C", "N")
+            size = ifelse(year == max_yr, "C", "N")
         )
     ) +
         ggplot2::geom_line() +
+        ggplot2::geom_point(
+            data = pdata %>% dplyr::filter(year == max_yr, num_obs_max_yr == 1),
+            size = vis$pt_sz[1],
+            show.legend = FALSE
+        ) +
         vis$common_size_scale +
         vis$common_color_scale +
         vis$common_xweek_scale +
@@ -434,6 +449,9 @@ c19_deaths_total <- function(country_code, eu_data = c19_eu_data()) {
         title_pre <- vis$txt_title1
     pdata <- eu_data$eurostat_deaths %>%
         dplyr::filter(geo == country_code, sex == "T", age == "TOTAL")
+    max_yr <- pdata %>% dplyr::filter(!is.na(deaths)) %>%
+        dplyr::pull(year) %>%
+        max()
     plt <- ggplot2::ggplot(
         data = pdata,
         mapping = ggplot2::aes(
@@ -441,13 +459,13 @@ c19_deaths_total <- function(country_code, eu_data = c19_eu_data()) {
             y = deaths,
             color = as.factor(year),
             linetype = as.factor(year),
-            size = ifelse(year == 2020, "C", "N")
+            size = ifelse(year == max_yr, "C", "N")
         )
     ) +
         ggplot2::geom_line() +
         ggplot2::geom_point(
-            data = pdata %>% dplyr::filter(year == 2020),
-            size = 2.7
+            data = pdata %>% dplyr::filter(year == max_yr),
+            size = vis$pt_sz[2]
         ) +
         vis$ext_ltypes +
         vis$ext_color_scale +
@@ -479,13 +497,14 @@ c19_deaths_map <- function(vline_last_wk = "BG", eu_data = c19_eu_data()) {
                       sex == "T",
                       age == "TOTAL",
                       year >= 2015)
+    max_yr <- pdata %>% dplyr::pull(year) %>% max()
     plt <- ggplot2::ggplot(
         data = pdata,
         mapping = ggplot2::aes(
             x = week,
             y = deaths,
             color = as.factor(year),
-            size = ifelse(year == 2020, "C", "N")
+            size = ifelse(year == max_yr, "C", "N")
         )
     ) +
         ggplot2::geom_line() +

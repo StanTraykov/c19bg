@@ -36,7 +36,8 @@ extrafont::font_import() # отнема време
 library(c19bg)
 
 # бързо генериране на SVG (високо качество)
-# отиват в c19bg/plots в текущата папка (обикн. Documents под Windows)
+# - отиват в c19bg/plots в текущата папка (обикн. Documents под Windows)
+# - в c19bg/data ще намерите изтеглените данни и изчислен R (estR.csv)
 c19_save_all()
 
 # бързо генериране на PNG, без презареждане от Интернет (dl = F)
