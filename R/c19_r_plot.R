@@ -186,7 +186,7 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
                 x = date - 3.5,
                 y = 0,
                 color = "B_pos",
-                label = signif(100 * posit7, digits = 2)
+                label = signif_pad(100 * posit7, digits = 2)
             ),
             vjust = 1.3,
             size = vis$font_size_poslab

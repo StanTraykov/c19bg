@@ -146,3 +146,8 @@ tib_read_tsv <- function(file, ...) {
                          ...)
     return(r)
 }
+
+signif_pad <- function(x, ...) {
+    fmt <- formatC(signif(x, ...), format = "fg", flag = "#", ...)
+    return(sub("\\.$", "", fmt))
+}
