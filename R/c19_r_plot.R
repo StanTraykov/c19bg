@@ -182,11 +182,12 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
         ggplot2::geom_text(
             data = sundays_only %>%
                 dplyr::filter(!is.na(posit7)),
-            mapping = ggplot2::aes(x = date - 3.5,
-                                   y = 0,
-                                   color = "B_pos",
-                                   label = paste0(round(100 * posit7),
-                                                  "%")),
+            mapping = ggplot2::aes(
+                x = date - 3.5,
+                y = 0,
+                color = "B_pos",
+                label = signif(100 * posit7, digits = 2)
+            ),
             vjust = 1.3,
             size = vis$font_size_poslab
         ) +
@@ -199,7 +200,7 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
                 x = date,
                 y = 0,
                 color = "B_pos",
-                label = tra("sedmicna pozitivnost: ")
+                label = tra("sedmicna pozitivnost (%): ")
             ),
             vjust = 1.3,
             hjust = 1,
