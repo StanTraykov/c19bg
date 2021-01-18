@@ -258,7 +258,7 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
             guide = fill_guide
         ) +
         ggplot2::scale_color_manual(
-            name = 1,
+            name = 2,
             values = c(vis$clr$tst, vis$clr$pos, "black", vis$clr$r_med),
             labels = vis$clr_labels,
             guide = clr_guide
