@@ -95,15 +95,17 @@ make_var_plot_vis <- function(process_data = FALSE) {
     hospitalized_colors <- c("black" = tra("aktivni slucai"))
     positivity_colors4 <- c(
         "green 3" = tra("broj testove"),
-        "red 3" = tra("pozitivni"),
+        "red 3" = tra("novodokazani"),
         "green 3" = tra("broj PCR"),
-        "red 3" = tra("pozitivni PCR")
+        "red 3" = tra("novodokazani PCR")
     )
     positivity_colors2 <- c(
         "green 3" = tra("broj testove"),
-        "red 3" = tra("pozitivni")
+        "red 3" = tra("novodokazani")
     )
-    make_scale <- function(sf, x) sf(values = names(x), labels = unname(x))
+    make_scale <- function(sf, x, ...) {
+        sf(values = names(x), labels = unname(x), ...)
+    }
     plot_colors <- c(
         casesdeaths = make_scale(ggplot2::scale_color_manual,
                                  casesdeaths_colors),
@@ -111,7 +113,8 @@ make_var_plot_vis <- function(process_data = FALSE) {
                                           labels = age_labels,
                                           guide = age_guide),
         hospitalized = make_scale(ggplot2::scale_color_manual,
-                                  hospitalized_colors),
+                                  hospitalized_colors,
+                                  guide = ggplot2::guide_legend(order = 2)),
         positivity = ggplot2::scale_color_manual(
             values = names(positivity_colors4),
             labels = unname(positivity_colors4),
@@ -126,11 +129,13 @@ make_var_plot_vis <- function(process_data = FALSE) {
             guide = ggplot2::guide_legend(nrow = 1)
         )
     )
-
-    plot_fills <- c(cases = make_scale(ggplot2::scale_fill_manual,
-                                       cases_fills),
-                    hospitalized = make_scale(ggplot2::scale_fill_manual,
-                                              hospitalized_fills))
+    plot_fills <- c(
+        cases = make_scale(ggplot2::scale_fill_manual,
+                           cases_fills),
+        hospitalized = make_scale(ggplot2::scale_fill_manual,
+                                  hospitalized_fills,
+                                  guide = ggplot2::guide_legend(order = 1))
+    )
     x_label <- tra("data na dokladvane (sedmica)")
     plot_labels <- list(
         casesdeaths = ggplot2::labs(

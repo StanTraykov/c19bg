@@ -138,8 +138,8 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
     last_sunday_inc <- plot_end_date + days_till_sunday
     secondary <- ggplot2::sec_axis(name = vis$sec_axis_name,
                                    trans = ~ . / r_scale)
-    clr_guide <- ggplot2::guide_legend(override.aes = vis$clr_leg)
-    fill_guide <- ggplot2::guide_legend(override.aes = vis$fill_leg)
+    clr_guide <- ggplot2::guide_legend(override.aes = vis$clr_leg, order = 1)
+    fill_guide <- ggplot2::guide_legend(override.aes = vis$fill_leg, order = 2)
     ttab <- ftab %>% dplyr::filter(date >= ftab$date[1] + vis$skip_to)
     cmx <- max(ttab %>% dplyr::pull(new_cases),
                na.rm = TRUE)
@@ -252,13 +252,11 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
             nudge_x = 5
         ) +
         ggplot2::scale_fill_manual(
-            name = 2,
             values = c(vis$clr$cri, vis$clr$reg_c, vis$clr$reg_s),
             labels = vis$fill_labels,
             guide = fill_guide
         ) +
         ggplot2::scale_color_manual(
-            name = 2,
             values = c(vis$clr$tst, vis$clr$pos, "black", vis$clr$r_med),
             labels = vis$clr_labels,
             guide = clr_guide
