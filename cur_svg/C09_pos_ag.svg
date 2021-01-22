@@ -30,8 +30,8 @@
 <polyline points='316.52,423.87 316.52,63.77 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' clip-path='url(#cpNTUuNDF8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
 <polyline points='472.41,423.87 472.41,63.77 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' clip-path='url(#cpNTUuNDF8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
 <polyline points='628.30,423.87 628.30,63.77 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' clip-path='url(#cpNTUuNDF8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
-<polyline points='71.55,285.42 93.82,261.61 116.09,251.88 138.36,256.23 160.63,261.68 182.90,262.34 205.17,218.62 227.44,221.16 249.71,213.71 271.98,195.21 294.25,164.71 316.52,158.86 338.79,160.74 361.06,171.99 383.33,170.78 405.60,183.23 427.87,186.83 450.14,189.87 472.41,189.24 494.68,191.92 516.95,184.73 539.22,189.23 561.49,178.65 ' style='stroke-width: 1.07; stroke: #00CD00; stroke-linecap: butt;' clip-path='url(#cpNTUuNDF8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
-<polyline points='71.55,123.66 93.82,107.86 116.09,102.96 138.36,92.90 160.63,80.51 182.90,85.70 205.17,115.23 227.44,142.28 249.71,186.87 271.98,208.05 294.25,217.18 316.52,225.56 338.79,227.58 361.06,239.35 383.33,253.36 405.60,260.18 427.87,265.35 450.14,270.29 472.41,274.44 494.68,275.01 516.95,282.01 539.22,284.49 561.49,291.77 ' style='stroke-width: 1.07; stroke: #CD0000; stroke-linecap: butt;' clip-path='url(#cpNTUuNDF8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
+<polyline points='71.55,285.42 93.82,261.61 116.09,251.88 138.36,256.23 160.63,261.68 182.90,262.34 205.17,218.62 227.44,221.16 249.71,213.71 271.98,195.21 294.25,164.71 316.52,158.86 338.79,160.74 361.06,171.99 383.33,170.78 405.60,183.23 427.87,186.83 450.14,189.87 472.41,189.24 494.68,191.92 516.95,184.73 539.22,189.23 561.49,178.65 583.76,172.00 ' style='stroke-width: 1.07; stroke: #00CD00; stroke-linecap: butt;' clip-path='url(#cpNTUuNDF8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
+<polyline points='71.55,123.66 93.82,107.86 116.09,102.96 138.36,92.90 160.63,80.51 182.90,85.70 205.17,115.23 227.44,142.28 249.71,186.87 271.98,208.05 294.25,217.18 316.52,225.56 338.79,227.58 361.06,239.35 383.33,253.36 405.60,260.18 427.87,265.35 450.14,270.29 472.41,274.44 494.68,275.01 516.95,282.01 539.22,284.49 561.49,291.77 583.76,298.13 ' style='stroke-width: 1.07; stroke: #CD0000; stroke-linecap: butt;' clip-path='url(#cpNTUuNDF8NzM5LjY1fDQyMy44N3w2My43Nw==)' />
 <defs>
   <clipPath id='cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA='>
     <rect x='0.00' y='0.00' width='792.00' height='504.00' />
@@ -76,14 +76,14 @@
 <g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text x='306.50' y='481.47' style='font-size: 14.00px; font-family: Calibri;' textLength='182.06px' lengthAdjust='spacingAndGlyphs'>дата на докладване (седмица)</text></g>
 <g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text transform='translate(14.33,282.67) rotate(-90)' style='font-size: 14.00px; font-family: Calibri;' textLength='77.71px' lengthAdjust='spacingAndGlyphs'>брой тестове</text></g>
 <g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text transform='translate(775.18,179.60) rotate(90)' style='font-size: 14.00px; font-family: Calibri;' textLength='128.43px' lengthAdjust='spacingAndGlyphs'>новодоказани случаи</text></g>
-<rect x='261.50' y='24.57' width='272.05' height='28.24' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)' />
-<g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text x='266.98' y='43.11' style='font-size: 14.00px; font-family: Calibri;' textLength='86.14px' lengthAdjust='spacingAndGlyphs'>7-дневна сума</text></g>
-<rect x='360.10' y='30.05' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #F2F2F2;' clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)' />
-<line x1='361.82' y1='38.69' x2='375.65' y2='38.69' style='stroke-width: 1.07; stroke: #00CD00; stroke-linecap: butt;' clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)' />
-<rect x='453.49' y='30.05' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #F2F2F2;' clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)' />
-<line x1='455.22' y1='38.69' x2='469.04' y2='38.69' style='stroke-width: 1.07; stroke: #CD0000; stroke-linecap: butt;' clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)' />
-<g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text x='384.35' y='42.23' style='font-size: 11.20px; font-family: Calibri;' textLength='62.17px' lengthAdjust='spacingAndGlyphs'>брой тестове</text></g>
-<g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text x='477.75' y='42.23' style='font-size: 11.20px; font-family: Calibri;' textLength='50.32px' lengthAdjust='spacingAndGlyphs'>позитивни</text></g>
+<rect x='252.65' y='24.57' width='289.75' height='28.24' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)' />
+<g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text x='258.13' y='43.11' style='font-size: 14.00px; font-family: Calibri;' textLength='86.14px' lengthAdjust='spacingAndGlyphs'>7-дневна сума</text></g>
+<rect x='351.24' y='30.05' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #F2F2F2;' clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)' />
+<line x1='352.97' y1='38.69' x2='366.80' y2='38.69' style='stroke-width: 1.07; stroke: #00CD00; stroke-linecap: butt;' clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)' />
+<rect x='444.64' y='30.05' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #F2F2F2;' clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)' />
+<line x1='446.37' y1='38.69' x2='460.19' y2='38.69' style='stroke-width: 1.07; stroke: #CD0000; stroke-linecap: butt;' clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)' />
+<g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text x='375.50' y='42.23' style='font-size: 11.20px; font-family: Calibri;' textLength='62.17px' lengthAdjust='spacingAndGlyphs'>брой тестове</text></g>
+<g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text x='468.89' y='42.23' style='font-size: 11.20px; font-family: Calibri;' textLength='68.03px' lengthAdjust='spacingAndGlyphs'>новодоказани</text></g>
 <g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text x='234.04' y='16.09' style='font-size: 16.80px; font-weight: bold; font-family: Calibri;' textLength='326.98px' lengthAdjust='spacingAndGlyphs'>Позитивност Ag (нови случаи / брой тестове)</text></g>
 <g clip-path='url(#cpMC4wMHw3OTIuMDB8NTA0LjAwfDAuMDA=)'><text x='645.48' y='496.52' style='font-size: 11.20px; font-family: Calibri;' textLength='94.16px' lengthAdjust='spacingAndGlyphs'>данни: data.egov.bg</text></g>
 </svg>
