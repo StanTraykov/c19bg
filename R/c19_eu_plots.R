@@ -401,7 +401,7 @@ c19_deaths_age <- function(country_code, eu_data = c19_eu_data()) {
         dplyr::pull(year) %>%
         max()
     num_obs_max_yr <- pdata %>%
-        dplyr::filter(year == max_yr, age == "00-09") %>%
+        dplyr::filter(year == max_yr, age == "00-09", !is.na(deaths)) %>%
         dplyr::count() %>%
         dplyr::pull()
     plt <- ggplot2::ggplot(
