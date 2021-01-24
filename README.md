@@ -15,10 +15,9 @@
 За инсталация директно от *GitHub*, въведете в [R](https://www.r-project.org/) или (още по-добре) в [RStudio](https://rstudio.com/):
 
 ```R
-devtools::install_github("StanTraykov/c19bg")
+install.packages("remotes")
+remotes::install_github("StanTraykov/c19bg")
 ```
-Ако нямате пакет `devtools`, може да го инсталирате в R с `install.packages("devtools")`. Повече информация ще намерите на [GitHub страницата на devtools](https://github.com/r-lib/devtools).
-
 Ако има проблеми с текущата версия, може да [изтеглите рилийз](https://github.com/StanTraykov/c19bg/releases) и инсталирате, напр. `install.packages("../Downloads/c19bg_0.1.0.zip")`.
 
 ### Опционално: extrafont
