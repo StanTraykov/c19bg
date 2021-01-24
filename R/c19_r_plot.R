@@ -83,7 +83,8 @@ make_r_plot_vis <- function(process_data = FALSE) {
         font_family = font_family,
         font_size = font_size,
         font_size_R = 3.7 * getOption("c19bg.font_scale"),
-        font_size_poslab = 2.7 * getOption("c19bg.font_scale")
+        font_size_poslab = 2.7 * getOption("c19bg.font_scale"),
+        font_scale = getOption("c19bg.font_scale")
     )
     return(vis)
 }
@@ -274,7 +275,9 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
                          by = "7 days"),
             limits = c(ftab$date[1], last_sunday_inc + 4),
             date_labels = "%d.%m. (%V)",
-            expand = ggplot2::expansion(mult = c(0.025, 0), add = c(-1, 4))
+            expand = ggplot2::expansion(mult = c(0.025,
+                                                 0.017 * vis$font_scale),
+                                        add = c(-1, 0))
         ) +
         vis$labels +
         ggplot2::labs(y = sprintf(vis$lab_y, tst_scale)) +
