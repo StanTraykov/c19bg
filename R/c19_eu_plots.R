@@ -498,6 +498,12 @@ c19_deaths_map <- function(vline_last_wk = "BG", eu_data = c19_eu_data()) {
                       age == "TOTAL",
                       year >= 2015)
     max_yr <- pdata %>% dplyr::pull(year) %>% max()
+    one_obs_max_yr <- pdata %>%
+        dplyr::filter(year == max_yr, !is.na(deaths)) %>%
+        dplyr::group_by(geo) %>%
+        dplyr::summarise(num_obs = dplyr::n()) %>%
+        dplyr::filter(num_obs == 1) %>%
+        dplyr::pull(geo)
     plt <- ggplot2::ggplot(
         data = pdata,
         mapping = ggplot2::aes(
@@ -508,6 +514,10 @@ c19_deaths_map <- function(vline_last_wk = "BG", eu_data = c19_eu_data()) {
         )
     ) +
         ggplot2::geom_line() +
+        ggplot2::geom_point(data = pdata %>%
+                                dplyr::filter(geo %in% one_obs_max_yr,
+                                              year == max_yr),
+                            show.legend = FALSE) +
         ggplot2::geom_vline(xintercept = last_bg_wk,
                             size = vis$map_vline$size,
                             color = vis$map_vline$col) +
