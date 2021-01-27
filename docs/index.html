@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">c19bg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -94,12 +94,15 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
 <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"StanTraykov/c19bg"</span><span class="op">)</span></code></pre></div>
-<p>Ако има проблеми с текущата версия, може да <a href="https://github.com/StanTraykov/c19bg/releases">изтеглите рилийз</a> и инсталирате, напр. <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("../Downloads/c19bg_0.1.0.zip")</a></code>.</p>
+<p>Ако има проблеми с текущата работна версия, може да <a href="https://github.com/StanTraykov/c19bg/releases/latest">изтеглите последния рилийз</a> и инсталирате с <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("&lt;път към сваления файл&gt;")</a></code> или директно от R:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"StanTraykov/c19bg"</span>, ref <span class="op">=</span> <span class="st">"v0.1.1"</span><span class="op">)</span></code></pre></div>
 <div id="опционално-extrafont" class="section level3">
 <h3 class="hasAnchor">
 <a href="#%D0%BE%D0%BF%D1%86%D0%B8%D0%BE%D0%BD%D0%B0%D0%BB%D0%BD%D0%BE-extrafont" class="anchor"></a>Опционално: extrafont</h3>
 <p>Еднократно и незадължително. Позволява ползването на шрифтове при извеждането на екран и записването в растерни формати (PNG, JPEG). <strong>Не влияе</strong> на векторния SVG изход (вкл. по-нататъшна обработка с външни програми). Единствената засегната графика, при генериране на всички графики с параметри по подразбиране, е хийтмапът на заболеваемостта.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"extrafont"</span><span class="op">)</span>
 <span class="fu">extrafont</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/extrafont/man/font_import.html">font_import</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># отнема време</span></code></pre></div>
 </div>
@@ -107,7 +110,7 @@
 <div id="генериране-на-всички-графики" class="section level2">
 <h2 class="hasAnchor">
 <a href="#%D0%B3%D0%B5%D0%BD%D0%B5%D1%80%D0%B8%D1%80%D0%B0%D0%BD%D0%B5-%D0%BD%D0%B0-%D0%B2%D1%81%D0%B8%D1%87%D0%BA%D0%B8-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B8" class="anchor"></a>Генериране на всички графики</h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stantraykov.github.io/c19bg">c19bg</a></span><span class="op">)</span>
 
 <span class="co"># бързо генериране на SVG (високо качество)</span>
@@ -140,7 +143,7 @@
 <h2 class="hasAnchor">
 <a href="#%D0%BE%D0%BF%D1%86%D0%B8%D0%B8" class="anchor"></a>Опции</h2>
 <p>Опциите могат да се зададат директно в R конзолата или в <a href="https://support.rstudio.com/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf">.Rprofile или сроден файл</a> за автоматично изпълнение при стартиране на R.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># промяна на шрифт</span>
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>c19bg.font_family <span class="op">=</span> <span class="st">"Calibri"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>c19bg.font_scale <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># скалиране на всички текстове (напр. 0.8, 1.1)</span>
@@ -168,7 +171,7 @@
 <div id="генериране-на-единични-графики" class="section level2">
 <h2 class="hasAnchor">
 <a href="#%D0%B3%D0%B5%D0%BD%D0%B5%D1%80%D0%B8%D1%80%D0%B0%D0%BD%D0%B5-%D0%BD%D0%B0-%D0%B5%D0%B4%D0%B8%D0%BD%D0%B8%D1%87%D0%BD%D0%B8-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B8" class="anchor"></a>Генериране на единични графики</h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stantraykov.github.io/c19bg">c19bg</a></span><span class="op">)</span>
 
 <span class="co"># зареждане на шрифтове за екран/растерен запис (ако са инсталирани)</span>
@@ -215,7 +218,7 @@
 <div id="данни" class="section level2">
 <h2 class="hasAnchor">
 <a href="#%D0%B4%D0%B0%D0%BD%D0%BD%D0%B8" class="anchor"></a>Данни</h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stantraykov.github.io/c19bg">c19bg</a></span><span class="op">)</span>
 
 <span class="co"># Данните могат да се достъпят с тези две функции</span>
@@ -250,10 +253,10 @@
 <h3 class="hasAnchor">
 <a href="#%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%BD%D0%B0-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B0-%D0%B8-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B0" class="anchor"></a>Примерна заявка и графика</h3>
 <p>Плаващо средно 7 дни по области.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stantraykov.github.io/c19bg">c19bg</a></span><span class="op">)</span>
 
 <span class="va">bg_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/c19_bg_data.html">c19_bg_data</a></span><span class="op">(</span><span class="op">)</span>
