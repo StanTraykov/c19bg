@@ -89,9 +89,9 @@ c19_heat <- function(
         ) +
         ggplot2::labs(
             title = ifelse(wrate,
-                tra("Sedmicen prirast (%) po vazrastovi grupi"),
-                paste(tra("Sedmicna zabolevaemost na COVID-19"),
-                      tra("(registrirani novi slucai na 100 hil.)"))
+                           tra("Sedmicen prirast (%) po vazrastovi grupi"),
+                           paste(tra("Sedmicna zabolevaemost na COVID-19"),
+                                 tra("(registrirani novi slucai na 100 hil.)"))
             ),
             caption = paste(tra("*dasno podravnena 7-dnevna suma"),
                             sprintf(tra("spramo dokladvanite v %s"), tra(wday)),
@@ -128,6 +128,11 @@ c19_heat_save <- function(file_ext = ".png", h = 5.5, ...) {
     }
     export(plot = c19_heat(),
            file = "C01_heat",
+           file_ext = file_ext,
+           h = h,
+           ...)
+    export(plot = c19_heat(wrate = TRUE),
+           file = "C01_heatWrate",
            file_ext = file_ext,
            h = h,
            ...)
