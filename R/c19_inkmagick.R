@@ -144,11 +144,18 @@ c19_inkmagick <- function(var = TRUE,
             plot = c19_var_plot("age", line_legend = "0")
         )
 
-        heat_map <- c19_heat()
+        heat_map <- c19_heat(wday = "Monday")
         ggplot2::ggsave(file = filenames("C01_heat")$jpg,
                         width = 11, height = 5.5, quality = 100, dpi = 125,
                         plot = heat_map)
         ggplot2::ggsave(file = filenames("C01_heat")$png,
+                        width = 11, height = 5.5, dpi = 125,
+                        plot = heat_map)
+        heat_map <- c19_heat(wday = "Monday", wrate = TRUE)
+        ggplot2::ggsave(file = filenames("C01_heatWrate")$jpg,
+                        width = 11, height = 5.5, quality = 100, dpi = 125,
+                        plot = heat_map)
+        ggplot2::ggsave(file = filenames("C01_heatWrate")$png,
                         width = 11, height = 5.5, dpi = 125,
                         plot = heat_map)
 

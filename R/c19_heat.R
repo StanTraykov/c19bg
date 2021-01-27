@@ -2,7 +2,7 @@
 
 #' @importFrom magrittr %>%
 
-heat_tidy <- function(atab) {
+heat_tidy <- function(atab, wday, wrate) {
     # from https://www.nsi.bg/bg/content/2977/%D0%BD%D0%B0%D1%81%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BF%D0%BE-%D1%81%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8-%D1%80%D0%B0%D0%B9%D0%BE%D0%BD%D0%B8-%D0%B2%D1%8A%D0%B7%D1%80%D0%B0%D1%81%D1%82-%D0%BC%D0%B5%D1%81%D1%82%D0%BE%D0%B6%D0%B8%D0%B2%D0%B5%D0%B5%D0%BD%D0%B5-%D0%B8-%D0%BF%D0%BE%D0%BB
     # population struct 0-19, 20-29, 30-39, 40-49,
     #                   50-59, 60-69, 70-79, 80-89, 90+, total
@@ -19,40 +19,62 @@ heat_tidy <- function(atab) {
                                                                sum,
                                                                align = "right",
                                                                fill = NA))) %>%
-        dplyr::filter(weekdays(date, abbreviate = FALSE) == "Monday",
+        dplyr::filter(weekdays(date, abbreviate = FALSE) == wday,
                       !is.na(`0-19`))
 
     # divide by pop struct
     atab[, -1] <- sweep(atab[, -1] * 100000, MARGIN = 2, pop_struct, `/`)
+    if (wrate) {
+        atab[-1, -1] <- atab[-1, -1] / atab[-nrow(atab), -1] - 1
+        atab <- atab[-1, ]
+    }
     # make longer and add week number
     atab <- atab %>%
         tidyr::pivot_longer(cols = tidyr::matches(paste0("0|", str_all)),
                             names_to = "group",
                             values_to = "incidence") %>%
-        dplyr::mutate(week = format(date - 1, "%G-%V")) #week-based yr; ISO week
+        dplyr::mutate(week = format(date - 7, "%G-%V")) #week-based yr; ISO week
     return(atab)
 }
 
 #' Plot incidence/100K heat map along age bands.
 #'
+#' @param wday weekday to right-align sums to ("Monday", "Tuesday", "Today",
+#'             etc.)
+#' @param wrate whether to plot weekly growth rates (%) instead of incidence
 #' @param country_data country data
 #'
 #' @export
 #' @family plot funcs
-c19_heat <- function(country_data = c19_bg_data()) {
-    atab <- heat_tidy(country_data$age)
+c19_heat <- function(
+    wday = "Monday",
+    wrate = FALSE,
+    country_data = c19_bg_data()
+) {
+    if (wday == "Today")
+        wday <- weekdays(Sys.Date(), abbreviate = FALSE)
+    if (!wday %in% weekdays(as.Date("2000-01-03") + 0:6, abbreviate = FALSE))
+        stop(paste("invalid weekday:", wday))
+    atab <- heat_tidy(country_data$age, wday, wrate)
+    if (wrate) {
+        lab_fun <- function(x) signif_pad(x * 100, digits = 3)
+        tile_fill <- ggplot2::scale_fill_distiller(palette = "Spectral")
+    } else {
+        lab_fun <- function(x) signif_pad(x, digits = 3)
+        tile_fill <- ggplot2::scale_fill_viridis_c()
+    }
     plt <- ggplot2::ggplot(data = atab,
                            ggplot2::aes(x = week,
                                         y = group,
                                         fill = incidence,
-                                        label = round(incidence))) +
+                                        label = lab_fun(incidence))) +
         ggplot2::geom_tile() +
         ggplot2::geom_text(
             family = getOption("c19bg.font_family"),
-            size = 3.6 * getOption("c19bg.font_scale")
+            size = 3 * getOption("c19bg.font_scale")
         ) +
         ggplot2::geom_hline(yintercept = 1.5, size = 1.5) +
-        ggplot2::scale_fill_viridis_c() +
+        tile_fill +
         ggplot2::theme_minimal() +
         ggplot2::theme(
             text = ggplot2::element_text(
@@ -66,13 +88,16 @@ c19_heat <- function(country_data = c19_bg_data()) {
             axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
         ) +
         ggplot2::labs(
-            title = paste(tra("Sedmicna zabolevaemost na COVID-19"),
-                          tra("(registrirani novi slucai na 100 hil.)")),
+            title = ifelse(wrate,
+                tra("Sedmicen prirast (%) po vazrastovi grupi"),
+                paste(tra("Sedmicna zabolevaemost na COVID-19"),
+                      tra("(registrirani novi slucai na 100 hil.)"))
+            ),
             caption = paste(tra("*dasno podravnena 7-dnevna suma"),
-                            tra("spramo dokladvanite v ponedelnik"),
+                            sprintf(tra("spramo dokladvanite v %s"), tra(wday)),
                             tra("na sledvasata sedmica;"),
                             tra("danni: data.egov.bg, NSI")),
-            fill = tra("c.100K"),
+            fill = ifelse(wrate, tra("prirast"), tra("c.100K")),
             x = tra("kalendarna sedmica*"),
             y = tra("grupa")
         )
