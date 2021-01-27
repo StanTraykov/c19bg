@@ -24,7 +24,7 @@ else
     echo "can't find suitable source dir (tried ${tday}, ${yday})" >&2
     exit 1
 fi
-pub_files="${src_dir}/svg/C*.svg ${src_dir}/svg/D00*.svg ${src_dir}/svg/D*BG.svg ${src_dir}/png/C*heat.png"
+pub_files="${src_dir}/svg/C*.svg ${src_dir}/svg/D00*.svg ${src_dir}/svg/D*BG.svg ${src_dir}/png/C*heat*.png"
 cp -a ${pub_files} "${copy_dir}"
 cd "${copy_dir}" || exit 1
 ${git_stage_docs}

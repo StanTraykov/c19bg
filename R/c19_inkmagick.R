@@ -143,6 +143,10 @@ c19_inkmagick <- function(var = TRUE,
             file = "C06_age_1",
             plot = c19_var_plot("age", line_legend = "0")
         )
+        im_exp(
+            file = "C06_age_dis_1",
+            plot = c19_var_plot("dis", line_legend = "0")
+        )
 
         heat_map <- c19_heat(wday = "Monday")
         ggplot2::ggsave(file = filenames("C01_heat")$jpg,
