@@ -4,9 +4,14 @@
 \alias{c19_heat}
 \title{Plot incidence/100K heat map along age bands.}
 \usage{
-c19_heat(country_data = c19_bg_data())
+c19_heat(wday = "Monday", wrate = FALSE, country_data = c19_bg_data())
 }
 \arguments{
+\item{wday}{weekday to right-align sums to ("Monday", "Tuesday", "Today",
+etc.)}
+
+\item{wrate}{whether to plot weekly growth rates (%) instead of incidence}
+
 \item{country_data}{country data}
 }
 \description{
