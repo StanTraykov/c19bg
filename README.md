@@ -24,7 +24,7 @@ remotes::install_github("StanTraykov/c19bg")
 
 ```R
 install.packages("remotes")
-remotes::install_github(ref = "v0.1.1", "StanTraykov/c19bg")
+remotes::install_github("StanTraykov/c19bg", ref = "v0.1.1")
 ```
 
 ### Опционално: extrafont
