@@ -162,16 +162,16 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
                                                   color = "C_mva"),
                            linetype = vis$lty_mva,
                            size = vis$line_sz) +
-        ggplot2::geom_line(mapping = ggplot2::aes(y = `Median(R)` * r_scale,
-                                                  color = "D_med"),
-                           linetype = vis$lty_norm,
-                           size = vis$line_sz) +
         ggplot2::geom_line(mapping = ggplot2::aes(y = s7_nt / tst_scale,
                                                   color = "A_tst"),
                            linetype = vis$lty_norm,
                            size = vis$line_sz) +
         ggplot2::geom_line(mapping = ggplot2::aes(y = posit7 * r_scale,
                                                   color = "B_pos"),
+                           linetype = vis$lty_norm,
+                           size = vis$line_sz) +
+        ggplot2::geom_line(mapping = ggplot2::aes(y = `Median(R)` * r_scale,
+                                                  color = "D_med"),
                            linetype = vis$lty_norm,
                            size = vis$line_sz) +
         ggplot2::geom_ribbon(
