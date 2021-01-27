@@ -41,7 +41,8 @@ heat_tidy <- function(atab, wday, wrate) {
 #'
 #' @param wday weekday to right-align sums to ("Monday", "Tuesday", "Today",
 #'             etc.)
-#' @param wrate whether to plot weekly growth rates (%) instead of incidence
+#' @param wrate whether to plot weekly growth rates (percentages) instead of
+#'              incidence
 #' @param country_data country data
 #'
 #' @export

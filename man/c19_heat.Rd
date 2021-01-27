@@ -10,7 +10,8 @@ c19_heat(wday = "Monday", wrate = FALSE, country_data = c19_bg_data())
 \item{wday}{weekday to right-align sums to ("Monday", "Tuesday", "Today",
 etc.)}
 
-\item{wrate}{whether to plot weekly growth rates (%) instead of incidence}
+\item{wrate}{whether to plot weekly growth rates (percentages) instead of
+incidence}
 
 \item{country_data}{country data}
 }
