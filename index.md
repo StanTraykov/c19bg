@@ -1,4 +1,4 @@
-**Последно обновяване: <!-- up -->2021-01-27 16:37:46 +0200<!-- date -->**
+**Последно обновяване: <!-- up -->2021-01-27 14:35:44 +0200<!-- date -->**
 
 *Чукнете на графиките за отваряне в голям размер.*
 
@@ -31,10 +31,12 @@
 
 [![Заболеваемост](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C01_heat.png)](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C01_heat.png)
 
+[![Седмичен прираст](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C01_heatWrate.png)](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C01_heatWrate.png)
+
 |Нови случаи по възраст, средно|Нови случаи по възраст, дневно|
 |-----|-----|
 |[![Случаи](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C05_age_7.svg)](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C05_age_7.svg)|[![Случаи дневно](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C06_age_1.svg)](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C06_age_1.svg)|
-|[![Случаи](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C05_age_dis.svg)](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C05_age_dis.svg)||
+|[![Случаи дез.](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C05_age_dis.svg)](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C05_age_dis.svg)|[![Случаи дез. дневно](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C06_age_dis_1.svg)](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C06_age_dis_1.svg)|
 
 # Общо случаи, хоспитализирани
 
@@ -77,5 +79,5 @@
 * [EUROSTAT demomwk](https://ec.europa.eu/eurostat/databrowser/view/demo_r_mwk_10/default/table?lang=en)
 
 # Забележки
-* Седмичните сравнителни графики са по данни на ECDC за всички страни. Възможни са леки разминавания с графиките за България по data.egov.bg и НСИ. Например, населението в ECDC е 7.00 млн., докато графиките за заболеваемост в България ползват по-актуална оценка (6.95 млн). ECDC изчислява позитивност за седмицата като частно на 7-дневни суми на новите случаи и броя тестове съответно по докладваните данни към понеделник на следващата седмица и неделя на текущата. Графиките за България взимат частното в един и същи ден (7-дневна сума от понеделник на следващата седмица за графиките по седмици).
+* Седмичните сравнителни графики са по данни на ECDC за всички страни. Възможни са леки разминавания с графиките за България по data.egov.bg и НСИ. Например, населението в ECDC е 7.00 млн., докато графиките за заболеваемост в България ползват по-актуална оценка (6.95 млн). ECDC изчислява позитивност за седмицата като частно на 7-дневни суми на новите случаи и броя тестове съответно по докладваните данни към понеделник на следващата седмица и неделя на текущата. Графиките за България взимат частното в един и същи ден (7-дневна сума от понеделник на следващата седмица за графиките по седмици). Допълнително, ECDC забави включването на антигенните тестове в знаменателя, докато позитивните бяха включени в числителя, което води до голямо, но кратко несъответствие в преходния период (до 2021-01 включително).
 * Данните в ЕВРОСТАТ за умирания по седмици през текущата година са предварителни и подлежат на корекция с всяко следващо обновяване. Някои страни не докладват стриктно по дата на умиране. Предварителните данни са с различна прецизност за различните страни. Ниска прецизност за последните седмици води до подценяване (увиснали отдясно криви) в "Сравнителна карта" и "Свръхсмъртност на 1 млн.". За България прецизността е добра (98%+ според [метаданните](https://ec.europa.eu/eurostat/cache/metadata/en/demomwk_esms.htm), вкл. за последната седмица). За Швеция са изпуснати ~2400 умирания, за които не е известна седмицата.
