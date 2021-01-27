@@ -18,7 +18,14 @@
 install.packages("remotes")
 remotes::install_github("StanTraykov/c19bg")
 ```
-Ако има проблеми с текущата версия, може да [изтеглите рилийз](https://github.com/StanTraykov/c19bg/releases) и инсталирате, напр. `install.packages("../Downloads/c19bg_0.1.0.zip")`.
+
+Ако има проблеми с текущата работна версия, може да [изтеглите последния рилийз](https://github.com/StanTraykov/c19bg/releases/latest) и инсталирате с 
+`install.packages("<път към сваления файл>")` или директно от R:
+
+```R
+install.packages("remotes")
+remotes::install_github(ref="v0.1.1", "StanTraykov/c19bg")
+```
 
 ### Опционално: extrafont
 
