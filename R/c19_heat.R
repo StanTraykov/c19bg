@@ -2,7 +2,7 @@
 
 #' @importFrom magrittr %>%
 
-heat_tidy <- function(atab, wday, wrate) {
+heat_tidy <- function(atab, first_wk, wday, wrate) {
     # from https://www.nsi.bg/bg/content/2977/%D0%BD%D0%B0%D1%81%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BF%D0%BE-%D1%81%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8-%D1%80%D0%B0%D0%B9%D0%BE%D0%BD%D0%B8-%D0%B2%D1%8A%D0%B7%D1%80%D0%B0%D1%81%D1%82-%D0%BC%D0%B5%D1%81%D1%82%D0%BE%D0%B6%D0%B8%D0%B2%D0%B5%D0%B5%D0%BD%D0%B5-%D0%B8-%D0%BF%D0%BE%D0%BB
     # population struct 0-19, 20-29, 30-39, 40-49,
     #                   50-59, 60-69, 70-79, 80-89, 90+, total
@@ -29,11 +29,14 @@ heat_tidy <- function(atab, wday, wrate) {
         atab <- atab[-1, ]
     }
     # make longer and add week number
+    first_wk <- sprintf("2020-%02.f", first_wk)
     atab <- atab %>%
         tidyr::pivot_longer(cols = tidyr::matches(paste0("0|", str_all)),
                             names_to = "group",
                             values_to = "incidence") %>%
-        dplyr::mutate(week = format(date - 7, "%G-%V")) #week-based yr; ISO week
+        #week_based_yr-ISO week
+        dplyr::mutate(week = format(date - 7, "%G-%V")) %>%
+        dplyr::filter(week >= first_wk)
     return(atab)
 }
 
@@ -43,6 +46,7 @@ heat_tidy <- function(atab, wday, wrate) {
 #'             etc.)
 #' @param wrate whether to plot weekly growth rates (percentages) instead of
 #'              incidence
+#' @param first_wk first week in 2020 to plot
 #' @param country_data country data
 #'
 #' @export
@@ -50,13 +54,14 @@ heat_tidy <- function(atab, wday, wrate) {
 c19_heat <- function(
     wday = "Monday",
     wrate = FALSE,
+    first_wk = 1,
     country_data = c19_bg_data()
 ) {
     if (wday == "Today")
         wday <- weekdays(Sys.Date(), abbreviate = FALSE)
     if (!wday %in% weekdays(as.Date("2000-01-03") + 0:6, abbreviate = FALSE))
         stop(paste("invalid weekday:", wday))
-    atab <- heat_tidy(country_data$age, wday, wrate)
+    atab <- heat_tidy(country_data$age, first_wk, wday, wrate)
     if (wrate) {
         lab_fun <- function(x) signif_pad(x * 100, digits = 3)
         tile_fill <- ggplot2::scale_fill_distiller(palette = "Spectral")

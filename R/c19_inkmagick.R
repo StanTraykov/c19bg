@@ -151,7 +151,7 @@ c19_inkmagick <- function(var = TRUE,
         ggplot2::ggsave(file = filenames("C01_heat")$png,
                         width = 11, height = 5.5, dpi = 150,
                         plot = heat_map)
-        heat_map <- c19_heat(wday = "Monday", wrate = TRUE)
+        heat_map <- c19_heat(wday = "Monday", wrate = TRUE, first_wk = 33)
         ggplot2::ggsave(file = filenames("C01_heatWrate")$jpg,
                         width = 11, height = 5.5, quality = 100, dpi = 125,
                         plot = heat_map)

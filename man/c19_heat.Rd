@@ -4,7 +4,12 @@
 \alias{c19_heat}
 \title{Plot incidence/100K heat map along age bands.}
 \usage{
-c19_heat(wday = "Monday", wrate = FALSE, country_data = c19_bg_data())
+c19_heat(
+  wday = "Monday",
+  wrate = FALSE,
+  first_wk = 1,
+  country_data = c19_bg_data()
+)
 }
 \arguments{
 \item{wday}{weekday to right-align sums to ("Monday", "Tuesday", "Today",
@@ -12,6 +17,8 @@ etc.)}
 
 \item{wrate}{whether to plot weekly growth rates (percentages) instead of
 incidence}
+
+\item{first_wk}{first week in 2020 to plot}
 
 \item{country_data}{country data}
 }
