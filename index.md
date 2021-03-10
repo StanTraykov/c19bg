@@ -27,6 +27,10 @@
 |-----|-----|
 |[![Заболеваемост карта](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C02_oblasts_i100k.svg)](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C02_oblasts_i100k.svg)|[![Нови случаи карта](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C03_oblasts_count.svg)](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C03_oblasts_count.svg)|
 
+|Сравнение 14-дневна заболеваемост|
+|-----|
+|[![Заболеваемост 14д](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C02_oblasts_i14_cmp.svg)](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C02_oblasts_i14_cmp.svg)|
+
 # Възрастови групи
 
 [![Заболеваемост](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C01_heat.png)](https://raw.githubusercontent.com/StanTraykov/c19bg/gh-pages/cur_svg/C01_heat.png)
