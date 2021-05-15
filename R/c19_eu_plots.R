@@ -96,7 +96,7 @@ make_eu_vis <- function(process_data = FALSE) {
             size = font_size,
             family = font_family
         ),
-        panel.grid.minor.x = ggplot2::element_blank(),
+        #panel.grid.minor.x = ggplot2::element_blank(),
         legend.position = "top",
         plot.title = ggplot2::element_text(hjust = 0.5,
                                            face = "bold")
@@ -304,7 +304,8 @@ c19_eu_weekly <- function(
             show.legend = FALSE
         ) +
         ggplot2::scale_x_discrete(
-            expand = ggplot2::expansion(mult = c(0.02, 0.25))
+            expand = ggplot2::expansion(mult = c(0.02, 0.25)),
+            labels = function(x) { x[c(FALSE, TRUE)] = ""; x}
         ) +
         ggplot2::scale_y_continuous(
             limits = c(lower_y, NA),
@@ -334,7 +335,7 @@ c19_eu_weekly <- function(
 #' @export
 #' @family plot funcs
 c19_deaths_factor <- function(
-    countries = c("BG", "UK", "BE", "NL", "FR", "ES", "IT", "RO"),
+    countries = c("BG", "HU", "BE", "CZ", "FR", "ES", "IT", "RO"),
     eu_data = c19_eu_data()
 ) {
     vis <- eu_vis()
@@ -365,6 +366,9 @@ c19_deaths_factor <- function(
             bg.color = "white"
         ) +
         vis$f_color_scale +
+        ggplot2::scale_x_discrete(
+            breaks = function(x) { x[c(TRUE, FALSE)] }
+        ) +
         ggplot2::facet_wrap(~ geo_name, ncol = 2, scales = "free_y") +
         vis$f_labs +
         vis$gtheme1 +

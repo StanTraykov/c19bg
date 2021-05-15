@@ -24,6 +24,7 @@ c19_reload(redownload = TRUE)
 \seealso{
 Other data funcs: 
 \code{\link{c19_bg_data}()},
-\code{\link{c19_eu_data}()}
+\code{\link{c19_eu_data}()},
+\code{\link{c19_nsi_data}()}
 }
 \concept{data funcs}

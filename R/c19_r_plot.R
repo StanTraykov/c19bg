@@ -65,7 +65,7 @@ make_r_plot_vis <- function(process_data = FALSE) {
         skip_to = 20, # do not include first few days in scaling calc's
         tick_choice = c(10, 15, 20, 25, 50, 75) *
             rep(c(1, 10, 100, 1000), each = 6),
-        tst_choice = c(1, 2, 5) * rep(c(1, 10, 100, 1000), each = 3),
+        tst_choice = c(1, 2, 2.5, 3, 4, 5) * rep(c(1, 10, 100, 1000), each = 6),
         line_sz = line_sz,
         fill_leg = list(alpha = c(0x66, 0x77, 0x99) / (0xFF * 1.5)),
         lty_norm = lty_norm,
@@ -155,6 +155,7 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
     tst_choice <- vis$tst_choice
     tst_scale <- tst_choice[tst_choice >= pmx / c_max][1]
     plt <- ggplot2::ggplot(data = ftab, mapping = ggplot2::aes(x = date))
+    nudge <- 7
     plt <- plt +
         ggplot2::geom_col(mapping = ggplot2::aes(y = new_cases, fill = is_sun),
                           width = 0.9) +
@@ -187,10 +188,12 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
                 x = date - 3.5,
                 y = 0,
                 color = "B_pos",
-                label = signif_pad(100 * posit7, digits = 2)
+                #label = signif_pad(100 * posit7, digits = 2)
+                label = round(100 * posit7)
             ),
             vjust = 1.3,
-            size = vis$font_size_poslab
+            size = vis$font_size_poslab,
+            family = vis$font_family
         ) +
         # % positivity labels label
         ggplot2::geom_text(
@@ -205,7 +208,8 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
             ),
             vjust = 1.3,
             hjust = 1,
-            size = vis$font_size_poslab
+            size = vis$font_size_poslab,
+            family = vis$font_family
         ) +
         # R median label
         shadowtext::geom_shadowtext(
@@ -220,7 +224,7 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
             family = vis$font_family,
             size = vis$font_size_R,
             bg.color = "#ebebeb",
-            nudge_x = 5
+            nudge_x = nudge
         ) +
         # R CrI 95% lower
         shadowtext::geom_shadowtext(
@@ -235,7 +239,7 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
             family = vis$font_family,
             size = vis$font_size_R,
             bg.color = "#ebebeb",
-            nudge_x = 5
+            nudge_x = nudge
         ) +
         # R CrI 95% upper
         shadowtext::geom_shadowtext(
@@ -250,7 +254,7 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
             family = vis$font_family,
             size = vis$font_size_R,
             bg.color = "#ebebeb",
-            nudge_x = 5
+            nudge_x = nudge
         ) +
         ggplot2::scale_fill_manual(
             values = c(vis$clr$cri, vis$clr$reg_c, vis$clr$reg_s),
@@ -272,8 +276,8 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
         ggplot2::scale_x_date(
             breaks = seq(first_sunday,
                          last_sunday_inc,
-                         by = "7 days"),
-            limits = c(ftab$date[1], last_sunday_inc + 4),
+                         by = "14 days"),
+            limits = c(ftab$date[1], last_sunday_inc + 6),
             date_labels = "%d.%m. (%V)",
             expand = ggplot2::expansion(mult = c(0.025,
                                                  0.017 * vis$font_scale),
@@ -288,8 +292,9 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
 #' Save the R plot.
 #'
 #' @param ... Passed export params: w (width), h (height), file_ext (".svg",
-#'            ".png", ".jpg"; others may work as well). Rest passed to ggplot2,
-#'            e.g. dpi, quality for JPEG output.
+#'            ".png", ".jpg"; others may work as well). Rest passed to
+#'            \code{ggplot2::ggsave}, e.g. \code{dpi}, \code{quality} for
+#'            JPEG output.
 #'
 #' @export
 #' @examples

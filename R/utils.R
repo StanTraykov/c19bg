@@ -138,6 +138,15 @@ tib_read_csv <- function(file, ...) {
     return(r)
 }
 
+tib_read_csv2 <- function(file, ...) {
+    data_dir <- getOption("c19bg.data_dir")
+    r <- readr::read_csv2(file.path(data_dir, file),
+                         trim_ws = FALSE,
+                         na = "",
+                         ...)
+    return(r)
+}
+
 tib_read_tsv <- function(file, ...) {
     data_dir <- getOption("c19bg.data_dir")
     r <- readr::read_tsv(file.path(data_dir, file),

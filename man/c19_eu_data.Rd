@@ -21,10 +21,12 @@ Provide access to ECDC/EUROSTAT COVID-19 data.
 \seealso{
 Other data funcs: 
 \code{\link{c19_bg_data}()},
+\code{\link{c19_nsi_data}()},
 \code{\link{c19_reload}()}
 
 Other data funcs: 
 \code{\link{c19_bg_data}()},
+\code{\link{c19_nsi_data}()},
 \code{\link{c19_reload}()}
 }
 \concept{data funcs}

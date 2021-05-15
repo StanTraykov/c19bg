@@ -46,5 +46,6 @@ Collate:
     'c19_var_plot.R'
     'opendata_bg.R'
     'opendata_eu.R'
+    'opendata_nsi.R'
 Depends: 
     R (>= 2.10)

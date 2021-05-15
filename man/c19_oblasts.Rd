@@ -5,14 +5,27 @@
 \title{Plot oblast incidence (per 100K or raw), faceted (map) or lumped ("spaghetti
 plot").}
 \usage{
-c19_oblasts(incid_100k, facet = TRUE, country_data = c19_bg_data())
+c19_oblasts(
+  incid_100k,
+  facet = TRUE,
+  days = 7,
+  country_data = c19_bg_data(),
+  nsi_data = c19_nsi_data(),
+  first_facet_date = as.Date("2020-10-01")
+)
 }
 \arguments{
 \item{incid_100k}{whether to plot raw incidence (case counts) or per 100K}
 
 \item{facet}{whether to facet plot (individual plots on BG map)}
 
+\item{days}{incidence over how many days}
+
 \item{country_data}{country data}
+
+\item{nsi_data}{nsi data}
+
+\item{first_facet_date}{starting date for facet plots}
 }
 \description{
 Plot oblast incidence (per 100K or raw), faceted (map) or lumped ("spaghetti

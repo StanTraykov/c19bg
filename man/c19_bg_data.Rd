@@ -17,6 +17,7 @@ Provide access to Bulgarian COVID-19 data from data.egov.bg.
 \seealso{
 Other data funcs: 
 \code{\link{c19_eu_data}()},
+\code{\link{c19_nsi_data}()},
 \code{\link{c19_reload}()}
 }
 \concept{data funcs}

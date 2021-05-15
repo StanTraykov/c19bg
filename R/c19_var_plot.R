@@ -37,7 +37,7 @@ make_var_plot_vis <- function(process_data = FALSE) {
     )
     area_fields <- list(cases = "^cases$|active_cases",
                         hospitalized = "hospitalized|in_icu")
-    tick_choice <- c(10, 20, 25, 50) * rep(c(1, 10, 100, 1000), each = 4)
+    tick_choice <- c(10, 20, 25, 50) * rep(c(1, 10, 100, 1000, 10000), each = 4)
     no_na <- c( # don't draw rows if these fields are NA
         age = "0+",
         dis = "0-19",
@@ -244,7 +244,7 @@ make_var_plot_vis <- function(process_data = FALSE) {
             size = font_size,
             family = font_family
         ),
-        panel.grid.minor.x = ggplot2::element_blank(),
+        #panel.grid.minor.x = ggplot2::element_blank(),
         legend.position = "top",
         plot.title = ggplot2::element_text(hjust = 0.5, face = "bold"),
         axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
@@ -465,7 +465,7 @@ c19_var_plot <- function(
                 bg.colour = "#ebebeb",
                 show.legend = FALSE
             )
-        exp_fix <- 5
+        exp_fix <- 10
     } else {
         exp_fix <- 0
     }
@@ -498,7 +498,7 @@ c19_var_plot <- function(
         ggplot2::scale_x_date(
             breaks = seq(first_sunday,
                          last_sunday_inc,
-                         by = "7 days"),
+                         by = "14 days"),
             limits = c(min(plot_start_date, first_sunday),
                        last_sunday_inc + 4),
             date_labels = "%d.%m. (%V)",

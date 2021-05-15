@@ -5,7 +5,7 @@
 \title{Plot excess deaths factors for a selection of countries.}
 \usage{
 c19_deaths_factor(
-  countries = c("BG", "UK", "BE", "NL", "FR", "ES", "IT", "RO"),
+  countries = c("BG", "HU", "BE", "CZ", "FR", "ES", "IT", "RO"),
   eu_data = c19_eu_data()
 )
 }

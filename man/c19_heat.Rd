@@ -8,7 +8,8 @@ c19_heat(
   wday = "Monday",
   wrate = FALSE,
   first_wk = 1,
-  country_data = c19_bg_data()
+  country_data = c19_bg_data(),
+  nsi_data = c19_nsi_data()
 )
 }
 \arguments{
@@ -21,6 +22,8 @@ incidence}
 \item{first_wk}{first week in 2020 to plot}
 
 \item{country_data}{country data}
+
+\item{nsi_data}{nsi data}
 }
 \description{
 Plot incidence/100K heat map along age bands.

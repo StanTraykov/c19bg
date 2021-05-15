@@ -8,8 +8,9 @@ c19_r_plot_save(...)
 }
 \arguments{
 \item{...}{Passed export params: w (width), h (height), file_ext (".svg",
-".png", ".jpg"; others may work as well). Rest passed to ggplot2,
-e.g. dpi, quality for JPEG output.}
+".png", ".jpg"; others may work as well). Rest passed to
+\code{ggplot2::ggsave}, e.g. \code{dpi}, \code{quality} for
+JPEG output.}
 }
 \description{
 Save the R plot.

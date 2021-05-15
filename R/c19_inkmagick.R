@@ -164,14 +164,17 @@ c19_inkmagick <- function(var = TRUE,
                         plot = heat_map)
 
         charts <- list(
-            list(file = "C02_oblasts_i100k", i = TRUE, f = TRUE),
-            list(file = "C03_oblasts_count", i = FALSE, f = TRUE),
-            list(file = "C02_oblasts_i_cmp", i = TRUE, f = FALSE),
-            list(file = "C03_oblasts_c_cmp", i = FALSE, f = FALSE)
+            list(file = "C02_oblasts_i100k", i = TRUE, f = TRUE, d = 7),
+            list(file = "C03_oblasts_count", i = FALSE, f = TRUE, d = 7),
+            list(file = "C02_oblasts_i_cmp", i = TRUE, f = FALSE, d = 7),
+            list(file = "C02_oblasts_i14_cmp", i = TRUE, f = FALSE, d = 14),
+            list(file = "C03_oblasts_c_cmp", i = FALSE, f = FALSE, d = 7)
         )
         for (c in charts) {
             im_exp(file = c$file,
-                   plot = c19_oblasts(incid_100k = c$i, facet = c$f))
+                   plot = c19_oblasts(incid_100k = c$i,
+                                      facet = c$f,
+                                      days = c$d))
         }
     }
     if (eu) {
@@ -217,6 +220,12 @@ c19_inkmagick <- function(var = TRUE,
                width = 14.4,
                pix_width = 1800,
                plot = c19_deaths_factor())
+        im_exp(file = "D00_cmp2",
+               height = 8,
+               width = 14.4,
+               pix_width = 1800,
+               plot = c19_deaths_factor(countries = c("BG", "HU", "BA", "CZ",
+                                                      "ME", "ES", "MK", "RO")))
         eu_codes <- c19_eu_data()$eu_codes
         for (n in seq_along(eu_codes)) {
             pn <- stringr::str_pad(n, 2, pad = "0")
