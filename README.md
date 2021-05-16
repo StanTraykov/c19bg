@@ -27,14 +27,49 @@ install.packages("remotes")
 remotes::install_github("StanTraykov/c19bg", ref = "v0.1.1")
 ```
 
-### Опционално: extrafont
+### Опционално: шрифтове
 
-Еднократно и незадължително. Позволява ползването на шрифтове при извеждането на екран и записването в растерни формати (PNG, JPEG). **Не влияе** на векторния SVG изход (вкл. по-нататъшна обработка с външни програми). Единствената засегната графика, при генериране на всички графики с параметри по подразбиране, е хийтмапът на заболеваемостта.
+Еднократно и незадължително. Позволява ползването на шрифтове при извеждането на екран и записването в растерни формати (PNG, JPEG). **Не влияе** на векторния SVG изход (вкл. по-нататъшна обработка с външни програми).
+
+#### Windows
+
+За да ползвате шрифтовете на Windows в R, инсталирайите extrafont:
 
 ```R
 install.packages("extrafont")
 extrafont::font_import() # отнема време
 ```
+
+#### macOS
+
+R може да ползва шрифтовете на macOS директно, но macOS може да не разполага с шрифта по подразбиране в графиките (Calibri). Ако имате инсталиран MS Office, можете да създадете папка и копирате шрифтовете от Office в нея.
+
+```
+$ mkdir ~/Library/Fonts/Microsoft
+$ cd ~/Library/Fonts/Microsoft
+$ cp -a /Applications/Microsoft\ Word.app/Contents/Resources/DFonts/* .
+```
+
+Ако нямате MS Office, вижте [Homebrew](https://brew.sh/) и [`brew cask install font-microsoft-office`](https://github.com/colindean/homebrew-fonts-nonfree).
+
+
+### Опционално: ImageMagick и Inkscape за по-качестевен растерен изход
+
+#### Windows
+
+* [Inkscape](https://inkscape.org/)
+    * Инсталирайте в мястото по подразбиране (`C:\Program Files\Inkscape\bin\inkscape.exe`) или укажете къде е в опциите (виж по-долу).
+* [ImageMagick](https://imagemagick.org/)
+    * Сложете в `%PATH%` или укажете къде е `magick.exe` в опциите (виж по-долу).
+
+#### macOS
+
+* [Inkscape](https://inkscape.org/)—ползвайте версията за macOS
+    * Ще бъде открит, ако е в мястото по подразбиране (`/Applications/Inkscape.app/Contents/MacOS/inkscape"`). Можете да укажете друго в опциите (виж по-долу). 
+    * Ако имате проблеми, ползвайте последната версия в разработка (latest development version)
+* [ImageMagick](https://imagemagick.org/)
+    * Инсталирайте с [Homebrew](https://brew.sh/) (`brew install imagemagick`)
+    * Уверете се, че `bin` директорията на Homebrew (обикновено `/opt/homebrew/bin` или `/usr/local/bin`) е в `$PATH`. За RStudio е достатъчно, ако прибавите пътя в `/etc/paths`. (Добавянето в `.zprofile` важи само за `zsh` и няма да има ефект.)
 
 ## Генериране на всички графики
 
