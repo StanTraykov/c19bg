@@ -98,19 +98,75 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
 <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"StanTraykov/c19bg"</span>, ref <span class="op">=</span> <span class="st">"v0.1.1"</span><span class="op">)</span></code></pre></div>
-<div id="опционално-extrafont" class="section level3">
+<div id="опционално-шрифтове" class="section level3">
 <h3 class="hasAnchor">
-<a href="#%D0%BE%D0%BF%D1%86%D0%B8%D0%BE%D0%BD%D0%B0%D0%BB%D0%BD%D0%BE-extrafont" class="anchor"></a>Опционално: extrafont</h3>
-<p>Еднократно и незадължително. Позволява ползването на шрифтове при извеждането на екран и записването в растерни формати (PNG, JPEG). <strong>Не влияе</strong> на векторния SVG изход (вкл. по-нататъшна обработка с външни програми). Единствената засегната графика, при генериране на всички графики с параметри по подразбиране, е хийтмапът на заболеваемостта.</p>
+<a href="#%D0%BE%D0%BF%D1%86%D0%B8%D0%BE%D0%BD%D0%B0%D0%BB%D0%BD%D0%BE-%D1%88%D1%80%D0%B8%D1%84%D1%82%D0%BE%D0%B2%D0%B5" class="anchor"></a>Опционално: шрифтове</h3>
+<p>Еднократно и незадължително. Позволява ползването на шрифтове при извеждането на екран и записването в растерни формати (PNG, JPEG). <strong>Не влияе</strong> на векторния SVG изход (вкл. по-нататъшна обработка с външни програми).</p>
+<div id="windows" class="section level4">
+<h4 class="hasAnchor">
+<a href="#windows" class="anchor"></a>Windows</h4>
+<p>За да ползвате шрифтовете на Windows в R, инсталирайите extrafont:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"extrafont"</span><span class="op">)</span>
-<span class="fu">extrafont</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/extrafont/man/font_import.html">font_import</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># отнема време</span></code></pre></div>
+<span class="fu">extrafont</span><span class="fu">::</span><span class="fu">font_import</span><span class="op">(</span><span class="op">)</span> <span class="co"># отнема време</span></code></pre></div>
+</div>
+<div id="macos" class="section level4">
+<h4 class="hasAnchor">
+<a href="#macos" class="anchor"></a>macOS</h4>
+<p>R може да ползва шрифтовете на macOS директно, но macOS може да не разполага с шрифта по подразбиране в графиките (Calibri). Ако имате инсталиран MS Office, можете да създадете папка и копирате шрифтовете от Office в нея.</p>
+<pre><code>$ mkdir ~/Library/Fonts/Microsoft
+$ cd ~/Library/Fonts/Microsoft
+$ cp -a /Applications/Microsoft\ Word.app/Contents/Resources/DFonts/* .</code></pre>
+<p>Ако нямате MS Office, вижте <a href="https://brew.sh/">Homebrew</a> и <a href="https://github.com/colindean/homebrew-fonts-nonfree"><code>brew cask install font-microsoft-office</code></a>.</p>
+</div>
+</div>
+<div id="опционално-imagemagick-и-inkscape-за-по-качестевен-растерен-изход" class="section level3">
+<h3 class="hasAnchor">
+<a href="#%D0%BE%D0%BF%D1%86%D0%B8%D0%BE%D0%BD%D0%B0%D0%BB%D0%BD%D0%BE-imagemagick-%D0%B8-inkscape-%D0%B7%D0%B0-%D0%BF%D0%BE-%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B5%D0%B2%D0%B5%D0%BD-%D1%80%D0%B0%D1%81%D1%82%D0%B5%D1%80%D0%B5%D0%BD-%D0%B8%D0%B7%D1%85%D0%BE%D0%B4" class="anchor"></a>Опционално: ImageMagick и Inkscape за по-качестевен растерен изход</h3>
+<div id="windows-1" class="section level4">
+<h4 class="hasAnchor">
+<a href="#windows-1" class="anchor"></a>Windows</h4>
+<ul>
+<li>
+<a href="https://inkscape.org/">Inkscape</a>
+<ul>
+<li>Инсталирайте в мястото по подразбиране (<code>C:\Program Files\Inkscape\bin\inkscape.exe</code>) или укажете къде е в опциите (виж по-долу).</li>
+</ul>
+</li>
+<li>
+<a href="https://imagemagick.org/">ImageMagick</a>
+<ul>
+<li>Сложете в <code>%PATH%</code> или укажете къде е <code>magick.exe</code> в опциите (виж по-долу).</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id="macos-1" class="section level4">
+<h4 class="hasAnchor">
+<a href="#macos-1" class="anchor"></a>macOS</h4>
+<ul>
+<li>
+<a href="https://inkscape.org/">Inkscape</a>—ползвайте версията за macOS
+<ul>
+<li>Ще бъде открит, ако е в мястото по подразбиране (<code>/Applications/Inkscape.app/Contents/MacOS/inkscape"</code>). Можете да укажете друго в опциите (виж по-долу).</li>
+<li>Ако имате проблеми, ползвайте последната версия в разработка (latest development version)</li>
+</ul>
+</li>
+<li>
+<a href="https://imagemagick.org/">ImageMagick</a>
+<ul>
+<li>Инсталирайте с <a href="https://brew.sh/">Homebrew</a> (<code>brew install imagemagick</code>)</li>
+<li>Уверете се, че <code>bin</code> директорията на Homebrew (обикновено <code>/opt/homebrew/bin</code> или <code>/usr/local/bin</code>) е в <code>$PATH</code>. За RStudio е достатъчно, ако прибавите пътя в <code>/etc/paths</code>. (Добавянето в <code>.zprofile</code> важи само за <code>zsh</code> и няма да има ефект.)</li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 </div>
 <div id="генериране-на-всички-графики" class="section level2">
 <h2 class="hasAnchor">
 <a href="#%D0%B3%D0%B5%D0%BD%D0%B5%D1%80%D0%B8%D1%80%D0%B0%D0%BD%D0%B5-%D0%BD%D0%B0-%D0%B2%D1%81%D0%B8%D1%87%D0%BA%D0%B8-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B8" class="anchor"></a>Генериране на всички графики</h2>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stantraykov.github.io/c19bg">c19bg</a></span><span class="op">)</span>
 
 <span class="co"># бързо генериране на SVG (високо качество)</span>
@@ -143,7 +199,7 @@
 <h2 class="hasAnchor">
 <a href="#%D0%BE%D0%BF%D1%86%D0%B8%D0%B8" class="anchor"></a>Опции</h2>
 <p>Опциите могат да се зададат директно в R конзолата или в <a href="https://support.rstudio.com/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf">.Rprofile или сроден файл</a> за автоматично изпълнение при стартиране на R.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># промяна на шрифт</span>
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>c19bg.font_family <span class="op">=</span> <span class="st">"Calibri"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>c19bg.font_scale <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># скалиране на всички текстове (напр. 0.8, 1.1)</span>
@@ -171,13 +227,13 @@
 <div id="генериране-на-единични-графики" class="section level2">
 <h2 class="hasAnchor">
 <a href="#%D0%B3%D0%B5%D0%BD%D0%B5%D1%80%D0%B8%D1%80%D0%B0%D0%BD%D0%B5-%D0%BD%D0%B0-%D0%B5%D0%B4%D0%B8%D0%BD%D0%B8%D1%87%D0%BD%D0%B8-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B8" class="anchor"></a>Генериране на единични графики</h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stantraykov.github.io/c19bg">c19bg</a></span><span class="op">)</span>
 
 <span class="co"># зареждане на шрифтове за екран/растерен запис (ако са инсталирани)</span>
 <span class="kw">if</span> <span class="op">(</span><span class="va">.Platform</span><span class="op">$</span><span class="va">OS.type</span> <span class="op">==</span> <span class="st">"windows"</span> <span class="op">&amp;&amp;</span>
         <span class="st">"extrafont"</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html">installed.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu">extrafont</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/extrafont/man/loadfonts.html">loadfonts</a></span><span class="op">(</span>device <span class="op">=</span> <span class="st">"win"</span><span class="op">)</span>
+    <span class="fu">extrafont</span><span class="fu">::</span><span class="fu">loadfonts</span><span class="op">(</span>device <span class="op">=</span> <span class="st">"win"</span><span class="op">)</span>
 <span class="op">}</span>
 
 <span class="co"># слчуаи по възрастови групи</span>
@@ -218,7 +274,7 @@
 <div id="данни" class="section level2">
 <h2 class="hasAnchor">
 <a href="#%D0%B4%D0%B0%D0%BD%D0%BD%D0%B8" class="anchor"></a>Данни</h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stantraykov.github.io/c19bg">c19bg</a></span><span class="op">)</span>
 
 <span class="co"># Данните могат да се достъпят с тези две функции</span>
@@ -253,7 +309,7 @@
 <h3 class="hasAnchor">
 <a href="#%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%BD%D0%B0-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B0-%D0%B8-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B0" class="anchor"></a>Примерна заявка и графика</h3>
 <p>Плаващо средно 7 дни по области.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
