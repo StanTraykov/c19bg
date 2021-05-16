@@ -162,6 +162,16 @@ c19_inkmagick <- function(var = TRUE,
         ggplot2::ggsave(file = filenames("C01_heatWrate")$png,
                         width = 11, height = 5.5, dpi = 150,
                         plot = heat_map)
+        im_exp(
+            file = "C01_heat",
+            make_svg = FALSE,
+            make_png = FALSE,
+        )
+        im_exp(
+            file = "C01_heatWrate",
+            make_svg = FALSE,
+            make_png = FALSE,
+        )
 
         charts <- list(
             list(file = "C02_oblasts_i100k", i = TRUE, f = TRUE, d = 7),

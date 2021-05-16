@@ -43,7 +43,11 @@ c19bg_setup <- function() {
         # so we try
         cfg$c19bg.output$magick <- "magick"
     } else { # unix
-        cfg$c19bg.output$inkscape <- "inkscape"
+        if(Sys.info()["sysname"] == "Darwin")
+            cfg$c19bg.output$inkscape <-
+                "/Applications/Inkscape.app/Contents/MacOS/inkscape"
+        else # let's hope it's in PATH
+            cfg$c19bg.output$inkscape <- "inkscape"
         cfg$c19bg.output$magick <- "magick"
     }
     return(cfg)

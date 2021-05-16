@@ -10,3 +10,4 @@ docs
 unf
 *.log
 *.tex
+.DS_Store

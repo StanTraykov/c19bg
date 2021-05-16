@@ -6,7 +6,7 @@ heat_tidy <- function(atab, age_struct, first_wk, wday, wrate) {
     str_all <- tra("vsicki")
     atab[, 11] <- rowSums(atab[, 2:10])
     names(atab)[11] <- str_all
-    # 7-day sums; filter only mondays to get approx. real week data
+    # 7-day sums; filter only Mondays to get approx. real week data
     atab <- atab %>%
         dplyr::mutate(dplyr::across(!matches("date"),
                                     function(x) zoo::rollapply(x,
@@ -30,7 +30,10 @@ heat_tidy <- function(atab, age_struct, first_wk, wday, wrate) {
                             names_to = "group",
                             values_to = "incidence") %>%
         #week_based_yr-ISO week
-        dplyr::mutate(week = format(date - 7, "%G-%V")) %>%
+        dplyr::mutate(week = format(date - 7, "%G-%V"),
+                      group = forcats::fct_relevel(group,
+                                                   tra("vsicki"),
+                                                   after=0L)) %>%
         dplyr::filter(week >= first_wk)
     return(atab)
 }
