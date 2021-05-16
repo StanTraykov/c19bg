@@ -1,4 +1,4 @@
-destination: ../../webc19/C19_BG/docs
+destination: ../../../webc19/c19bg/docs
 template:
   params:
     ganalytics: G-K3H94J0ECQ
