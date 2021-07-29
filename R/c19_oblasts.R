@@ -178,7 +178,7 @@ c19_oblasts <- function(
     if (facet) {
         plt <- plt +
             ggplot2::scale_x_date(date_labels = "%m",
-                                  date_breaks = "1 month",
+                                  date_breaks = "2 months",
                                   limits = c(first_facet_date, NA)) +
             ggplot2::geom_blank(data = dummy) +
             geofacet::facet_geo(~ oblast, grid = ggrid, scales = scales)
@@ -213,7 +213,7 @@ c19_oblasts <- function(
                     dplyr::filter(date == plot_end_date),
                 family = vis$font_family,
                 size = vis$font_size_lab,
-                nudge_x = 17,
+                nudge_x = 25,
                 hjust = 0,
                 direction = "y",
                 point.padding = NA,

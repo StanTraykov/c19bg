@@ -155,7 +155,7 @@ c19_r_plot <- function(country_data = c19_bg_data()) {
     tst_choice <- vis$tst_choice
     tst_scale <- tst_choice[tst_choice >= pmx / c_max][1]
     plt <- ggplot2::ggplot(data = ftab, mapping = ggplot2::aes(x = date))
-    nudge <- 7
+    nudge <- 9
     plt <- plt +
         ggplot2::geom_col(mapping = ggplot2::aes(y = new_cases, fill = is_sun),
                           width = 0.9) +

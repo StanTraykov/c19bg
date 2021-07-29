@@ -455,7 +455,7 @@ c19_var_plot <- function(
                 family = vis$font_family,
                 size = vis$font_size_lineleg,
                 direction = "y",
-                nudge_x = 2,
+                nudge_x = 4,
                 box.padding = ggplot2::unit(0.12, units = "line"),
                 hjust = 0,
                 max.overlaps = Inf,
@@ -465,7 +465,7 @@ c19_var_plot <- function(
                 bg.colour = "#ebebeb",
                 show.legend = FALSE
             )
-        exp_fix <- 10
+        exp_fix <- 20
     } else {
         exp_fix <- 0
     }
