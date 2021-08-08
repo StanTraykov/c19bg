@@ -97,6 +97,7 @@ c19_heat <- function(
             plot.title = ggplot2::element_text(hjust = 0.5,
                                                face = "bold"),
             axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
+            plot.background = ggplot2::element_rect(fill = "white")
         ) +
         ggplot2::labs(
             title = ifelse(wrate,
