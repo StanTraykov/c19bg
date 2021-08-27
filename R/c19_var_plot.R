@@ -222,7 +222,7 @@ make_var_plot_vis <- function(process_data = FALSE) {
                             scale = 10),
         positivity = list(label = tra("novodokazani slucai"),
                           vars = c("posit_roll", "posit_roll_pcr"),
-                          scale = 0.000005,
+                          scale = 0.000004,
                           type = "percent"),
         pospcr = list(label = tra("novodokazani slucai"),
                       vars = "posit_roll_pcr",
@@ -230,7 +230,7 @@ make_var_plot_vis <- function(process_data = FALSE) {
                       type = "percent"),
         posag = list(label = tra("novodokazani slucai"),
                      vars = "posit_roll_ag",
-                     scale = 0.000005,
+                     scale = 0.0000025,
                      type = "percent")
     )
     plot_x_min <- list(
