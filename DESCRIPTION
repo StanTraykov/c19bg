@@ -1,7 +1,7 @@
 Package: c19bg
 Type: Package
 Title: COVID-19 Charts for Bulgaria
-Version: 0.1.2
+Version: 0.1.3
 Author: Stanislav Traykov
 Maintainer: Stanislav Traykov <st@gmuf.com>
 Description: COVID-19 charts for Bulgaria based on data.egov.bg, ECDC, EUROSTAT.
