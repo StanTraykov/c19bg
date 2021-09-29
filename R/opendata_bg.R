@@ -31,8 +31,10 @@ process_bg_data <- function(redownload = FALSE) {
     ##### age tab
     age_tab <- tib_read_csv(
         file = "bg_age.csv",
-        col_types = paste0("D", strrep("i", 9))
+        col_types = paste0("D", strrep("i", 14))
     )
+    # remove younger age band splits
+    age_tab <- age_tab[-(2:6)]
     # repl. totals with daily incidence (losing one day of data)
     age_tab[-1, -1] <- age_tab[-1, -1] - age_tab[-nrow(age_tab), -1]
     age_tab <- age_tab[-1, ]
