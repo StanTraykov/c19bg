@@ -277,7 +277,7 @@ c19_eu_weekly <- function(
             mapping = ggplot2::aes(x = max_yr_wk),
             family = vis$font_family,
             size = ifelse(top_n > 20, vis$font_xsmall, vis$font_small),
-            nudge_x = ifelse(top_n > 20, 6.0, 3.75),
+            nudge_x = ifelse(top_n > 20, 7.8, 4.88),
             hjust = 0,
             direction = "y",
             point.padding = NA,
