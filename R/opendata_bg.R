@@ -53,7 +53,7 @@ process_bg_data <- function(redownload = FALSE) {
     ##### gen tab (+ test tab)
     gen_tab <- tib_read_csv(
         file = "bg_gen.csv",
-        col_types = paste0("D", strrep("i", 11))
+        col_types = paste0("D", strrep("i", 12))
     )
     tst_tab <- tib_read_csv(
         file = "bg_tst.csv",
@@ -63,7 +63,7 @@ process_bg_data <- function(redownload = FALSE) {
     # (=all tests until Dec 24) and then all tests from Jan 6, 2021.
     names(gen_tab) <- c(
         "date", "tests", "new_tests_GEN", "cases", "active_cases", "new_cases",
-        "hospitalized", "in_icu", "recovered", "newly_recovered", "deaths",
+        "hospitalized", "new_hosps", "in_icu", "recovered", "newly_recovered", "deaths",
         "new_deaths"
     )
     names(tst_tab) <- c(
