@@ -230,7 +230,7 @@ make_var_plot_vis <- function(process_data = FALSE) {
                       type = "percent"),
         posag = list(label = tra("novodokazani slucai"),
                      vars = "posit_roll_ag",
-                     scale = 0.000002,
+                     scale = 0.000001,
                      type = "percent")
     )
     plot_x_min <- list(
